@@ -1,0 +1,74 @@
+<div id="login_main">
+  <h1>Listing my jobs</h1>
+  <div class='user_box'> <%= link_to 'Productivity Report - UB04 : ', :action => 'completed_claims', :batch_type => "UB04" %>  <%= @ub04 %></div>
+  <div class='user_box'> <%= link_to 'Productivity Report - CMS1500 : ', :action => 'completed_claims', :batch_type => "CMS" %>  <%= @cms1500 %></div>
+  
+  <%#= errors_for(@jobs) %>
+
+  <% unless @jobs.empty? %>       
+    <%= legend_start %>
+    <table style="width:100%"><td class="black_text" style="width:900px">
+        <%= legend "color" => "white", "text" => "Allocated" %>
+        <%= legend "color" => "red", "text" => "Rejected" %>
+      </td> </table>
+    <%= legend_end %>
+ <%=will_paginate @jobs %>
+    <table>
+       
+      <tr>
+        <th>Batch ID</th>
+        <th>Facility</th>
+        <th>Processor</th>
+        <th>Processor Status </th>
+        <th>QA Status</th>
+        <th>Job Status</th>
+        <th>Estimated Claim</th>
+        <th>Comment for QA</th>
+        <th>Image name </th>
+      </tr>
+      <% @jobs.each do |job|
+        cls=""
+        if job.job_status =~ /Rejected/
+          cls = 'red'
+        else
+          cls = 'white'
+        end %>
+        <tr>
+           
+          <td class="<%= cls %>" align='right'><%= job.batch.batchid %></td>
+          <td class="<%= cls %>"><%= job.batch.facility %></td>
+
+
+          <td class="<%= cls %>">
+
+
+            <%= Job.processor_name_id(job.processor_id) rescue nil %>
+             
+          </td>
+          <td class="<%= cls %>"><%= job.processor_status %></td>
+          <td class="<%= cls %>"><%= job.qa_status %></td>
+          <td class="<%= cls %>"><%= job.job_status %></td>
+          <td class="<%= cls %>" align='right'><%= job.estimated_eob %></td>
+
+          <td class="<%= cls %>">
+            <%if job.comment_for_qa.blank? %>
+              <%="-"%>
+            <%else%>
+              <%=job.comment_for_qa%>
+            <%end%>
+          </td>
+          <td class="<%= cls %>"><%=job.tiff_number%></td>
+      
+  
+             <td> <%= link_to 'Verify/Reject',:controller=>'datacaptures', :action => 'claimqa', :job => job.id, :back_page=>params[:back_page],:batchid => job.batch.batchid, :view => 'qa_view' %></td>
+        
+        </tr>
+      <% end %>
+    
+    </table>
+
+
+  <% else %>
+    <h4>You don't have any assigned jobs!!</h4>
+  <% end %>
+</div>

@@ -1,0 +1,109 @@
+cms1500s_096: 
+  id: 96
+  job_id: 1
+  payer_id: 1
+  accept_assignment: "Yes"
+  amount_paid: "0.00"
+  balance_due: "111.00"
+  billing_provider_address: "LLC PO BOX"
+  billing_provider_city: "MEMPHIS"
+  billing_provider_first_name: 
+  billing_provider_last_name: 
+  billing_provider_middle_initial: 
+  billing_provider_name: "RADIOLOGY AND IMAGING ASSOC"
+  billing_provider_non_npi_id: "2611498232"
+  billing_provider_npi_id: "1013901222"
+  billing_provider_phone: "9017220088"
+  billing_provider_state: "TN"
+  billing_provider_suffix: 
+  billing_provider_zipcode: "38174"
+  date_of_current_illness: 
+  federal_tax_id: "621498232"
+  federal_tax_id_type: "EIN"
+  first_date_similar_illness: 
+  hospitalization_from_date: 
+  hospitalization_to_date: 
+  insurance_type: "OTHER"
+  insured_address: "995 KORTH WATKINS ART 4"
+  insured_city: "MEMPHIS"
+  insured_dob: "1961-06-17"
+  insured_employers_or_school_name: ""
+  insured_first_name: "BELENDA"
+  insured_id: "414138335"
+  insured_last_name: "ECWEKS"
+  insured_middle_initial: ""
+  insured_plan_name: "UNITED AMERICAN HEALTH CORP"
+  insured_policy_group_or_feca_number: "9"
+  insured_sex: "F"
+  insured_signature_on_file: "Signature on File"
+  insured_state: "TN"
+  insured_suffix: ""
+  insured_telephone: "9027266383"
+  insured_zipcode: "38126"
+  medicaid_resubmission_code: ""
+  medicaid_resubmission_ref_number: ""
+  nature_of_illness_or_injury_1: "715.80"
+  nature_of_illness_or_injury_2: "401.1"
+  nature_of_illness_or_injury_3: ""
+  nature_of_illness_or_injury_4: ""
+  other_health_benefit_plan: "No"
+  other_insured_dob: 
+  other_insured_employers_or_school_name: 
+  other_insured_first_name: 
+  other_insured_insurance_plan_name: 
+  other_insured_last_name: 
+  other_insured_middle_initial: 
+  other_insured_policy_or_group_number: 
+  other_insured_sex: "M"
+  other_insured_suffix: 
+  outside_lab: "No"
+  outside_lab_charge: 
+  patient_account_number: "5003269447"
+  patient_address: "995 KORTH WATKINS ART 4"
+  patient_city: "MEMPHIS"
+  patient_condition_reserved_for_local_use: ""
+  patient_condition_to_auto_accident: "No"
+  patient_condition_to_auto_accident_place: ""
+  patient_condition_to_employment: "No"
+  patient_condition_to_other_accident: "No"
+  patient_dob: "1961-06-17"
+  patient_employment_status: "Full-Time Student"
+  patient_first_name: "BELENDA"
+  patient_last_name: "ECWEKS"
+  patient_marital_status: 
+  patient_middle_initial: ""
+  patient_relationship_to_insured: "Self"
+  patient_sex: 
+  patient_signature_on_file: "Signature on File"
+  patient_signed_date: "2007-11-28"
+  patient_state: "TN"
+  patient_suffix: ""
+  patient_telephone: "9027266383"
+  patient_unable_to_work_from_date: 
+  patient_unable_to_work_to_date: 
+  patient_zipcode: "38126"
+  physician_first_name: "MORAFA"
+  physician_last_name: "OLAWALE"
+  physician_middle_initial: "MD"
+  physician_sign_date: "2008-02-13"
+  physician_signature_on_file: "Yes"
+  physician_suffix: "A"
+  prior_authorization_number: 
+  referring_provider_first_name: ""
+  referring_provider_last_name: ""
+  referring_provider_middle_initial: ""
+  referring_provider_npi_id: 
+  referring_provider_other_id: ""
+  referring_provider_other_qualifier: ""
+  referring_provider_suffix: ""
+  reserved_local_use: ""
+  service_facility_address: "1325 BASTNORELAND AVE"
+  service_facility_city: "MEMPHIS"
+  service_facility_name: "HEADTHFIRST FAMILY CARE"
+  service_facility_non_npi_id: ""
+  service_facility_npi_id: 
+  service_facility_state: "TN"
+  service_facility_zipcode: "38104"
+  total_charge: "111.00"
+  created_at: 2008-03-20 12:50:32
+  updated_at: 2008-03-20 12:50:32

@@ -1,0 +1,20 @@
+<%= error_messages_for 'eob_error' %>
+
+<!--[form:eob_error]-->
+<table>
+  <tr>
+    <th>Error type</th>
+    <td><%= text_field 'eob_error', 'error_type'  %></td>
+  </tr>
+  <tr>
+    <th>Severity</th>
+    <td><%= text_field 'eob_error', 'severity'  %></td>
+  </tr>
+  <tr>
+    <th>Code</th>
+    <td><%= text_field 'eob_error', 'code'  %></td>
+  </tr>
+
+</table>
+<%= set_focus 'eob_error_error_type' %>
+<!--[eoform:eob_error]-->

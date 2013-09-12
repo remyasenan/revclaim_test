@@ -1,0 +1,43 @@
+  <%= form_for :facility, :url => {:action=>"update", :controller=>"admin/facility"}, :method => 'put' do |f|%>
+<%if @facility.errors.any?%>
+		<%@facility.errors.full_messages.each do |msg|%>
+			<font color="red" class = "error"><%= msg %></font><br />
+				<%end%>
+                        <%end%>
+<table style="margin-top:15px;" id="tabletwo" class="add">
+	<th align="left" height="25" colspan="2"><%=  image_tag("enable.png",{ :alt=>"Add"})%>&nbsp;Edit Facility</th>
+	</tr>
+	<tr>
+		<td width="216">Client Name</td>
+		<td align="left" width="183">
+				<%= f.select(:client_id, options_from_collection_for_select(@clients,:id,:name,@facility.client_id), {},{ :style => "width:170px; color:#000000;"  }) rescue nil%></td>
+	</tr>
+	<tr>
+		<td class="even" width="216">Facility Name</td>
+		<td align="left" width="183"><% if @facility.errors[:name].any?%> <%= f.text_field(:name, :id => 'txt_btn', :class => 'false')%>
+		<%else%> <%= f.text_field(:name, :id => 'txt_btn')%><%end%></td>
+	</tr>
+	<tr>
+		<td width="216">Site Name</td>
+		<td align="left" width="183"><% if @facility.errors[:sitecode].any?%> <%= f.text_field(:sitecode, :id => 'txt_btn', :class => 'false')%>
+		<%else%> <%= f.text_field(:sitecode, :id => 'txt_btn')%><%end%></td>
+	</tr>
+        <tr>
+		<td width="216">Batch upload status</td>
+		<td align="left" width="183"> <%= f.radio_button("batchupload","1",options = {:checked => true})%> <label id="radio"> Activate </label> <%= f.radio_button("batchupload","0")%> <label id="radio">De-Activate</label></td>
+	</tr>
+	<tr>
+		<td width="216">Internal TAT</td>
+		<td align="left" width="183"><% if @facility.errors[:internal_tat].any?%> <%= f.text_field(:internal_tat, :id => 'txt_btn', :class => 'false')%>
+		<%else%> <%= f.text_field(:internal_tat, :id => 'txt_btn')%><%end%></td>
+	</tr>
+	<tr>
+		<td width="216">Client status</td>
+		<td align="left" width="183"> <%= f.radio_button("status","ACTIVATE",options = {:checked => true})%> <label id="radio"> Activate </label> <%= f.radio_button("status","DEACTIVATE")%> <label id="radio">De-Activate</label></td>
+	</tr>
+	<tr>
+		<td width="216" height="44"></td>
+		<td align="left" width="183"><%= f.submit "Save", :id => 'commit',:class => "save"%>&nbsp;&nbsp;<%= link_to 'Cancel' ,{ :action => 'index'} , :class => "cancel" %></td>
+	</tr>
+</table>
+<%end%>

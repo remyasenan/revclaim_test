@@ -1,0 +1,178 @@
+<script type="text/javascript">
+  
+      function activate_button(form_name,msg,batch_id,check_no,tiff_no,form,file_location) {
+         var button = document.getElementById(form_name.id);
+            if (button.disabled == true)
+                button.disabled=false;
+                if(file_location!=""){
+                    alert(msg) 
+                    //alert(file_location)
+                    window.open("/data/"+file_location)
+                    }
+                 else{
+                    alert(msg) 
+                    
+                    }
+                    form.b_id.value = batch_id
+                    form.check_no.value = check_no
+                            if (tiff_no=='nil')
+                                form.temp_tiffno.value = tiff_no
+                            else
+                                form.temp_tiffno.value =  tiff_no
+  }
+ </script>
+<div id="login_main">
+<h1>Listing my jobs</h1>
+<h5><%= link_to 'Create New payer ', :controller => '/admin/payer', :action => 'new' %> </h5>
+<div class='user_box'>Completed EOBs : <%= @user.completed_eob %></div>
+<%= error_messages_for 'job' %>
+<%i=0%>
+<% unless @jobs.empty? %>
+                <%= create_pagination(@job_pages,'processor',params[:page]) %>
+            <%= legend_start %>
+            <table style="width:100%"><td class="black_text" style="width:900px">
+                <%= legend "color" => "white", "text" => "Allocated" %>
+                <%= legend "color" => "red", "text" => "Rejected" %>
+                </td> </table>
+            <%= legend_end %>
+            <br/><br/>
+  <table width='100%'>
+    <tr>
+        <th>Batch ID<br/><font size='1'>(Date)</font></th>
+        <th>Facility</th>
+        <th>Check number</th>
+        <th>Tiff number</th>
+        <th>QA</th>
+        <!--
+                             <th>Processor Status</th>
+                             <th>QA Status</th>
+                             <th>Job Status</th>
+          -->
+        <th>Estimated EOB<br/>(Remaining EOBs)</th>
+        <th>Comment </th>
+        <th>Arrival Time</th>
+        <th>Target Time</th>
+        <th>Estimated Completion Time</th>
+        <th>PayerID</th>
+        <th>&nbsp;</th>
+    </tr>
+    <%@jobs.each do |job|
+                    cls=""
+              if job.job_status =~ /Rejected/
+                      cls = 'red'
+              else
+                    cls = 'white'
+              end
+    %>
+    <%
+            i=i+1
+            temp_batch_id = job.batch.batchid 
+            temp_check_no = job.check_number
+            temp_incomplete_tiffno = job.incomplete_tiff
+            temp_complete_tiffno = job.tiff_number
+                if temp_incomplete_tiffno==nil 
+                    temp_tiffno=temp_complete_tiffno
+                else
+                    temp_tiffno=temp_incomplete_tiffno
+                end 
+              ###'values from GUI'
+              gui_facility_name = job.batch.facility
+              gui_facility_id = Facility.find_by_id(gui_facility_name)
+              gui_payer_id = job.payer.id
+              gui_sys_time = Time.now()
+            #obj = ErrorPopup.find_by_sql("select id from error_popups where facility_id ='2' and payer_id ='2' and start_datetime <='#{(Time.now).strftime("%y/%m/%d")}' and end_datetime >'#{Time.now.strftime("%y/%m/%d")}'")  
+            obj = ErrorPopup.find(:all,:conditions => "payer_id='#{gui_payer_id}' and  facility_id='#{gui_facility_id.id}' and start_date <='#{(Time.now).strftime("%y/%m/%d")}' and end_date >'#{Time.now.strftime("%y/%m/%d")}'")
+            #puts Time.now.strftime("%y/%m/%d")  
+            temp='submit'+i.to_s+''
+           # puts obj.file_id
+            
+            @msg=''
+              obj.each do |obj_message|
+                 
+                  @msg = @msg + '\n' + obj_message.comment
+                  puts obj_message.file_id
+                 if not obj_message.file_id.nil?
+                  @file_location_db = HlscDocument.find_by_id(obj_message.file_id).file_name
+                  else
+                  @file_location_db = ""
+                 end
+                #
+              
+                #end
+                
+             end
+      %>
+    <%if obj.size==0%>
+       <tr>
+          <td class="<%= cls %>" align='left'><%= job.batch.batchid %><br/>
+          <font size='1'>(<%= format_date(job.batch.date) unless job.batch.date.nil? %>)</td>
+          <td class="<%= cls %>"><%= job.batch.facility %></td>
+          <td class="<%= cls %>"><%= job.check_number %></td>
+            <% if not job.incomplete_tiff.blank? %>
+            <td class="<%= cls %>"><%= job.incomplete_tiff %></td>
+          <% else %>
+            <td class="<%= cls %>"><%= job.tiff_number %></td>
+          <% end %>
+            <td class="<%= cls %>"><% if !job.qa.nil? %><%= job.qa.name %><% end %></td>
+            <!--
+          <td class="<%= cls %>"><%= job.processor_status %></td>
+          <td class="<%= cls %>"><%= job.qa_status %></td>
+          <td class="<%= cls %>"><%= job.job_status %></td>
+          -->
+          <td class="<%= cls %>" align='right'>
+          <%= job.estimated_eob %> (<%if job.incomplete_count.blank? %> 0 <%else%><%= job.incomplete_count%><%end%>)</td>
+          <td><textarea readonly='true'class="black_text"><%= job.comment %></textarea></td>
+           <% form_tag :action => 'complete_job', :id => job do %>
+            <td><%= text_field 'job', 'count', :size => 6,:disabled=>true  %></td>
+            <td><%= text_field 'job', 'incomplete_count', :size => 10,:disabled=>true  %></td>
+            <td><%= text_field 'job', 'incomplete_tiff', :size => 10,:disabled=>true  %></td>
+            <td><textarea name='payerid' readonly='true'class="black_text" ><%= job.payer.payid%></textarea></td>
+            <td><% submit_tag "Complete", :class => 'button' %>
+                 <%= link_to 'Data Capture ', :controller => 'datacaptures', :action => 'claim',:batchid=>job.batch.batchid,:checknumber=>job.check_number,:payerid =>job.payer.payid,:jobid=>job.id %>
+                    </td>
+               <%= set_focus 'job_count' %>
+        <%end%>
+     </tr>
+  <%else%>
+          <tr>
+                <% form_tag :name=>"form1", :action => 'complete_job', :id => job do %>  
+                    <td class="<%= cls %>"><textarea name="b_id" class = "black_text"  readonly='true' value="" ></textarea><br/>
+                    <font size='1'>(<%= format_date(job.batch.date) unless job.batch.date.nil? %>)</td>
+                    <td class="<%= cls %>"><%= job.batch.facility %></td>
+                    <td class="<%= cls %>"><textarea name="check_no" class = "black_text" readonly='true' value="" ></textarea></td>
+                      <% if not job.incomplete_tiff.blank? %>
+                            <td class="<%= cls %>"><input type="text" name="temp_tiffno" class = "black_text" value="" readonly="true"><br/></td>
+                                <!--        
+                                <td class="<%= cls %>"><%= job.incomplete_tiff %></td>
+                                -->
+                      <% else %>
+                            <td class="<%= cls %>"><input type="text" name="temp_tiffno" class = "black_text" value="" readonly="true"><br/></td>
+                        <% end %>
+                        <td class="<%= cls %>"><% if !job.qa.nil? %><%= job.qa.name %><% end %></td>
+                <!--
+                        <td class="<%= cls %>"><%= job.processor_status %></td>
+                                       <td class="<%= cls %>"><%= job.qa_status %></td>
+                                       <td class="<%= cls %>"><%= job.job_status %></td>
+                    -->
+                    <td class="<%= cls %>" align='right'>
+                    <%= job.estimated_eob %> (<%if job.incomplete_count.blank? %> 0 <%else%><%= job.incomplete_count%><%end%>)</td>
+                    <td><textarea readonly='true' class = "black_text"><%= job.comment %></textarea></td>
+                    <% form_tag :action => 'complete_job', :id => job do %>
+                        <td><%= text_field 'job', 'count', :size => 6  %></td>
+                        <td><%= text_field 'job', 'incomplete_count', :size => 10  %></td>
+                        <td><%= text_field 'job', 'incomplete_tiff', :size => 10  %></td>
+                        <td><textarea name='payerid' readonly='true' class = "black_text" ><%= job.payer.payid%></textarea></td>
+                        <td><% submit_tag "Complete", :class => 'button',:disabled => true ,:id => temp %></td>
+                        <td><input type="checkbox" name="all" 
+                               onClick='activate_button(<%=temp%>,"<%=@msg%>","<%=temp_batch_id%>","<%=temp_check_no%>","<%=temp_tiffno%>",this.form,"<%=@file_location_db%>")'></td>
+                   <%end%> 
+             <% end %>
+  <% end %>
+           <%= set_focus 'job_count' %>
+        </tr>
+      <% end %>  
+ </table>
+ <% else  %>
+  <h4>You don't have any assigned jobs!!</h4>
+<% end %>
+</div>

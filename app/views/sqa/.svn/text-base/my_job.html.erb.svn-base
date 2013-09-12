@@ -1,0 +1,32 @@
+<div id="login_main">
+<h1>Listing my jobs</h1>
+<div class="right"><%= "Remaining Jobs in Work Queue" " (#{@job_count})"  %></div>
+<%= error_messages_for 'job' %>
+<% unless @jobs.empty? %>
+
+<table width='70%'>
+		<tr>			
+			<th>Batch ID</th>
+			<th>Facility</th>
+			<th>Check Number</th>
+			<th>Tiff Number</th>
+			<th>   QA   </th>
+     	  	<th>SQA Status</th>
+		</tr>
+		<% @jobs.each do |job|%>
+		<tr>			
+			<td align='center'><%= job.batch.batchid%></th>
+			<td align='center'><%= job.batch.facility%></td>
+			<td align='center'><%= job.check_number %></td>
+			<td align='center'><%= job.tiff_number %></td>
+			<td align='center'><%= job.qa.name%></td>
+			<td align='center'><%= job.sqa_status%></td>
+			<td><%= link_to 'Verify', :action => 'verify', :job => job.id %></td>
+		</tr>
+	<% end %>
+</table>
+<% else %>
+<h4>You don't have any assigned jobs!!</h4>
+<%= link_to 'Click Here To Get New Job', :controller => 'sqa/my_job' %>
+<% end %>
+</div>

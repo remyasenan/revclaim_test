@@ -1,0 +1,17 @@
+<%= error_messages_for 'eobrate' %>
+
+<!--[form:eobrate]-->
+<p><label for="eobrate_high">High</label><br/>
+<%= text_field 'eobrate', 'high'  %></p>
+
+<p><label for="eobrate_medium">Medium</label><br/>
+<%= text_field 'eobrate', 'medium'  %></p>
+
+<p><label for="eobrate_low">Low</label><br/>
+<%= text_field 'eobrate', 'low'  %></p>
+
+<p><label for="eobrate_client">Client</label><br/>
+<%= select 'form', 'client', @clients %></p>
+
+<!--[eoform:eobrate]-->
+

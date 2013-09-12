@@ -1,0 +1,79 @@
+<% unless @jobs.blank?%>
+
+<%= legend_start %>
+ <table style="width:100%"><td class="black_text" style="width:900px">
+  <%= legend "color" => "white", "text" => "New"%>
+  <%= legend "color" => "blue", "text" => "Processing"%>
+  <%= legend "color" => "green", "text" => "Complete"%>
+  <%= legend "color" => "darkgreen", "text" => "Batch Complete"%>
+  <%= legend "color" => "red", "text" => "Rejected"%>
+  </td>  </table>
+<%= legend_end %>
+<br/>
+<br/>
+<% pagination = create_pagination(@jobs_pages, 'jobs', params[:page]) %>
+<%= pagination %>
+
+<table>
+      <tr>
+      <th>Batch ID</th>
+      <th>Check <br/>Number </th>
+      <th>Tiff <br/>Number </th>
+      <th>EOBs<br/><font size='1'>Est./Completed</font></th>
+      <th>Processor</th>
+      <th>Processors <br/> Status</th>
+      <th>QA </th>
+      <th>QAs <br/>status</th>
+      <th>Job Status</th>
+      <th>Payer</th>
+      <th>Comment</th>
+    </tr>
+
+    <% @jobs.each do |job| %>
+    <%cls=''%>
+  	<%if job.job_status =~ /Rejected/
+        cls = 'red'
+      elsif job.job_status =~ /Processing/
+        cls = 'blue'
+      elsif job.job_status =~ /Complete/ and job.batch.status =~ /Complete/
+        cls = 'darkgreen'
+      elsif job.job_status =~ /Complete/
+        cls = 'green'
+      else
+        cls = 'white'
+       end
+  	%>
+    <tr>
+      <td class="<%= cls %>" align='right'><strong><%= job.batch.batchid %></strong></td>
+      <td class="<%= cls %>"><%= job.check_number %></td>
+      <td class="<%= cls %>"><%= job.tiff_number %></td>
+      <td class="<%= cls %>" align='right'><%= job.estimated_eob %> / <%= job.count %></td>
+      <% if job.processor %>
+        <td class="<%= cls %>"><%= job.processor.name %></td>
+      <% else %>
+        <td class="<%= cls %>">NA</td>
+      <% end %>
+      <td class="<%= cls %>"><%= job.processor_status %></td>
+      <% if job.qa %>
+        <td class="<%= cls %>"><%= job.qa.name %></td>
+      <% else %>
+        <td class="<%= cls %>">NA</td>
+      <% end %>
+			<td class="<%= cls %>"><%= job.qa_status %></td>
+      <td class="<%= cls %>"><%= job.job_status %></td>
+      <td class="<%= cls %>">
+        <% if job.payer.nil? %>
+          No Payer
+        <% else %>
+          <strong><%= job.payer.payer %></strong>
+        <% end %>
+      </td>
+		 <td><textarea readonly='true' cols="20" rows="2" class="black_text"><%= job.comment %></textarea></td>
+    </tr>
+    <% end %>
+    <% else %>
+      Click on facility name for jobs.
+    <% end %>
+  </table>
+  </div>
+<%= pagination %>

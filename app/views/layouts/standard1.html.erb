@@ -1,0 +1,58 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+
+    <title>RevClaim - <%= controller.action_name %></title>
+
+    <link rel="shortcut icon" href="/favicon.ico"/>
+    <%= stylesheet_link_tag 'scaffold' %>
+    <%= stylesheet_link_tag "fonts",:media => 'all'%>
+    <%= stylesheet_link_tag "login",:media => 'all'%>
+    <%#= javascript_include_tag 'sorttable' %>
+    <%= javascript_include_tag "default.js" %>
+    <%= javascript_include_tag "application.js" %>
+    <%= javascript_include_tag "datepicker" %>
+    <%= javascript_include_tag "wz_tooltip" %>
+  </head>
+
+  <body >
+
+    <div id="link_bar"  align="right">
+      <div id="message" style:align="absmiddle" >
+
+        <% if flash[:notice] %>
+          <%= image_tag("alert.gif", :alt => "Edit")%>
+          <%= flash[:notice] %>
+        <% end %>
+      </div>
+
+
+      <% if @user%>
+        <%= link_to image_tag("home.gif", :alt => "home",:border=>'0',:align=>'absmiddle'), :controller =>  '/sessions', :action => 'dashboard' %>
+        <%= link_to image_tag("logout.gif", :alt => "Logout",:border=>'0',:align=>'absmiddle'), :controller => '/sessions', :action => 'logout' %>
+
+      <%else%>
+
+        <%= link_to image_tag("home.gif", :alt => "home",:border=>'0',:align=>'absmiddle'), :controller =>  '/sessions', :action => 'new' %>
+        <%= link_to image_tag("login.gif", :alt => "Login",:border=>'0',:align=>'absmiddle'), :controller => '/sessions', :action => 'new' %>
+
+      <%end%>
+
+
+    </div>
+
+    <div id="container">
+
+
+      <%=yield %>
+
+
+    </div>
+
+
+    
+  </body>
+
+</html>

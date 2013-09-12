@@ -1,0 +1,12 @@
+<h1>Editing cpt_code</h1>
+
+<% form_for(@cpt_code) do |f| %>
+  <%= f.error_messages %>
+
+  <p>
+    <%= f.submit "Update" %>
+  </p>
+<% end %>
+
+<%= link_to 'Show', @cpt_code %> |
+<%= link_to 'Back', cpt_codes_path %>

@@ -1,0 +1,68 @@
+<div id="login_main">
+  <h1>Productivity Report</h1>
+
+  <% if @processor_claims > 0 %>
+      <div class="light_info">
+        <%= form_tag :action => 'completed_claims', :jobs => @jobs, :back_page => params[:back_page] do %>
+            <%= select 'job', 'criteria', ['Batch Id', 'Count', 'QA'] %>
+            <%= select 'job', 'compare', ['=', '>=', '<='] %>
+            <%= text_field 'job', 'to_find', :size => '10' %>
+            <%= submit_tag 'Filter', :class => 'button' %>
+        <% end %>
+        <%= set_focus 'job_to_find' %>
+      </div>
+      <br/>
+
+      <%= will_paginate @jobs %>      
+      <table>
+        <tr>
+          <th> Batch Date</th>
+          <th> Batch ID</th>
+          <th> Processed Date and Time</th>
+          <th> Claims Count</th>
+          <th> SVC Count</th>
+          <th> Image Name</th>
+          <th> Processor Status</th>
+          <th> Incomplete Comments</th>
+        </tr>
+        <%# To convert from EST to IST it is adding 10.45 to the time - after upgrade we can change it using utc.in_time_zone()%>
+        <% @jobs.each do |job| %> 
+        <% svcnum = 0 %>
+        <%  if params[:batch_type] != 'UB04'%>
+        <% claimid = Cms1500.find(:all, :conditions => "job_id = #{job.id}") %>
+        <% else
+           claimid = Ub04ClaimInformation.find(:all, :conditions => "job_id = #{job.id}")
+         end %>
+        
+        <% claimid.each do |claim| %>
+         <%  if params[:batch_type] != 'UB04'%>
+        <% svcnum += Cms1500serviceline.count_by_sql("select COUNT(*) from cms1500servicelines where cms1500_id = #{claim.id}") %>
+        <% else
+           svcnum += Ub04ClaimInformation.count_by_sql("select COUNT(*) from ub04_serviceline_informations where ub04_claim_information_id = #{claim.id}")%>
+        <% end %>
+        <% end %>
+                <tr>
+                  <td nowrap align='right'> <%= job.batch.date.try(:strftime,'%m-%d-%Y') %> </td>
+                  <td nowrap align='right'> <%= job.batch.batchid %> </td>
+                  <td nowrap align='right'> <%= (job.processor_flag_time).in_time_zone("Chennai").try(:strftime, '%m-%d-%Y %H:%M:%S') %> </td>
+                  <td nowrap align='right'> <%=  claimid.count %> </td>
+                  <td nowrap align='right'> <%= svcnum %> </td>
+                  <td nowrap align='right'> <%= job.tiff_number  %></td>
+                  <% if job.processor %>
+                      <td nowrap align='right'> <%= job.job_status  %> </td>
+                  <% end %>
+                  <td>
+                    <% if job.job_status.downcase != 'incomplete' %>
+                    -
+                      </td>
+                    <% else %>
+                        <%= job.processor_comments %></td>
+                    <% end %>
+                    </tr>
+         <% end %>
+      </table>
+      <%= will_paginate @jobs %>
+  <% else %>
+      <h4>You don't have any completed claims!!</h4>
+  <% end %>
+</div>

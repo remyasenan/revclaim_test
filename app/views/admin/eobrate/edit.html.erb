@@ -1,0 +1,9 @@
+<h1>Editing eobrate</h1>
+
+<% form_tag :action => 'update', :id => @eobrate do %>
+  <%= render :partial => 'form' %>
+  <%= submit_tag 'Edit', :class => 'button' %>
+<% end %>
+
+<%= link_to 'Show', :action => 'show', :id => @eobrate %> |
+<%= link_to 'Back', :action => 'list' %>

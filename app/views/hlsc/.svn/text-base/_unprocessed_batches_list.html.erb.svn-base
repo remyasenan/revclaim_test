@@ -1,0 +1,96 @@
+<% unless @batches.empty? %>
+<%=will_paginate @batches%>
+    <table style="width:100%">
+      <tr>
+        <th> Batch Date </th>
+	
+        <th> <a>Batch ID</a> </th>
+	
+        <th> Site </th>
+        <th> Arrival Time (EST)</th>
+        
+        <th> Expected Completion Time (EST)</th>
+        <% if @rol[0].name == 'Supervisor' or @rol[0].name == 'admin' %>
+          <th> Estimated CLAIMs </th>
+          <th> Completed CLAIMs</th>
+        <% end %>
+        <th> Status </th>
+      </tr>
+
+      <% for batch in @batches %>
+          <% cls = ''
+          if batch.status == 'HLSC Rejected'
+            cls = 'red'
+          end
+          if @rol[0].name == 'Supervisor' or @rol[0].name == 'admin' 
+            unless  batch.tat.nil? or batch.tat.expected_time.nil?
+              if batch.tat.expected_time > batch.contracted_time(@rol[0].name)
+                cls = 'red'
+              end
+            end
+
+            if batch.status == 'New'
+              cls = 'white'
+            elsif batch.status == 'HLSC Rejected'
+              cls = 'red'
+            #elsif not batch.allocated.nil?
+              #cls = 'palered'
+            #elsif batch.processor_allocated.nil?   u have to check dis
+              #cls = 'lightblue'
+            elsif batch.status == 'Processing'
+              cls = 'blue'
+            end
+            
+            if batch.policy_issue == 1
+              cls = 'darkgrey'
+            end
+            if batch.system_issue == 1
+              cls = 'lightgrey'
+            end                      
+            
+          end %>
+
+        <tr>
+          <td nowrap class="<%= cls %>" align='right'><%= format_date(batch.date) %> </td>
+		 
+   
+		 <% if @rol[0].name == 'Supervisor' or @rol[0].name== 'admin' %>
+		  <td nowrap class="<%= cls %>" align='right'><%= link_to batch.batchid, :controller => '/admin/job', :action => 'allocate', :id => batch %> </td>
+		  <% else %>
+		  <td nowrap class="<%= cls %>" align='right'><%= batch.batchid %> </td>
+		  <% end %>
+      
+          <td nowrap class="<%= cls %>"><%= batch.facility.name%> (<%= batch.facility.sitecode %>) </td>
+          <td nowrap class="<%= cls %>" align='right'><%= format_datetime(batch.arrival_time) %></td>
+        
+
+          <td nowrap class="<%= cls %>"  align='right'>
+            <% if batch.status == 'New' or batch.tat.nil? or batch.tat.expected_time.nil? %>
+              N/A
+            <% else %>
+              <%= format_datetime(batch.tat.expected_time)%>
+              <% if @rol[0].name == 'Supervisor' && batch.manual_override %> *<% end %>
+            <% end %>
+          </td>
+
+          <% if @rol[0].name == 'Supervisor' or @rol[0].name == 'admin'  %>
+            <td nowrap class="<%= cls %>" align='right'> <%= batch.estimated_eobs %></td>
+            <td nowrap class="<%= cls %>" align='right'> <%= batch.get_completed_eobs %></td>
+          <% end %>
+
+          <td nowrap class="<%= cls %>">
+            <% if batch.client_status_histories.size > 0 %>
+             <a href="#" onmouseover="return escape('<%= batch_tooltip(batch) %>');"><%= batch.status %></a>
+            <% else %>
+              <%= batch.status %>
+            <% end %>
+          </td>
+
+      </tr>
+      <% end %>
+    </table>
+
+  <br/>
+<% else %>
+  <h4> No matching Batches found. </h4>
+<% end %>

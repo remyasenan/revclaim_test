@@ -1,0 +1,27 @@
+<%= form_for :client, :url => {:action=>"create", :controller=>"admin/client"}, :method => "post" do |p|%>
+  	<%if @client.errors.any?%>
+		<%@client.errors.full_messages.each do |msg|%>
+			<font color="red" class = "error"><%= msg %></font><br />
+				<%end%>
+                        <%end%>
+
+	   	   	  <table id="tabletwo" class="add">
+              <tr>
+                <th align="left" height="25" colspan="2"><%=  image_tag("enable.png",{ :alt=>"Add"})%>&nbsp;Add Client</th>
+              </tr>
+              <tr>
+			  <td width="216">Client Name</td>
+			  <td align="left" width="183"> <%= p.text_field(:name, :id => 'client_name')%></td></tr>
+              <tr>
+			  <td width="216">Client Tat</td>
+			  <td align="left" width="183"> <%= p.text_field(:tat, :id => 'client_tat')%></td></tr>
+			  <tr><td width="216">Client statuse</td> 
+			 <td align="left" width="183">
+			<%= p.radio_button(:status,"ACTIVATE",options = {:checked => true})%><label id="radio">Activate</label><%= p.radio_button(:status,"DEACTIVATE")%><label id="radio">De-Activate</label>
+			 </td></tr>
+			 <tr><td width="216" height="44"></td> 
+                           <td  align="left" width="183"><%= link_to 'Cancel' ,{ :action => 'index'} , :class => "cancel" %> &nbsp;&nbsp; <%= p.submit("save",:class =>"save",:id=>'commit')%></td>
+			  </tr>
+			  <%end%>
+            </table>
+            

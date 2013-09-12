@@ -1,0 +1,29 @@
+<div id="login_main">
+<h1>Editing Job</h1>
+<% form_tag :action => 'update', :id => @job.id do %>
+  <table>
+  <tr>
+    <th>Check number</th>
+    <th>Tiff number</th>
+    <th>Estimated EOBs</th>
+    <th>Payer</th>
+  </tr>
+  <tr>
+    <td><%= text_field 'job', 'check_number', :value => @job.check_number %></td>
+    <td><%= text_field 'job', 'tiff_number', :value => @job.tiff_number %></td>
+    <td><%= text_field 'job', 'estimated_eob', :value => @job.estimated_eob %></td>
+    <td><% if @job.payer.nil? %>
+          <%= text_field 'job1', 'payer', :value => "" %>
+        <% else %>
+          <%= text_field 'job1', 'payer', :value => @job.payer.payer %>
+        <% end %>
+    </td>
+    <td><%= link_to 'Change Payer', :action => 'payer_selection', :controller => 'payer', :id => @job.id %></td>
+  </tr>
+</table>
+	<%= submit_tag 'Edit', :class => 'button' %>
+<% end %>
+
+<br/> <!-- TODO: Handle in CSS -->
+<a href="javascript:history.go(-1)">Back</a>
+</div>

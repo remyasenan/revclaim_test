@@ -1,0 +1,51 @@
+<% form_tag :action => 'delete_users', :id => @users_to_delete do %>
+    <% pagination = create_pagination(@user_pages,'user',params[:page]) %>
+    <%= pagination %>
+  <table>
+    <tr>
+      <th style="width: 173px">Name</th>
+      <th style="width: 155px">Userid</th>
+      <th style="width: 91px">Role</th>
+      <th style="width: 67px">Status</th>
+      <th style="width: 56px">Shift</th>
+     
+      <th style="width: 87px">Accuracy(%) </th>
+      <% if @rol[0].name == 'admin'%>
+        <th style="width: 20px"><input type="checkbox" name="all" onClick="checkAll(document.forms[1].toggle,this)"></th>
+      <% end %>
+      <th style="width: 26px"> &nbsp;</th>
+    </tr>
+    <% for user in @user %>
+      <tr>
+        <td><%= @user.login %></td>
+        <% if @rol[0].name  == 'Processor' %>
+          <td><%= @user.login %></td>
+        <% else %>
+          <td><%=  @user.login %></td>
+        <% end %>
+        <% if @rol[0].name == 'TL' %>
+          <td><%= link_to "#{user.role}", :action => "assign_members", :id => user %></td>
+        <% else %>
+          <td><%= user.role %></td>
+        <% end %>
+        <td><%= user.status %></td>
+        <td>
+          <% if user.shift.nil? %>
+            NA
+          <% else %>
+            <%= user.shift.name %>
+          <% end %>
+        </td>
+        
+        <td align=center><%= format_percentage(user.field_accuracy) %> | <%= format_percentage(user.eob_accuracy) %></td>
+        <% if  @rol[0].name == 'admin'%>
+          <td><%= check_box :users_to_delete, user.id, :id => 'toggle' %></td>
+          <td><%= link_to image_tag("report_edit.png", :alt => "Edit",:border=>"0"), :action => 'edit', :id => user,:page => params[:page] %></td>
+        <% end %>
+      </tr>
+    <% end %>
+  </table>
+  <%= pagination %>
+  <br/>
+  <%= submit_tag 'Delete', :class => 'button' %>
+<% end %>

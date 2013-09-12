@@ -1,0 +1,7 @@
+<ul>
+    <% @payers.each do |payer| %>
+    <li>
+        <%= payer.popup %>
+    </li>
+    <% end %>
+</ul>

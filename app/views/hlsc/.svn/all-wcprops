@@ -1,0 +1,71 @@
+K 25
+svn:wc:ra_dav:version-url
+V 55
+/revenuemed/revclaim/!svn/ver/1462/trunk/app/views/hlsc
+END
+completed_batches_report.rhtml
+K 25
+svn:wc:ra_dav:version-url
+V 85
+/revenuemed/revclaim/!svn/ver/879/trunk/app/views/hlsc/completed_batches_report.rhtml
+END
+reject_checks.html.erb
+K 25
+svn:wc:ra_dav:version-url
+V 77
+/revenuemed/revclaim/!svn/ver/879/trunk/app/views/hlsc/reject_checks.html.erb
+END
+_unprocessed_batches_list.html.erb
+K 25
+svn:wc:ra_dav:version-url
+V 90
+/revenuemed/revclaim/!svn/ver/1461/trunk/app/views/hlsc/_unprocessed_batches_list.html.erb
+END
+batchlist.html.erb
+K 25
+svn:wc:ra_dav:version-url
+V 73
+/revenuemed/revclaim/!svn/ver/879/trunk/app/views/hlsc/batchlist.html.erb
+END
+reject_batch.html.erb
+K 25
+svn:wc:ra_dav:version-url
+V 76
+/revenuemed/revclaim/!svn/ver/879/trunk/app/views/hlsc/reject_batch.html.erb
+END
+_batch_status_list.html.erb
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/revenuemed/revclaim/!svn/ver/1461/trunk/app/views/hlsc/_batch_status_list.html.erb
+END
+hlsc_report.rhtml
+K 25
+svn:wc:ra_dav:version-url
+V 72
+/revenuemed/revclaim/!svn/ver/879/trunk/app/views/hlsc/hlsc_report.rhtml
+END
+unprocessed_batches.html.erb
+K 25
+svn:wc:ra_dav:version-url
+V 84
+/revenuemed/revclaim/!svn/ver/1462/trunk/app/views/hlsc/unprocessed_batches.html.erb
+END
+view_completed_jobs.html.erb
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/revenuemed/revclaim/!svn/ver/879/trunk/app/views/hlsc/view_completed_jobs.html.erb
+END
+batch_status.html.erb
+K 25
+svn:wc:ra_dav:version-url
+V 77
+/revenuemed/revclaim/!svn/ver/1459/trunk/app/views/hlsc/batch_status.html.erb
+END
+reject_tiff.html.erb
+K 25
+svn:wc:ra_dav:version-url
+V 75
+/revenuemed/revclaim/!svn/ver/879/trunk/app/views/hlsc/reject_tiff.html.erb
+END

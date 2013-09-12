@@ -1,0 +1,35 @@
+K 25
+svn:wc:ra_dav:version-url
+V 62
+/revenuemed/revclaim/!svn/ver/879/trunk/app/views/admin/pop_up
+END
+select_facility.html.erb
+K 25
+svn:wc:ra_dav:version-url
+V 87
+/revenuemed/revclaim/!svn/ver/879/trunk/app/views/admin/pop_up/select_facility.html.erb
+END
+edit.html.erb
+K 25
+svn:wc:ra_dav:version-url
+V 76
+/revenuemed/revclaim/!svn/ver/879/trunk/app/views/admin/pop_up/edit.html.erb
+END
+document_list.html.erb
+K 25
+svn:wc:ra_dav:version-url
+V 85
+/revenuemed/revclaim/!svn/ver/879/trunk/app/views/admin/pop_up/document_list.html.erb
+END
+add_message.html.erb
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/revenuemed/revclaim/!svn/ver/879/trunk/app/views/admin/pop_up/add_message.html.erb
+END
+select_payer.html.erb
+K 25
+svn:wc:ra_dav:version-url
+V 84
+/revenuemed/revclaim/!svn/ver/879/trunk/app/views/admin/pop_up/select_payer.html.erb
+END

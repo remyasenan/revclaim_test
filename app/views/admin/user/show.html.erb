@@ -1,0 +1,25 @@
+<div id="login_main">
+<h1>User detail</h1>
+<table>
+	<tr>
+		<th> Name </th>
+		<th> User ID </th>
+		<th> Shift </th>
+		<th> Role </th>
+    <th> Exists? </th>
+	</tr>
+	<tr>
+		<td><%= @user.name %></td>
+		<td><%= @user.userid %></td>
+		<td><%= @user.shift %></td>
+		<td><%= @user.role %></td>
+    <% if @user.is_deleted == false %>
+    <td> Yes </td>
+    <% else %>
+    <td> No </td>
+    <% end %>
+	</tr>
+</table>
+
+<a href="javascript:history.go(-1)">Back</a>
+</div>

@@ -1,0 +1,54 @@
+<br/> <br/><% unless @batches.empty? %>
+<%=will_paginate @batches%>
+  <table>
+  <tr>
+    <th> Batch Date </th>
+    <th> Batch ID </th>
+    <th> Site</th>
+    <th> Arrival Time (EST)</th>
+    <th> Completion Time (EST)</th>
+    <% if @rol[0].name != 'HLSC'%>
+      <th> Completed CLAIMs</th>
+    <% end %>
+    <th> Status </th>
+  
+  </tr>
+
+      <% for batch in @batches %>
+          <% if batch.status == 'HLSC Verified'
+                cls = 'green'
+            elsif !batch.comment.nil?
+                cls = 'red'
+            elsif !batch.completion_time.nil? && ((Time.now - batch.completion_time) > 1800)
+                cls = 'palered'
+            else
+                cls = 'white'
+            end
+          %>
+    <tr>
+    <td nowrap class="<%= cls %>" align='right'><%= format_date(batch.date) %> </td>
+      <td nowrap class="<%= cls %>" align='right'><%= batch.batchid %> </td>
+      <td nowrap class="<%= cls %>"><%= batch.facility.name %> (<%= batch.facility.sitecode %>)</td>
+      <td nowrap class="<%= cls %>" align='right'><%= format_datetime(batch.arrival_time) %></td>
+ <td nowrap class="<%= cls %>" align='right'>&nbsp;<%#= format_datetime(batch.completion_time) %></td>
+      <% if @rol[0].name != 'HLSC'%>
+        <td nowrap class="<%= cls %>" align='right'> <%= batch.get_completed_eobs %> </td>
+      <% end %>
+      <td nowrap class="<%= cls %>">
+          <span class="link">
+      <% if batch.client_status_histories.size > 0 %>
+        <a href="#" onmouseover="return escape('<%= batch_tooltip(batch) %>');"><%= batch.status %></a>
+      <% else %>
+          <%= batch.status %>
+      <% end %>
+      </span>
+    </td>
+
+    </tr>
+  <% end %>
+  </table>
+
+  <br/>
+<% else %>
+  <h4> No matching Batches found. </h4>
+<% end %>

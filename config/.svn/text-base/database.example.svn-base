@@ -1,0 +1,17 @@
+base: &base
+  adapter: mysql
+  socket: /var/run/mysqld/mysqld.sock
+  username: revclaim
+  password: revclaim
+
+development:
+  database: revclaim_dev
+  <<: *base
+
+test:
+  database: revclaim_test
+  <<: *base
+
+production:
+  database: revclaim_prod
+  <<: *base

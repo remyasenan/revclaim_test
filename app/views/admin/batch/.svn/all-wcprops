@@ -1,0 +1,155 @@
+K 25
+svn:wc:ra_dav:version-url
+V 62
+/revenuemed/revclaim/!svn/ver/1787/trunk/app/views/admin/batch
+END
+pcn_cms1500_837.txt.erb
+K 25
+svn:wc:ra_dav:version-url
+V 86
+/revenuemed/revclaim/!svn/ver/1662/trunk/app/views/admin/batch/pcn_cms1500_837.txt.erb
+END
+ubo4_xml.txt.erb
+K 25
+svn:wc:ra_dav:version-url
+V 79
+/revenuemed/revclaim/!svn/ver/1473/trunk/app/views/admin/batch/ubo4_xml.txt.erb
+END
+list.html.erb
+K 25
+svn:wc:ra_dav:version-url
+V 76
+/revenuemed/revclaim/!svn/ver/1483/trunk/app/views/admin/batch/list.html.erb
+END
+jobfind.html.erb
+K 25
+svn:wc:ra_dav:version-url
+V 78
+/revenuemed/revclaim/!svn/ver/879/trunk/app/views/admin/batch/jobfind.html.erb
+END
+payer_list.html.erb
+K 25
+svn:wc:ra_dav:version-url
+V 81
+/revenuemed/revclaim/!svn/ver/879/trunk/app/views/admin/batch/payer_list.html.erb
+END
+load.erb
+K 25
+svn:wc:ra_dav:version-url
+V 71
+/revenuemed/revclaim/!svn/ver/1467/trunk/app/views/admin/batch/load.erb
+END
+batch_report.html.erb
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/revenuemed/revclaim/!svn/ver/879/trunk/app/views/admin/batch/batch_report.html.erb
+END
+batchlist.html.erb
+K 25
+svn:wc:ra_dav:version-url
+V 81
+/revenuemed/revclaim/!svn/ver/1473/trunk/app/views/admin/batch/batchlist.html.erb
+END
+show.html.erb
+K 25
+svn:wc:ra_dav:version-url
+V 75
+/revenuemed/revclaim/!svn/ver/879/trunk/app/views/admin/batch/show.html.erb
+END
+incompletedjobs.html.erb
+K 25
+svn:wc:ra_dav:version-url
+V 87
+/revenuemed/revclaim/!svn/ver/1484/trunk/app/views/admin/batch/incompletedjobs.html.erb
+END
+archive_batch.html.erb
+K 25
+svn:wc:ra_dav:version-url
+V 84
+/revenuemed/revclaim/!svn/ver/879/trunk/app/views/admin/batch/archive_batch.html.erb
+END
+add_job.html.erb
+K 25
+svn:wc:ra_dav:version-url
+V 78
+/revenuemed/revclaim/!svn/ver/879/trunk/app/views/admin/batch/add_job.html.erb
+END
+allocate.html.erb
+K 25
+svn:wc:ra_dav:version-url
+V 80
+/revenuemed/revclaim/!svn/ver/1787/trunk/app/views/admin/batch/allocate.html.erb
+END
+edit.html.erb
+K 25
+svn:wc:ra_dav:version-url
+V 75
+/revenuemed/revclaim/!svn/ver/879/trunk/app/views/admin/batch/edit.html.erb
+END
+comments.html.erb
+K 25
+svn:wc:ra_dav:version-url
+V 80
+/revenuemed/revclaim/!svn/ver/1467/trunk/app/views/admin/batch/comments.html.erb
+END
+2790_cms1500_837.txt.erb
+K 25
+svn:wc:ra_dav:version-url
+V 87
+/revenuemed/revclaim/!svn/ver/1421/trunk/app/views/admin/batch/2790_cms1500_837.txt.erb
+END
+pcn_ub04_837.txt.erb
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/revenuemed/revclaim/!svn/ver/1598/trunk/app/views/admin/batch/pcn_ub04_837.txt.erb
+END
+payer_grouplist.html.erb
+K 25
+svn:wc:ra_dav:version-url
+V 86
+/revenuemed/revclaim/!svn/ver/879/trunk/app/views/admin/batch/payer_grouplist.html.erb
+END
+new.html.erb
+K 25
+svn:wc:ra_dav:version-url
+V 74
+/revenuemed/revclaim/!svn/ver/879/trunk/app/views/admin/batch/new.html.erb
+END
+837.txt.erb
+K 25
+svn:wc:ra_dav:version-url
+V 74
+/revenuemed/revclaim/!svn/ver/1662/trunk/app/views/admin/batch/837.txt.erb
+END
+ubo4_check_balancing_xml.txt.erb
+K 25
+svn:wc:ra_dav:version-url
+V 95
+/revenuemed/revclaim/!svn/ver/1473/trunk/app/views/admin/batch/ubo4_check_balancing_xml.txt.erb
+END
+non_compliant.html.erb
+K 25
+svn:wc:ra_dav:version-url
+V 84
+/revenuemed/revclaim/!svn/ver/879/trunk/app/views/admin/batch/non_compliant.html.erb
+END
+output_batch.html.erb
+K 25
+svn:wc:ra_dav:version-url
+V 84
+/revenuemed/revclaim/!svn/ver/1776/trunk/app/views/admin/batch/output_batch.html.erb
+END
+_form.html.erb
+K 25
+svn:wc:ra_dav:version-url
+V 76
+/revenuemed/revclaim/!svn/ver/879/trunk/app/views/admin/batch/_form.html.erb
+END
+_batches_list.html.erb
+K 25
+svn:wc:ra_dav:version-url
+V 85
+/revenuemed/revclaim/!svn/ver/1483/trunk/app/views/admin/batch/_batches_list.html.erb
+END

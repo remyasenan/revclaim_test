@@ -1,0 +1,42 @@
+<div id="login_main">
+<h1>Listing Allocated batches</h1>
+
+
+<% if @batches.size > 0 %>
+<div class="light_info">
+  <%= form_tag :action => 'unprocessed_batches' do %>
+    <%= select_tag 'criteria',  optionize('Batch Date', 'Batch ID') %>
+    <%= select_tag 'compare', optionize('=','>', '<')%>
+    <%= text_field_tag 'to_find', nil,  :size => '10' %>
+    <%= submit_tag 'Filter', :class => 'button' %>
+  <% end %>
+  <%= set_focus 'to_find' %>
+	</div>
+
+<%= legend_start %>
+
+<table style="width:100%"><div style="width:900px"><td class="black_text">
+	<% if @rol[0].name == 'HLSC' %>
+    <%= legend "color" => "white", "text" => "New/Processing" %>
+		<%= legend "color" => "red", "text" => "HLSC Rejected" %>
+	<% else %>
+    <%= legend "color" => "white", "text" => "New" %>
+    <%= legend "color" => "blue", "text" => "Processing"%>
+    <%= legend "color" => "palered", "text" => "Half Allocated"%>
+		
+    <%= legend "color" => "lightblue", "text" => "Processor Complete"%>
+    
+	<% end %>
+       </td>
+     </div>
+       </table>
+<%= legend_end %>
+
+<% end %>
+
+<br/>
+<br/>
+<div id="table">
+	<%= render :partial => "unprocessed_batches_list" %>
+</div>
+</div>

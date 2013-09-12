@@ -1,0 +1,53 @@
+<% unless @batches.blank? %>
+<%= legend_start %>
+	<%= legend "color" => "blue", "text" => "Correspondence" %>
+	<%= legend "color" => "white", "text" => "Payment" %>
+<%= legend_end %>
+
+  <%= form_tag :action => 'delete_batches', :id => @batches_to_delete do %>
+    <% pagination = create_pagination(@batch_pages,'batch',params[:page]) %>
+    <%= pagination %>
+
+    <table>
+      <tr>
+         <th style="width: 85px">Batch ID</th>
+        <th style="width: 64px">Date</th>
+        <th style="width: 95px">Facility</th>
+        <th style="width: 115px">Client</th>
+        <th style="width: 116px">Estimated EOBs</th>
+        <th style="width: 126px">Arrival Time (EST)</th>
+        <th style="width: 116px">Target Time (EST)</th>
+        <th style="width: 20px"><input type="checkbox" name="all" onClick="checkAll(document.forms[1].toggle,this)"/></th>
+        <th style="width: 43px">&nbsp;</th>
+        <th style="width: 112px">&nbsp;</th>
+      </tr>
+
+    <% for batch in @batches
+    	cls=""
+			if batch.correspondence == 1
+				cls = 'blue'
+			else
+				cls = 'white'
+			end %>
+      <tr>
+        <td class="<%= cls %>" align='right'><%= batch.batchid %> </td>
+        <td class="<%= cls %>"><%= format_date(batch.date) unless batch.date.nil? %> </td>
+        <td class="<%= cls %>"><%= batch.facility %> </td>
+        <td class="<%= cls %>"><%= batch.facility.client %> </td>
+        <td class="<%= cls %>" align='right'><%= batch.estimated_eobs %></td>
+        <td class="<%= cls %>" align='right'><%= format_datetime(batch.arrival_time)%> </td>
+        <td class="<%= cls %>" align='right'><%= format_datetime(batch.target_time)%> </td>
+        <td class="<%= cls %>"><%= check_box :batches_to_delete, batch.id, :id => 'toggle' %> </td>
+        <td class="<%= cls %>"><%= link_to image_tag("report_edit.png", :alt => "Edit",:border=>"0"), :action => 'edit', :id => batch  %></td>
+        <td class="<%= cls %>"><%= link_to 'Job  Administration', :action => 'add_job', :id => batch %></td>
+      </tr>
+    <% end %>
+    </table>
+
+  <%= pagination %>
+  <br/>
+  <%= submit_tag 'Delete Batches', :class => 'button' %>
+  <% end %>
+<% else %>
+  <h4> No Batches found. </h4>
+<% end %>

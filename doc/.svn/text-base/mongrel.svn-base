@@ -1,0 +1,58 @@
+#!/usr/bin/env ruby
+
+SCRIPT_NAME = 'mongrel'
+RAILS_APP_ROOT = '/var/www/apps/current'
+PORTS = [9000, 9001, 9002, 9003]
+MODE = 'production'
+
+def start
+	PORTS.each do |port|
+		if is_started?(port)
+			puts "Mongrel is already started"
+		else
+			puts "Starting Mongrel(#{port})..." 
+			system "mongrel_rails start -c #{RAILS_APP_ROOT} -p #{port} -e #{MODE} -d -P log/mongrel.#{port}.pid -l log/mongrel.#{port}.log"
+		end
+	end
+end
+
+def stop
+	PORTS.each do |port|
+		if is_started?(port)
+			puts "Stopping Mongrel(#{port})..."
+			system "mongrel_rails stop -c #{RAILS_APP_ROOT} -P log/mongrel.#{port}.pid"
+		else
+			puts "Mongrel is already stopped"
+		end
+	end
+end
+
+def restart
+	puts "Restarting Mongrel..."
+	PORTS.each do |port|
+		if is_started?(port)
+			system "mongrel_rails stop -c #{RAILS_APP_ROOT} -P log/mongrel.#{port}.pid"
+		else
+			puts "Mongrel not started already. Starting Mongrel#{port}..." 
+		end
+	end
+  start
+end
+
+def is_started?(port)
+	Dir.open(File.join(RAILS_APP_ROOT,"log")).each do |filename|
+		return true if filename =~ /mongrel.#{port}.*pid/
+	end
+	return false
+end
+
+case ARGV.first
+when 'start'
+	start
+when 'stop'
+	stop
+when 'restart'
+	restart
+else
+	puts "Usage: #{SCRIPT_NAME} (start|stop|restart) "
+end

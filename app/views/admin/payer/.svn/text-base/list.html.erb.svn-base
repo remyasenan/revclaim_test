@@ -1,0 +1,114 @@
+<div id="login_main">
+  <h1>Listing payers</h1>
+
+  <% if @user.roles.first.name == 'Processor' %>
+    <div class="light_info">
+      <%= link_to 'New payer', :action => 'new' %>
+    </div>
+  <% end %>
+  <% if @user.roles.first.name== 'Supervisor' or @user.roles.first.name == 'admin' %>
+    <div class="light_info">
+      <%= link_to 'New payer', :action => 'new' %> | <%= link_to 'Import Payers from CSV file', :controller => '/admin/upload', :action => 'upload', :type => 'payer'%> | <%= link_to 'Newly added Payers', :action => 'new_payers' %>
+    </div>
+  <% end %>
+
+  <% if @payers.size > 0 %>
+    <div class="light_info">
+      <%= form_tag "",:method => :get do %>
+        <%= select_tag 'criteria', optionize('Payer Id','Gateway', 'Payer', 'Address-1','Address-2','Address-3','Address-4') %>
+        <%= select_tag 'compare', optionize('=','>=', '<=')%>
+        <%= text_field_tag 'to_find', nil, :size => '10' %>
+        <%= submit_tag 'Filter', :class => 'button' %>
+      <% end  %>
+      <%= set_focus 'to_find' %>
+    </div>
+  <% end %>
+
+  <% unless @payers.empty? %>
+    <%= form_tag :action => 'delete_payers', :id => @payers_to_delete do %>
+      <%=will_paginate @payers%>
+      <table>
+        <tr>
+
+          <th>Gateway</th>
+          <th>Payer ID</th>
+          <th>Payer</th>
+
+          <th>GR Name</th>
+
+          <th>Address One</th>
+          <th>Address Two</th>
+          <th>Address Three</th>
+          <th>Address Four</th>
+          <% if @user.roles.first.name == 'Supervisor' or @user.roles.first.name == 'admin'%>
+                <th><input type="checkbox" name="all" onClick="checkAll(document.forms[1].toggle,this)"></th>
+                <th style="width: 28px"> &nbsp;</th>
+              </tr>
+
+            <% end %>
+      <!--	<th>Phone</th> -->
+      <% for payer in @payers %>
+        <tr>
+
+          <td><%= payer.gateway %></td>
+          <td><%= payer.payid %></td>
+          <td><%= payer.payer %></td>
+          <td>
+            <%if  payer.gr_name.blank?%>
+              <%='-'%>
+            <%else%>
+              <%=payer.gr_name%>
+            <%end%>
+          </td>
+
+          <td><%if payer.pay_address_one.blank? %>
+              <%='-'%>
+            <%else%>
+              <%=payer.pay_address_one%>
+            <%end%>
+
+          </td>
+          <td><%if payer.pay_address_two.blank? %>
+              <%='-'%>
+            <%else%>
+              <%=payer.pay_address_two%>
+            <%end%>
+          </td>
+          <td><%if payer.pay_address_three.blank? %>
+              <%='-'%>
+            <%else%>
+              <%=payer.pay_address_three%>
+            <%end%>
+          </td>
+          <td>
+            <%if payer.pay_address_four.blank? %>
+              <%='-'%>
+            <%else%>
+              <%=payer.pay_address_four%>
+            <%end%>
+          </td>
+          <% if @user.roles.first.name == 'Supervisor' or @user.roles.first.name == 'admin'%>
+            <td><%= check_box :payers_to_delete, payer.id, :id => 'toggle' %> </td>
+            <td><%= link_to image_tag("report_edit.png", :alt => "Edit",:border=>"0"), :action => 'edit', :id => payer %></td>
+          <% end %>
+        </tr>
+      <% end %>
+    </table>
+
+    <%=will_paginate @payers %>
+    <% if @user.roles.first.name == 'Supervisor' or @user.roles.first.name == 'admin'%>
+      <%= submit_tag 'Delete', :class => 'button' if @payers.size > 0 %>
+    <% end %>
+  <% end %>
+  <br/>
+
+
+<% else %>
+
+  <h4> No Payers found. Click 'New Payer' to create one. </h4>
+<% end %>
+
+</div>
+
+
+

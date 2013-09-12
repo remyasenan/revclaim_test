@@ -1,0 +1,146 @@
+
+<%= javascript_include_tag "standard" %>
+<%= stylesheet_link_tag 'daterangepicker-bs2' %>
+<%= stylesheet_link_tag 'bootstrap-combined.min' %>
+<style>
+  #container{
+      border: none!important;
+  }
+</style>
+<div id="page_container">
+<div id="login_main">
+<h1 style="color: #0066FF;font-size: 120%;">837 Ready Batches</h1>
+  <%= legend_start %>
+<table style="width:100%; margin-top: -13px;">
+  <td class="black_text" style="width:600px">
+
+  <%= legend "color" => "green", "text" => "Completed" %>
+	<%= legend "color" => "red", "text" => "837 Ready" %>
+        </td>  </table>
+<%= legend_end %>
+
+  <div class="light_info" style="width:580px;height:78px;">
+
+    <% if !params[:date_type].blank?
+           if params[:date_type] == 'arrival'
+              @arrival = true
+              @deposit = false
+           elsif params[:date_type] == 'deposit'
+              @deposit = true
+              @arrival = false
+           else
+              @arrival = true
+              @deposit = false
+           end
+         else
+           @arrival = true
+           @deposit = false
+       end
+    %>
+    <%= form_tag :action => 'output_batch'  do %>
+        <table style="margin: 0;width: 580px;">
+          <tr>
+            <td style="height: 20px; width: 200px;" >Date</td>
+            <td > </td>
+            <td >
+              <%= select_tag 'criteria', options_for_select([ "", "Batch ID" , "Facility"], params[:criteria]), :style => "width :180px; height : 25px;" %>
+            </td>
+          </tr>
+          <tr>
+            <td ><i class="icon-calendar"></i><%= text_field_tag 'date_range', params[:date_range],  :size => '10', :style => "width :155px; height : 18px;" %></td>
+            <td >    <%= radio_button_tag 'date_type', 'arrival', @arrival %> Arrival <br/>
+              <%= radio_button_tag 'date_type', 'deposit', @deposit %> Deposit</td>
+            <td ><%= text_field_tag 'option_name', params[:option_name],  :size => '10', :style => "width :120px; height : 18px;" %>
+              <%= submit_tag 'Filter', :class => 'button' %></td>
+          </tr>
+        </table>
+
+
+
+
+       </table>
+    <% end %>
+    <%#= set_focus 'date_range' %>
+  </div>
+
+    <script type="text/javascript">
+$(document).ready(function() {
+    $('#date_range').daterangepicker();
+});
+</script>
+<% unless @batches.blank? %>
+  <%= form_tag :action => 'batch_report' do %>
+   <br><br>
+  <table style="margin-top: -20px;">
+    <tr>
+      <th> Batch Date </th>
+      <th> <a>Batch ID</a> </th>
+      <th> Facility </th>
+      <th> Arrival Time (EST)</th>
+      <th> Expected Completion Time (EST)</th>
+
+    </tr>
+
+       <%=will_paginate @batches,:params=>{:date_range=>params[:date_range],:date_type=>params[:date_type],:criteria=>params[:criteria],:option_name=>params[:option_name]}%>
+         <%  @batches.each do|batch| %>
+
+               <% cls = ''
+               if batch.status == 'HLSC Rejected'
+                   cls = 'white'
+               end
+               if @rol[0].name == 'Supervisor' or @rol[0].name == 'admin' or @rol[0].name == 'TL'
+                   
+ 
+                              
+                   if batch.status == "Complete"
+                       cls = 'green'
+                   end
+                   if batch.status == "837Ready"
+                       cls = 'red'
+                   end                      
+             
+               end %>
+      <tr>
+        <td nowrap class="<%= cls %>" align='right'><%= format_date(batch.date) %> </td>
+        <% if @rol[0].name == 'Supervisor' or @rol[0].name == 'admin' %>
+           <%@id =Batch.find_by_batchid(batch.batchid).id%>
+          <td nowrap class="<%= cls %>" align='right'><%=  batch.batchid %> </td>
+    
+        <% end %>
+        <td nowrap class="<%= cls %>"><%= batch.facility.name%> (<%= batch.facility.sitecode %>) </td>
+        <td nowrap class="<%= cls %>" align='right'><%= format_datetime(batch.arrival_time) %></td>
+        <td nowrap class="<%= cls %>"  align='right'>
+            <% 
+            @batchid = Batch.find_by_batchid(batch.batchid).id
+            @count=Tat.count(:all,:conditions=>"batch_id=#{@batchid}")
+            %>
+                        <% if @count==0  %>
+              N/A
+            <% else %>
+                <% date=Tat.find_by_batch_id(@batchid ).expected_time%>
+                <%= format_datetime(date)%>
+                  <% if @rol[0].name == 'Supervisor' && batch.manual_override %> *<% end %>
+              <% end %>
+             
+              </td>
+<td><%= check_box :batch_to_delete, batch.batchid %> </td>
+          <%
+          @batchid = Batch.find_by_batchid(batch.batchid).id
+          @totaljobcount = Job.count(:conditions=>"batch_id=#{@batchid}")
+          @totalcomletedjobcount = Job.count(:conditions=>"batch_id=#{@batchid} and job_status='Complete' ")
+           %>
+         
+        </tr>
+      <% end %>
+      
+    </table>
+ <%= submit_tag "Archive", :class => 'button', :name => "option1" %>
+ <%= submit_tag "837 Report", :class => 'button', :name => "option1" %>
+ <%= submit_tag "XML Report", :class => 'button', :name => "option1" %>
+  <% end %>
+    <br/>
+  <% else %>
+    <h4> No matching Batches found. </h4>
+  <% end %>
+</div>
+     </div>

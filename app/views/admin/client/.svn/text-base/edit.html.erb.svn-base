@@ -1,0 +1,25 @@
+<%= form_for :client, :url => {:action=>"update", :controller=>"admin/client"}, :method => 'put' do |p|%>
+
+<table  id="tabletwo" class="add">
+	<tr>
+		<th align="left" height="25" colspan="2">
+                  &nbsp;Update Client </th>
+	</tr>
+        <tr>
+	<td width="216">Client Name</td>
+        <td align="left" width="183"><%= p.text_field(:name, :id => 'client_name') %></td></tr>
+        <tr>
+	<td width="216">Client Tat</td>
+        <td align="left" width="183"><%= p.text_field(:tat, :id => 'client_tat') %></td></tr>
+	<tr>
+		<td width="216">Client statuse</td>
+                <td width="216">
+                  <%= p.radio_button(:status,"ACTIVATE",options = {:checked => true})%><label id="radio">Activate</label><%= p.radio_button(:status,"DEACTIVATE")%><label id="radio">De-Activate</label>
+                </td>
+	</tr>
+	<tr>
+		<td width="216" height="44"></td>
+		<td  align="left" width="183"><%= link_to 'Cancel' ,{ :action => 'index'} %> <%= p.submit("save",:class =>"save",:id=>'commit')%><!-- <input type="submit" class="save" value="save" title="save the task" />&nbsp;&nbsp;<input type="submit" class="cancel" value="cancel" title="cancel the task" /> --></td>
+	</tr>
+	<%end%>
+</table>

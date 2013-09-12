@@ -1,0 +1,47 @@
+K 25
+svn:wc:ra_dav:version-url
+V 40
+/revenuemed/revclaim/!svn/ver/1801/trunk
+END
+sample
+K 25
+svn:wc:ra_dav:version-url
+V 46
+/revenuemed/revclaim/!svn/ver/879/trunk/sample
+END
+Rakefile
+K 25
+svn:wc:ra_dav:version-url
+V 49
+/revenuemed/revclaim/!svn/ver/1453/trunk/Rakefile
+END
+Capfile
+K 25
+svn:wc:ra_dav:version-url
+V 47
+/revenuemed/revclaim/!svn/ver/879/trunk/Capfile
+END
+Gemfile
+K 25
+svn:wc:ra_dav:version-url
+V 48
+/revenuemed/revclaim/!svn/ver/1636/trunk/Gemfile
+END
+config.ru
+K 25
+svn:wc:ra_dav:version-url
+V 50
+/revenuemed/revclaim/!svn/ver/1453/trunk/config.ru
+END
+README
+K 25
+svn:wc:ra_dav:version-url
+V 47
+/revenuemed/revclaim/!svn/ver/1455/trunk/README
+END
+REVISION
+K 25
+svn:wc:ra_dav:version-url
+V 48
+/revenuemed/revclaim/!svn/ver/879/trunk/REVISION
+END

@@ -1,0 +1,1 @@
+$RC_REFERENCES = YAML.load_file("#{Rails.root}/config/references.yml")

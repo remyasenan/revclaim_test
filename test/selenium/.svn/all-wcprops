@@ -1,0 +1,41 @@
+K 25
+svn:wc:ra_dav:version-url
+V 53
+/revenuemed/revclaim/!svn/ver/879/trunk/test/selenium
+END
+client_administration.html
+K 25
+svn:wc:ra_dav:version-url
+V 80
+/revenuemed/revclaim/!svn/ver/879/trunk/test/selenium/client_administration.html
+END
+user_administration.html
+K 25
+svn:wc:ra_dav:version-url
+V 78
+/revenuemed/revclaim/!svn/ver/879/trunk/test/selenium/user_administration.html
+END
+payer_administration.html
+K 25
+svn:wc:ra_dav:version-url
+V 79
+/revenuemed/revclaim/!svn/ver/879/trunk/test/selenium/payer_administration.html
+END
+batch_administration.html
+K 25
+svn:wc:ra_dav:version-url
+V 79
+/revenuemed/revclaim/!svn/ver/879/trunk/test/selenium/batch_administration.html
+END
+facility_administration.html
+K 25
+svn:wc:ra_dav:version-url
+V 82
+/revenuemed/revclaim/!svn/ver/879/trunk/test/selenium/facility_administration.html
+END
+job_administration.html
+K 25
+svn:wc:ra_dav:version-url
+V 77
+/revenuemed/revclaim/!svn/ver/879/trunk/test/selenium/job_administration.html
+END

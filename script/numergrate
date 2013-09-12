@@ -1,0 +1,212 @@
+#!/usr/bin/env ruby
+# (c) 2007 Alex Le
+# www.alexle.net  -  nworld3d@yahoo.com
+# This script is developed for www.warsofearth.com. (shameless self-promotion)
+# Released under the same license as Ruby
+# Disclaimer:  The author is not responsible for any incorrect results from running 
+# the script.  Use it at your own risk.
+#
+# USAGE:
+# ------
+# This script is used to re-number the migration files into the desired sequence
+# In development, this comes handy as you can organize migration files into logical groups
+# by running a simple command line utility instead of manually renaming the filenames.
+# 
+#    numergration = numerate migration files
+#  
+# INSTALL 
+# -------
+# Copy numergration into script/ folder of your Rails application.
+# On linux system you may have to chmod the script to be executable (+x)
+#
+# HOW TO RUN
+# ----------
+# At your Rails application root, run:
+#  On Windows:  
+#    > ruby script/numergrate <origianl_migration_sequence> before|after <destination_migration_sequence> [mode]
+#  On Linux:  users  can just run the script without calling the ruby executable since 
+#  there's a #! on top, provided that you set the permission correctly. (chmod to +x)
+#    $ script/numergrate <origianl_migration_sequence> before|after <destination_migration_sequence> [mode]
+# 
+#  The [mode] options are 
+#    --test   Default mode to test the result before you run
+#             with --shell or --svn
+#
+#    --shell  Renaming file as you would do manually in the shell
+#
+#    --svn    Integrate with Subversion by executing `svn rename` on each file
+#             This option alters your working copy so please be extra careful.
+#             (a.k.a. use it at your own risk)"
+#
+#  Example:  
+#  --------
+#  a. Move Migration file 50 to position 3, hence shifting migration files 
+#     from 3 to 49 to the right by 1.
+#     > ruby script/numergrate 50 before 3
+#     (the above will just execute with the --test default option)
+#
+#     Or to actually rename the files,
+#     > ruby script/numergrate 50 before 3 --shell    (or --svn)
+#
+#     Or you can even run 
+#     > ruby script/numergrate 50 after 3
+#     to put migration file 50 after migration file 3 (shifting migration 
+#     file 4 to 49 to the right by 1)
+#
+# TODO:
+# ----
+#  1. Better sequence handling.  Currently it's default to 000 for the 
+#     sequence series.  However, there can be potentially a lot migration files. 
+#     (more than 999 files).  The solution is to find the max sequence and 
+#     use that as the series template
+#  2. Better SVN integration.  
+#      a. Do some checking to see if the svn client exists before running.
+#         Otherwise throw an error
+#  3.  Better sequence checking.  Currently it doesn't check for input 
+#      range so we can have "index out of bound" errors.
+#
+
+require 'fileutils'
+include FileUtils
+
+# which folder we would skip while iterate through
+SKIPPED_FILES = ['.', '..','.svn']
+
+# check for arguments
+unless ARGV.size == 3 or ARGV.size == 4 
+  puts 'invalid syntax'
+  exit
+end
+
+# this class hold the information about the migration file
+class MigrationFile 
+  attr_accessor :sequence, :name, :new_sequence
+  
+  def to_s(options={})
+    if @new_sequence != @sequence
+      s = sprintf("%03d",@new_sequence) <<  "_#{@name}"
+    else
+      s = sprintf("%03d",@sequence) <<  "_#{@name}"
+    end
+  end
+  
+  def initialize(sequence, name)
+    @sequence = sequence
+    @name = name
+    @new_sequence = @sequence
+  end
+  
+  def shift_left()
+    @new_sequence -= 1
+  end
+  
+  def shift_right()
+    @new_sequence += 1
+  end
+  
+  def is_changed?
+    return @new_sequence != @sequence
+  end
+  
+  def old_name
+    s = sprintf("%03d",@sequence) <<  "_#{@name}"
+  end
+  
+  def new_name
+    s = sprintf("%03d",@new_sequence) <<  "_#{@name}"
+  end
+end
+
+
+
+# 123 after 234 --test
+src, task, dest, mode = [ARGV[0].to_i, ARGV[1], ARGV[2].to_i, ARGV[3]] # got to explicitly convert to number for comparision
+# exit if don't have to move
+exit if src == dest
+
+# default mode to --test
+mode ||= "--test"
+
+#grab the migration files 
+files = []
+Dir.entries("db/migrate").each { |file|
+  unless SKIPPED_FILES.include?file
+     files << MigrationFile.new(file.to_i, file.match(/.+?_(.*)/)[1])
+  end
+}
+
+# now perform shifting
+files.each{ |file|
+  if src > dest 
+    if file.sequence == src
+      if task == "before" 
+        file.new_sequence = dest
+      elsif task == "after"
+        file.new_sequence = dest + 1
+      end
+    else
+      # shift the innner range files
+      if file.sequence >= dest && file.sequence < src
+        if task == "before"
+          file.shift_right           
+        else
+          file.shift_right unless file.sequence == dest # if insert after, we don't need to shift the dest
+        end
+      end
+    end
+  elsif src < dest 
+    if file.sequence == src
+      if task == "before" 
+        file.new_sequence = dest - 1
+      elsif task == "after"
+        file.new_sequence = dest
+      end
+    else
+      # shift the innner range files
+      if file.sequence <= dest && file.sequence > src
+        if task == "before"
+          file.shift_left unless file.sequence == dest # if insert before, we don't need to shift the dest
+        else
+          file.shift_left
+        end
+      end
+    end    
+  end # if src > dest
+}
+
+#files.each{ |f| puts f if f.new_sequence != f.sequence }
+
+# now issue
+puts ""
+puts "                      Execute using #{mode} option"
+puts ""
+puts "   You can execute with these options: "
+puts ""
+puts "     --test   Default mode to test the result before you run"
+puts "              with --shell or --svn"
+puts ""
+puts "     --shell  Renaming file as you would do manually in the shell"
+puts ""
+puts "     --svn    Integrate with Subversion by executing `svn rename` on each file"
+puts "              This option alters your working copy so please be extra careful."
+puts "              (a.k.a. use it at your own risk)"
+puts ""
+
+files.each{ |file|
+  if file.is_changed?
+    if mode == "--shell"
+	  puts "	rename " << "db/migrate/" << file.old_name 
+	  puts "	    to " << "db/migrate/" << file.new_name 
+      cp("db/migrate/" << file.old_name, "db/migrate/" << file.new_name )
+      rm("db/migrate/" << file.old_name)
+    elsif mode.downcase == "--svn"
+      #puts "executing svn commmand here"
+	  puts "     svn rename   " <<  "db/migrate/" << file.old_name 
+	  puts "             to   " <<  "db/migrate/" << file.new_name
+	  system 'svn rename --force db/migrate/' << file.old_name << " db/migrate/" << file.new_name
+	elsif mode.downcase == "--test"
+	  puts "    [TEST] rename " << "db/migrate/" << file.old_name 
+	  puts "               to " << "db/migrate/" << file.new_name 
+    end
+  end
+}

@@ -1,0 +1,67 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <head>
+      <title>RevClaim - <%= controller.action_name %></title>
+      <meta http-equiv="content-type" content="text/html; charset=iso-8859-1" />
+      <meta http-equiv="cache-control" content="no-cache" />
+      <link rel="shortcut icon" href="/favicon.ico" />
+        <%= stylesheet_link_tag 'scaffold' %>
+        <%= stylesheet_link_tag "fonts",:media => 'all'%>
+        <%= stylesheet_link_tag "login",:media => 'all'%>
+        <%#= javascript_include_tag 'sorttable' %>
+        <%= javascript_include_tag 'standard.js' %>
+        <%= javascript_include_tag "datepicker" %>
+       <%= csrf_meta_tags %>
+    </head>
+
+  </head>
+  <body >
+
+    <div id="container">
+
+      <div id="header">
+
+        <div id="logo_container"></div>
+        <div id="company_logo"></div>
+      </div>
+
+      <div id="link_bar"  align="right">
+        <div id="message" style:align="absmiddle" >
+
+          <% if flash[:notice] %>
+            <%= image_tag("alert.gif", :alt => "Edit")%>
+            <%= flash[:notice] %>
+          <% end %></div>
+
+
+        <% if session[:user]%>
+          <%= link_to image_tag("home.gif", :alt => "home",:border=>'0',:align=>'absmiddle'), :controller =>  '/sessions', :action => 'dashboard' %>
+          <%= link_to image_tag("logout.gif", :alt => "Logout",:border=>'0',:align=>'absmiddle'), :controller => '/sessions', :action => 'logout' %>
+
+        <%else%>
+
+          <%= link_to image_tag("home.gif", :alt => "home",:border=>'0',:align=>'absmiddle'), :controller =>  '/sessions', :action => 'new' %>
+          <%= link_to image_tag("login.gif", :alt => "Login",:border=>'0',:align=>'absmiddle'), :controller => '/sessions', :action => 'new' %>
+
+        <%end%>
+
+
+
+      </div>
+
+      <div id="page_container">
+
+
+        <%=yield %>
+
+
+
+        <div id="footer"> Send any <a href="mailto:revlogic-support@revenuemed.com?subject=RevLogic%20Issue">issues</a>, <a href="mailto:revlogic-support@revenuemed.com?subject=RevLogic%20Question">questions</a>, or <a href="mailto:revlogic-support@revenuemed.com?subject=RevLogic%20Suggestion">suggestions</a> to <a href="mailto:revlogic-support@revenuemed.com?" ?="">revclaim-support@revenuemed.com</a><br />
+          RevClaim Work Allocation V1.3 (20071031010247).  				&copy; 2008-2009  RevenueMed Inc. All Rights Reserved.<%=link_to "About RevClaim", { :controller => '/sessions', :action => 'version' }%></div>
+      </div>
+    </div>
+    <script language="JavaScript" type="text/javascript" src="/javascripts/wz_tooltip.js"></script>
+  </body>
+
+</html>

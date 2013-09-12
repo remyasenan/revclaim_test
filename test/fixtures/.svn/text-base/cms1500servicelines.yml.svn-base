@@ -1,0 +1,20 @@
+cms1500servicelines_140: 
+  id: 140
+  cms1500_id: 96
+  charges: "111.00"
+  cpt_hcpcts: "99214"
+  days_units: "1.00"
+  diagnosis_pointer: "12"
+  emg: ""
+  epsdt: ""
+  family_plan: ""
+  modifier1: ""
+  modifier2: ""
+  modifier3: ""
+  modifier4: ""
+  qual_id: "NB"
+  rendering_provider_id: "612498232"
+  rendering_provider_qualifier_npi_id: "1013901222"
+  service_from_date: "2008-01-30"
+  service_place: "11"
+  service_to_date: "2008-01-30"

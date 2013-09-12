@@ -1,0 +1,7 @@
+email:
+  batch_upload:
+    notification: "revclaim_notification@revenuemed.com"
+application:
+  # Debug = 0, Info = 1, Warn = 2
+  logger_level: 1
+  

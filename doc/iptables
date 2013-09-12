@@ -1,0 +1,21 @@
+#!/usr/bin/env ruby
+SCRIPT_NAME = 'iptables'
+
+def start
+	puts "Starting firewall"
+	system "/usr/bin/firewall"
+end
+
+def stop
+	puts "Flushing firewall rules"
+	system "iptables -F"
+end
+
+case ARGV.first
+when 'start'
+	start
+when 'stop'
+	stop
+else
+	puts "Usage: #{SCRIPT_NAME} (start|stop) "
+end

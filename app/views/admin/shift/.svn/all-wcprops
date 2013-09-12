@@ -1,0 +1,29 @@
+K 25
+svn:wc:ra_dav:version-url
+V 61
+/revenuemed/revclaim/!svn/ver/879/trunk/app/views/admin/shift
+END
+new.rhtml
+K 25
+svn:wc:ra_dav:version-url
+V 71
+/revenuemed/revclaim/!svn/ver/879/trunk/app/views/admin/shift/new.rhtml
+END
+list.rhtml
+K 25
+svn:wc:ra_dav:version-url
+V 72
+/revenuemed/revclaim/!svn/ver/879/trunk/app/views/admin/shift/list.rhtml
+END
+_form.rhtml
+K 25
+svn:wc:ra_dav:version-url
+V 73
+/revenuemed/revclaim/!svn/ver/879/trunk/app/views/admin/shift/_form.rhtml
+END
+edit.rhtml
+K 25
+svn:wc:ra_dav:version-url
+V 72
+/revenuemed/revclaim/!svn/ver/879/trunk/app/views/admin/shift/edit.rhtml
+END

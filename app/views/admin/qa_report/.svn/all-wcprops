@@ -1,0 +1,17 @@
+K 25
+svn:wc:ra_dav:version-url
+V 65
+/revenuemed/revclaim/!svn/ver/879/trunk/app/views/admin/qa_report
+END
+qa_daily_report.rhtml
+K 25
+svn:wc:ra_dav:version-url
+V 87
+/revenuemed/revclaim/!svn/ver/879/trunk/app/views/admin/qa_report/qa_daily_report.rhtml
+END
+qa_monthly_report.rhtml
+K 25
+svn:wc:ra_dav:version-url
+V 89
+/revenuemed/revclaim/!svn/ver/879/trunk/app/views/admin/qa_report/qa_monthly_report.rhtml
+END

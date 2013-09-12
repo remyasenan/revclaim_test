@@ -1,0 +1,43 @@
+/* CSS Document */
+html,body{height:100%; width:100%;}
+.login { /* ------- Login----------*/
+	width: 265px;
+	background-color: #dee8ea;
+	color: #000;
+	float: left;
+	margin-left: 20px;
+	margin-right: 20px;
+	margin-top: 30px;
+}
+.link_button {
+font-family: "Trebuchet MS", Arial;
+font-size:11px;
+color: #fff !important;
+border:1px solid #CCCCCC;
+background-color: #016696;
+text-align: center;
+display: block;
+}
+#login_right
+{
+	width: 291px;
+	height: 185px;
+	float: left;
+	margin-left: 10px;
+	margin-top: 30px;
+	padding:10px;
+	border:1px solid #dee8ea;
+
+}
+
+#login_left
+{
+	width: 30%;
+	height: 185px;
+	float: right;
+	margin-right: 10px;
+	margin-top: 30px;
+	padding:10px;
+	border:1px solid #dee8ea;
+
+}

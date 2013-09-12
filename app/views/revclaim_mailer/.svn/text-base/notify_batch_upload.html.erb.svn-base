@@ -1,0 +1,10 @@
+   <%  if @bool_ok %>
+    Hi,
+        The batch <%=@filename%> of facility <%=@facility_name%> is copied successfully at <%=  Time.now.strftime("%Y-%m-%d %H:%M:%S") %>.
+        This request for batch loading is raised by user <%=  @user_name %> from IP <%= @ip_adder %> at <%=  Time.now.strftime("%Y-%m-%d %H:%M:%S") %>.
+        The batch size is <%= @file_size %>. The batch is now ready for loading.
+     
+     <%  else %>
+         Zip File uploading was Unsuccessful
+     <% end  %>
+

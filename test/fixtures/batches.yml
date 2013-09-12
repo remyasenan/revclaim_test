@@ -1,0 +1,152 @@
+# == Schema Information
+# Schema version: 69
+#
+# Table name: batches
+#
+#  id              :integer(11)   not null, primary key
+#  batchid         :integer(11)
+#  date            :date
+#  facility_id     :integer(11)
+#  arrival_time    :datetime
+#  target_time     :datetime
+#  status          :string(255)   default(New)
+#  eob             :integer(11)
+#  completion_time :datetime
+#  payer_id        :integer(11)
+#  comment         :string(255)
+#  contracted_time :datetime
+#  manual_override :boolean(1)
+#  source          :string(255)   default(Manual)
+#  updated_by      :integer(11)
+#  updated_at      :datetime
+#  created_by      :integer(11)
+#  created_at      :datetime
+#  hlsc_id         :integer(11)
+#
+
+batch1:
+  id:                  1
+  batchid:             1
+  date:                2006-10-09
+  facility_id:         1
+  arrival_time:        <%= Time.now.to_s(:db) %>
+  target_time:         <%= (Time.now + 12.hours).to_s(:db) %>
+  status:              "Complete"
+  eob:                 123
+  completion_time:     <%= (Time.now + 13.hours).to_s(:db) %>
+
+batch2:
+  id:                  2
+  batchid:             2
+  date:                2006-10-09
+  facility_id:         1
+  arrival_time:        <%= Time.now.to_s(:db) %>
+  target_time:         <%= (Time.now + 12.hours).to_s(:db) %>
+  status:              "Complete"
+  eob:                 123
+  completion_time:     <%= (Time.now + 13.hours).to_s(:db) %>
+
+batch3:
+  id:                  3
+  batchid:             3
+  date:                2006-10-09
+  facility_id:         1
+  arrival_time:        <%= Time.now.to_s(:db) %>
+  target_time:         <%= (Time.now + 12.hours).to_s(:db) %>
+  status:              "New"
+  eob:                 123
+  completion_time:
+
+batch4:
+  id:                  4
+  batchid:             4
+  date:                2006-10-09
+  facility_id:         1
+  arrival_time:        <%= Time.now.to_s(:db) %>
+  target_time:         <%= (Time.now + 12.hours).to_s(:db) %>
+  status:              "New"
+  eob:                 123
+  completion_time:
+
+batch5:
+  id:                  5
+  batchid:             5
+  date:                2006-10-09
+  facility_id:         1
+  arrival_time:        <%= Time.now.to_s(:db) %>
+  target_time:         <%= (Time.now + 12.hours).to_s(:db) %>
+  status:              "Processing"
+  eob:                 123
+  completion_time:
+
+batch_with_manual_override:
+  id:                  6
+  batchid:             6
+  date:                2006-10-09
+  facility_id:         1
+  arrival_time:        <%= Time.now.to_s(:db) %>
+  target_time:         <%= (Time.now + 12.hours).to_s(:db) %>
+  status:              "Processing"
+  eob:                 123
+  completion_time:
+  manual_override:     false
+
+
+batch_complete02:
+  id:                  18
+  batchid:             18
+  date:                2006-10-09
+  facility_id:         1
+  arrival_time:        <%= Time.now.to_s(:db) %>
+  target_time:         <%= (Time.now + 12.hours).to_s(:db) %>
+  status:              "Complete"
+  eob:                 123
+  completion_time:     <%= (Time.now).to_s(:db) %>
+  correspondence:      1
+
+batch_complete03:
+  id:                  19
+  batchid:             19
+  date:                2006-10-09
+  facility_id:         1
+  arrival_time:        <%= Time.now.to_s(:db) %>
+  target_time:         <%= (Time.now + 12.hours).to_s(:db) %>
+  status:              "Processing"
+  eob:                 123
+  completion_time:
+  correspondence:      1
+  
+batch_complete04:
+  id:                  20
+  batchid:             2020
+  date:                2006-10-09
+  facility_id:         1
+  arrival_time:        <%= Time.now.to_s(:db) %>
+  target_time:         <%= (Time.now + 12.hours).to_s(:db) %>
+  status:              "Complete"
+  eob:                 123
+  completion_time:     <%= (Time.now).to_s(:db) %>
+  correspondence:      1
+
+batch_complete05:
+    id:                  21
+    batchid:             2021
+    date:                <%= Date.today.to_s(:db) %>
+    facility_id:         1
+    arrival_time:        <%= Time.now.to_s(:db) %>
+    target_time:         <%= (Time.now + 12.hours).to_s(:db) %>
+    status:              "Complete"
+    eob:                 123
+    completion_time:     <%= (Time.now).to_s(:db) %>
+    correspondence:
+
+invalid_batch_complete01:
+    id: 22
+    batchid: 2022
+    date: <%= Date.today.to_s(:db) %>
+    facility_id: 1
+    arrival_time: <%= Time.now.to_s(:db) %>
+    target_time: <%= (Time.now + 12.hours).to_s(:db) %>
+    status: "Complete"
+    eob: 123
+    

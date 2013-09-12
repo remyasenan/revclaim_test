@@ -1,0 +1,23 @@
+K 25
+svn:wc:ra_dav:version-url
+V 52
+/revenuemed/revclaim/!svn/ver/1474/trunk/app/mailers
+END
+.gitkeep
+K 25
+svn:wc:ra_dav:version-url
+V 61
+/revenuemed/revclaim/!svn/ver/1453/trunk/app/mailers/.gitkeep
+END
+user_mailer.rb
+K 25
+svn:wc:ra_dav:version-url
+V 67
+/revenuemed/revclaim/!svn/ver/1453/trunk/app/mailers/user_mailer.rb
+END
+revclaim_mailer.rb
+K 25
+svn:wc:ra_dav:version-url
+V 71
+/revenuemed/revclaim/!svn/ver/1474/trunk/app/mailers/revclaim_mailer.rb
+END

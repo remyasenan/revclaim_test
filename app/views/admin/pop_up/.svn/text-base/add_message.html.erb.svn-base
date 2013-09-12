@@ -1,0 +1,149 @@
+<div id="login_main">
+    <h1>Popup Administration</h1>
+    <h4>New Comment </h4>
+    <span class="alert">( * ) Mandatory Fields</span>
+    <%if params[:job].nil?
+    @facility=params[:facility]
+    else
+    @facility=params[:job]
+    end %>
+    <% form_tag :action => 'submit', :id => @payer,:id1=>@facility,:id2=>params[:userid],:id3 =>params[:uid] do %>
+    <table>
+        <tr>
+            <th>
+                Select Payee(Client)<span class="alert"> *</span>
+            </th>
+            <th>
+                Processor Name<span class="alert"></span>
+            </th>
+            <th>
+                Pop-Up Time<span class="alert"> *</span>
+            </th>
+            <th>
+                Comment(s) for the Processor<span class="alert"> *</span>
+            </th>
+        </tr>
+        <tr>
+            
+            <td>
+                <ul class="checklist" id="retro_qa_pro_error_type_ids_facility" name="pro_error_type_facility[id][]">
+                    <% o1 =10 %>
+                    <% @facility_new.each do |error_type1| %>
+                    <% o1 = o1 + 1 %>
+                    <%client_name = Client.find_by_id(error_type1.client_id).name %>
+                    <li>
+                        <label for="oo<%= o1 %>">
+                            <input id="oo<%= o1 %>" name="pro_error_type_facility[id][]" type="checkbox" value= "<%=error_type1.name%>"><%=error_type1.name %>(<%=client_name %>)
+                        </label>
+                    </li><% end %>
+                </ul>
+            </td>
+            <td>
+                <ul class="checklist" id="retro_qa_pro_error_type_ids" name="pro_error_type[id][]">
+                    <% o =0 %>
+                    <% @user_new.each do |error_type1| %>
+                    <% o = o + 1 %>
+                    <li>
+                        <label for="o<%= o %>">
+                            <input id="o<%= o %>" name="pro_error_type[id][]" type="checkbox" value= "<%=error_type1.login%>"><%=error_type1.login %>
+                        </label>
+                    </li><% end %>
+                </ul>
+            </td>
+            <td>
+                <%= select_tag 'duration', optionize('1 week','2 week', '4 week'),:class => "black_text" %>
+            </td>
+            <td>
+                <textarea id="comment" name="comment" cols="20" rows="5" class = "black_text">
+                </textarea>
+            </td>
+         
+        </table>
+        <%= set_focus 'comment' %>
+        <%= submit_tag "Submit", :class => 'button', :name => "option1" %>
+        <% end %>
+        <% if @messages.size > 0 %>
+        <h1>Popup List </h1>
+        <%= legend_start %>
+        <table> 
+          <td class="black_text" style="width:900px">
+                <%= legend "color" => "blue", "text" => "Active" %>
+                <%= legend "color" => "palered", "text" => "Expired" %>
+            </td>
+        </table>
+        <%= legend_end %>
+        <br/>
+        <br/>
+        <%= will_paginate @messages %>
+        <% form_tag ({:action => 'delete_messages', :id => @message_to_delete}),:id =>"my_form" do %>
+        <table>
+            <tr>
+                
+                <th>
+                    Payee
+                </th>
+                <th>
+                    User Name
+                </th>
+                <th>
+                    Start Date
+                </th>
+                <th>
+                    End Date
+                </th>
+                <th>
+                    Comment(s)
+                </th>
+                <th>
+                    <input type="checkbox" name="all" onClick="checkAll('my_form')"/>
+                </th>
+            </tr>
+            
+            <% unless @messages.blank? %>
+            <% @messages.each do |m| %>
+            <tr>
+                <% payer = Payer.find_by_id(m.payer_id) %>
+                <% unless m.processor_id.blank? %><%user_list = Remittor.find(m.processor_id).login %><%end %>
+                <% facility = Facility.find_by_id(m.facility_id) %>
+                <%
+                gui_payer_id = m.payer_id
+                gui_facility_id = m.facility_id
+                obj = ErrorPopup.find(:all,:conditions => "start_date <='#{(Time.now).strftime("%y/%m/%d")}' and end_date >='#{Time.now.strftime("%y/%m/%d")}'and id=#{m.id}") %>
+                <%cls='' %>
+                <%if obj.size==0
+                cls='palered'
+                else
+                cls='blue'
+                end %>
+                
+                <td class="<%=cls%>">
+                    <%= facility.name %>
+                </td>
+                <td class="<%=cls%>">
+                    <%= user_list %>
+                </td>
+                <td align='left' class="<%=cls%>">
+                    <%= m.start_date.strftime("%m/%d/%y") %>
+                </td>
+                <td align='left' class="<%=cls%>">
+                    <%= m.end_date.strftime("%m/%d/%y") %>
+                </td>
+                <td align='left' class="<%=cls%>">
+                    <%= m.comment %>
+                </td>
+                <td>
+                    <%= check_box :message_to_delete, m.id, :id => 'toggle' %>
+                </td>
+                <td>
+                    <%= link_to image_tag("report_edit.png", :alt => "Edit",:border=>"0"), :action => 'edit', :id => m.id %>
+                </td>
+            </tr>
+            <% end %>
+        </table>
+        <%= submit_tag 'Delete', :class => 'button', :action => 'delete_messages' %>
+        <% end %>
+        <% end %>
+        <% end %>
+        <br/>
+        <!-- TODO: Handle in CSS -->
+        </div>

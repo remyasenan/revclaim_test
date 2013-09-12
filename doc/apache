@@ -1,0 +1,51 @@
+#!/usr/bin/env ruby
+
+SCRIPT_NAME = 'apache'
+APACHE_ROOT = '/usr/local/apache2/'
+
+def start
+	if is_started?
+		puts "Apache already started"
+	else
+		puts "Starting Apache"
+		system "/usr/local/apache2/bin/httpd -f /usr/local/apache2/conf/httpd.conf -k start"
+	end
+end
+
+def stop
+	if is_started?
+		puts "Stopping Apache"
+		system "/usr/local/apache2/bin/httpd -f /usr/local/apache2/conf/httpd.conf -k stop"
+	else
+		puts "Apache already stopped"
+	end
+end
+
+def restart
+	if is_started?
+		stop
+    # Give some breathing time
+    sleep 5
+		start
+	else
+		start
+	end
+end
+
+def is_started?
+	Dir.open(File.join(APACHE_ROOT,"logs")).each do |filename|
+	 	return true if filename == 'httpd.pid'
+ 	end
+	return false
+end
+
+case ARGV.first
+when 'start'
+	start
+when 'stop'
+	stop
+when 'restart'
+	restart
+else
+	puts "Usage: #{SCRIPT_NAME} (start|stop|restart) "
+end

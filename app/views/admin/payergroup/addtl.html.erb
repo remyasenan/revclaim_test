@@ -1,0 +1,70 @@
+<head>
+  <%= javascript_include_tag "sorttable"%>
+</head>
+
+<h1>Select TL</h1>
+<% unless @users.empty? %>
+  <table class="sortable" id="job_processor">
+    <tr>
+      <% if @site_settings.show_userid == true %>
+      <th>User Name</th>
+      <th>User ID</th>
+      <% end %>
+      <th>Shift</th>
+     
+      
+      <th>Payer Group Count</th>
+     
+      <% if not @payer.nil? %>
+      <th>Experience with <%= @payer.payer %></th>
+      <% end %>
+     
+    </tr>
+    
+    <% @users.each do |user| %>
+     <tr>
+      <% if @site_settings.show_userid == true %>
+      <td>
+        <% unless user.nil? %>
+          <%= user.name %>
+        <% else %>
+          None
+        <% end %>
+      </td>
+      <td><%= user.userid %></td>
+      <% end %>
+      <td><%= user.shift.name %></td>
+<% user=User.find_by_userid(user.userid).id%>
+      <% job=TeamLeaderQueue.count(:conditions=>"tlusername='#{user}'")%>
+       <td><%= job %></td>
+
+   <td align='right'><%=  "#{@a}"%></td>
+     
+     
+      <!-- code that displays all experience for all clients selected under User administration
+      
+      <td align='center'>
+     
+      
+      </td> -->
+      
+      <td align='center'>
+       
+       
+       
+      </td>
+      <td><%= link_to 'Allocate TL', :action => 'assigntl', :jobs => @jobs,:user => user, :page => params[:page], :back_page => params[:back_page], :payer => params[:payer], :from => params[:from] %></td>
+    </tr>
+    <% end %>
+  </table>
+  <% else  %>
+    <h4> No TL created/online.</h4>
+  <% end %>
+
+<%  if params[:from] == 'payer' %>
+	<%= link_to image_tag("arrow_undo.png", :alt => "Back"), :action => 'allocate_payer_jobs' ,:back_page=>params[:back_page], :payer => params[:payer] %>
+<% elsif params[:from] == 'user' %>
+	<%= link_to image_tag("arrow_undo.png", :alt => "Back"), :action => 'user_jobs', :back_page=>params[:back_page], :user => params[:jobs_of_user] %>
+<% else %>
+	<%= link_to image_tag("arrow_undo.png", :alt => "Back"), :action => 'list' ,:back_page=>params[:back_page] %>
+<% end %>

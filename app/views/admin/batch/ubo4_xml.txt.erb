@@ -1,0 +1,699 @@
+<SecureEDI_UBCLAIM_XML version="1.0">
+<BatchID><%=@batch.batchid.split('_')[0]%><%=@batch.batchid.split('_')[2]%></BatchID>
+<BatchDate><%=@batch.date.to_datetime.strftime("%Y%m%d") if @batch.date%></BatchDate>
+<BatchReceivedDate><%=@batch.arrival_time.to_s.split(':')[0].split(' ')[0].to_datetime.strftime("%Y%m%d") if @batch.arrival_time.to_s.split(':')[0].split(' ')[0] %></BatchReceivedDate>
+<BatchFileName><%=@batch.batchid.split('_')[0]%><%=@batch.batchid.split('_')[2]%></BatchFileName>
+<%@batch.jobs.each do |job|%>
+  <%job.ub04_claim_informations.each do |ubo4_claim|%>
+     <ClaimData>
+  <PaperClaimID><%=job.tiff_number%></PaperClaimID>
+  <PaperClaimDate><%=@batch.date.to_datetime.strftime("%Y%m%d") if !@batch.date.nil? %></PaperClaimDate>
+  <% if job.job_status == "Complete" %>
+    <PaperClaimStatus>Accepted</PaperClaimStatus>
+    <% unless  ubo4_claim.billing_provider_last_name.blank? or ubo4_claim.billing_provider_last_name.nil?%>
+      <BillingProviderLastName><%=ubo4_claim.billing_provider_last_name%></BillingProviderLastName>
+    <%end%>
+    <% unless  ubo4_claim.billing_provider_address1.blank? or ubo4_claim.billing_provider_address1.nil?%>
+      <BillingProviderAddress1><%=ubo4_claim.billing_provider_address1%></BillingProviderAddress1>
+    <%end%>
+    <% unless  ubo4_claim.billing_provider_address2.blank? or ubo4_claim.billing_provider_address2.nil?%>
+      <BillingProviderAddress2><%=ubo4_claim.billing_provider_address2%></BillingProviderAddress2>
+    <%end%>
+    <% unless  ubo4_claim.billing_provider_city.blank? or ubo4_claim.billing_provider_city.nil?%>
+      <BillingProviderCity><%=ubo4_claim.billing_provider_city%></BillingProviderCity>
+    <%end%>
+    <% unless  ubo4_claim.billing_provider_state.blank? or ubo4_claim.billing_provider_state.nil?%>
+      <BillingProviderState><%=ubo4_claim.billing_provider_state%></BillingProviderState>
+    <%end%>
+    <% unless  ubo4_claim.billing_provider_zipcode.blank? or ubo4_claim.billing_provider_zipcode.nil?%>
+      <BillingProviderZipcode><%=ubo4_claim.billing_provider_zipcode%></BillingProviderZipcode>
+    <%end%>
+    <% unless  ubo4_claim.billing_provider_telephone.blank? or ubo4_claim.billing_provider_telephone.nil?%>
+      <BillingProviderTelephone><%=ubo4_claim.billing_provider_telephone%></BillingProviderTelephone>
+    <%end%>
+    <% unless  ubo4_claim.billing_provider_tin_or_ein.blank? or ubo4_claim.billing_provider_tin_or_ein.nil?%>
+      <BillingProviderEIN><%=ubo4_claim.billing_provider_tin_or_ein%></BillingProviderEIN>
+    <%end%>
+    <% unless  ubo4_claim.billing_provider_npi.blank? or ubo4_claim.billing_provider_npi.nil?%>
+      <BillingProviderNPI><%=ubo4_claim.billing_provider_npi%></BillingProviderNPI>
+    <%end%>
+    <% unless  ubo4_claim.billing_providerid1.blank? or ubo4_claim.billing_providerid1.nil?%>
+      <BillingProviderID1><%=ubo4_claim.billing_providerid1%></BillingProviderID1>
+    <%end%>
+    <% unless  ubo4_claim.billing_providerid2.blank? or ubo4_claim.billing_providerid2.nil?%>
+      <BillingProviderID2><%=ubo4_claim.billing_providerid2%></BillingProviderID2>
+    <%end%>
+    <% unless  ubo4_claim.billing_providerid3.blank? or ubo4_claim.billing_providerid3.nil?%>
+      <BillingProviderID3><%=ubo4_claim.billing_providerid3%></BillingProviderID3>
+    <%end%>
+
+    <% if !(ubo4_claim.rendering_provider_last_name.blank?) %>
+        <% unless  ubo4_claim.rendering_provider_last_name.blank? or ubo4_claim.rendering_provider_last_name.nil?%>
+        <PaytoProviderLastName><%=ubo4_claim.rendering_provider_last_name%></PaytoProviderLastName>
+      <%end%>
+      <% unless  ubo4_claim.rendering_provider_address1.blank? or ubo4_claim.rendering_provider_address1.nil?%>
+        <PaytoProviderAddress1><%=ubo4_claim.rendering_provider_address1%></PaytoProviderAddress1>
+      <%end%>
+      <% unless  ubo4_claim.rendering_provider_city.blank? or ubo4_claim.rendering_provider_city.nil?%>
+        <PaytoProviderCity><%=ubo4_claim.rendering_provider_city%></PaytoProviderCity>
+      <%end%>
+      <% unless  ubo4_claim.rendering_provider_state.blank? or ubo4_claim.rendering_provider_state.nil? %>
+        <PaytoProviderState><%=ubo4_claim.rendering_provider_state%></PaytoProviderState>
+      <%end%>
+      <% unless  ubo4_claim.rendering_provider_zipcode.blank? or ubo4_claim.rendering_provider_zipcode.nil?%>
+        <PaytoProviderZipcode><%=ubo4_claim.rendering_provider_zipcode%></PaytoProviderZipcode>
+      <%end%>
+      <% unless  ubo4_claim.rendering_providerid.blank? or ubo4_claim.rendering_providerid.nil?%>
+        <PaytoProviderID><%=ubo4_claim.rendering_providerid%></PaytoProviderID>
+      <% else %>
+          <%  if (ubo4_claim.rendering_providerid.blank?) or (ubo4_claim.rendering_providerid.nil?)%>
+              <% unless (ubo4_claim.billing_providerid1.blank?) or (ubo4_claim.billing_providerid1.nil?)%>
+            <PaytoProviderID><%=ubo4_claim.billing_providerid1%></PaytoProviderID>
+          <%end%>
+        <% end %>
+      <%end%>
+    <% else %>
+      <% unless  ubo4_claim.billing_provider_last_name.blank? or ubo4_claim.billing_provider_last_name.nil?%>
+        <PaytoProviderLastName><%=ubo4_claim.billing_provider_last_name%></PaytoProviderLastName>
+      <%end%>
+      <% unless  ubo4_claim.billing_provider_address1.blank? or ubo4_claim.billing_provider_address1.nil?%>
+        <PaytoProviderAddress1><%=ubo4_claim.billing_provider_address1%></PaytoProviderAddress1>
+      <%end%>
+      <% unless  ubo4_claim.billing_provider_city.blank? or ubo4_claim.billing_provider_city.nil?%>
+        <PaytoProviderCity><%=ubo4_claim.billing_provider_city%></PaytoProviderCity>
+      <%end%>
+      <% unless  ubo4_claim.billing_provider_state.blank? or ubo4_claim.billing_provider_state.nil?%>
+        <PaytoProviderState><%=ubo4_claim.billing_provider_state%></PaytoProviderState>
+      <%end%>
+      <% unless  ubo4_claim.billing_provider_zipcode.blank? or ubo4_claim.billing_provider_zipcode.nil?%>
+        <PaytoProviderZipcode><%=ubo4_claim.billing_provider_zipcode%></PaytoProviderZipcode>
+      <%end%>
+      <% unless  ubo4_claim.rendering_providerid.blank? or ubo4_claim.rendering_providerid.nil?%>
+        <PaytoProviderID><%=ubo4_claim.rendering_providerid%></PaytoProviderID>
+      <% else %>
+          <%  if (ubo4_claim.rendering_providerid.blank?) or (ubo4_claim.rendering_providerid.nil?)%>
+              <% unless (ubo4_claim.billing_providerid1.blank?) or (ubo4_claim.billing_providerid1.nil?)%>
+            <PaytoProviderID><%=ubo4_claim.billing_providerid1%></PaytoProviderID>
+          <%end%>
+        <% end %>
+      <%end%>
+    <% end %>
+
+
+    <% unless  ubo4_claim.patient_account_number.blank? or ubo4_claim.patient_account_number.nil?%>
+      <PatientAccountNumber><%=ubo4_claim.patient_account_number%></PatientAccountNumber>
+    <%end%>
+    <% unless  ubo4_claim.patient_med_rec_number.blank? or ubo4_claim.patient_med_rec_number.nil?%>
+      <PatientMedRecNumber><%=ubo4_claim.patient_med_rec_number%></PatientMedRecNumber>
+    <%end%>
+    <% unless  ubo4_claim.patient_bill_type.blank? or ubo4_claim.patient_bill_type.nil?%>
+      <TypeofBill><%=ubo4_claim.patient_bill_type%></TypeofBill>
+    <%end%>
+    <% unless  ubo4_claim.statement_cover_from.blank? or ubo4_claim.statement_cover_from.nil?%>
+      <StatementCoverFrom><%=ubo4_claim.statement_cover_from.to_datetime.strftime("%Y%m%d")  %></StatementCoverFrom>
+    <%end%>
+    <% unless  ubo4_claim.statement_cover_to.blank? or ubo4_claim.statement_cover_to.nil?%>
+      <StatementCoverTo><%=ubo4_claim.statement_cover_to.to_datetime.strftime("%Y%m%d") %></StatementCoverTo>
+    <%end%>
+    <% unless  ubo4_claim.patient_first_name.blank? or ubo4_claim.patient_first_name.nil?%>
+      <PatientFirstName><%=ubo4_claim.patient_first_name%></PatientFirstName>
+    <%end%>
+    <% unless  ubo4_claim.patient_last_name.blank? or ubo4_claim.patient_last_name.nil?%>
+      <PatientLastName><%=ubo4_claim.patient_last_name%></PatientLastName>
+    <%end%>
+    <% unless  ubo4_claim.patientid.blank? or ubo4_claim.patientid.nil?%>
+      <PatientID><%=ubo4_claim.patientid%></PatientID>
+    <%end%>
+    <% unless  ubo4_claim.patient_address1.blank? or ubo4_claim.patient_address1.nil?%>
+      <PatientAddress1><%=ubo4_claim.patient_address1%></PatientAddress1>
+    <%end%>
+    <% unless  ubo4_claim.patient_address2.blank? or ubo4_claim.patient_address2.nil?%>
+      <PatientAddress2><%=ubo4_claim.patient_address2%></PatientAddress2>
+    <%end%>
+    <% unless  ubo4_claim.patient_city.blank? or ubo4_claim.patient_city.nil?%>
+      <PatientCity><%=ubo4_claim.patient_city%></PatientCity>
+    <%end%>
+    <% unless  ubo4_claim.patient_state.blank? or ubo4_claim.patient_state.nil?%>
+      <PatientState><%=ubo4_claim.patient_state%></PatientState>
+    <%end%>
+    <% unless  ubo4_claim.patient_zipcode.blank? or ubo4_claim.patient_zipcode.nil?%>
+      <PatientZipcode><%=ubo4_claim.patient_zipcode%></PatientZipcode>
+    <%end%>
+    <% unless  ubo4_claim.patient_country_code.blank? or ubo4_claim.patient_country_code.nil?%>
+      <PatientCountryCode><%=ubo4_claim.patient_country_code%></PatientCountryCode>
+    <%end%>
+    <% unless  ubo4_claim.patient_dob.blank? or ubo4_claim.patient_dob.nil?%>
+      <PatientBirthdate><%=ubo4_claim.patient_dob.to_datetime.strftime("%Y%m%d")%></PatientBirthdate>
+    <%end%>
+    <% unless  ubo4_claim.patient_gender.blank? or ubo4_claim.patient_gender.nil?%>
+      <PatientGender><%=ubo4_claim.patient_gender%></PatientGender>
+    <%end%>
+    <% unless  ubo4_claim.admission_date.blank? or ubo4_claim.admission_date.nil?%>
+      <AdmissionDate><%=ubo4_claim.admission_date.to_datetime.strftime("%Y%m%d")%></AdmissionDate>
+    <%end%>
+    <% unless  ubo4_claim.admission_hour.blank? or ubo4_claim.admission_hour.nil?%>
+      <AdmissionHour><%=ubo4_claim.admission_hour%></AdmissionHour>
+    <%end%>
+    <% unless  ubo4_claim.admission_type.blank? or ubo4_claim.admission_type.nil?%>
+      <AdmissionType><%=ubo4_claim.admission_type%></AdmissionType>
+    <%end%>
+    <% unless  ubo4_claim.admission_source.blank? or ubo4_claim.admission_source.nil?%>
+      <AdmissionSource><%=ubo4_claim.admission_source%></AdmissionSource>
+    <%end%>
+    <% unless  ubo4_claim.discharge_hour.blank? or ubo4_claim.discharge_hour.nil?%>
+      <DischargeHour><%=ubo4_claim.discharge_hour%></DischargeHour>
+    <%end%>
+    <% unless  ubo4_claim.patient_status_code.blank? or ubo4_claim.patient_status_code.nil?%>
+      <PatientStatusCode><%=ubo4_claim.patient_status_code%></PatientStatusCode>
+    <%end%>
+    <% unless ubo4_claim.condition_code1.blank? or ubo4_claim.condition_code1.nil? %>
+      <ConditionCodes>
+        <% unless  ubo4_claim.condition_code1.blank? or ubo4_claim.condition_code1.nil? %>
+          <ConditionCode><%=  ubo4_claim.condition_code1%></ConditionCode>
+        <% end %>
+      </ConditionCodes>
+    <% end %>
+    <% unless ubo4_claim.condition_code2.blank? or ubo4_claim.condition_code2.nil? %>
+      <ConditionCodes>
+        <% unless  ubo4_claim.condition_code2.blank? or ubo4_claim.condition_code2.nil? %>
+          <ConditionCode><%=  ubo4_claim.condition_code2%></ConditionCode>
+        <% end %>
+      </ConditionCodes>
+    <% end %>
+    <% unless ubo4_claim.condition_code3.blank? or ubo4_claim.condition_code3.nil? %>
+      <ConditionCodes>
+        <% unless  ubo4_claim.condition_code3.blank? or ubo4_claim.condition_code3.nil? %>
+          <ConditionCode><%=  ubo4_claim.condition_code3%></ConditionCode>
+        <% end %>
+      </ConditionCodes>
+    <% end %>
+    <% unless ubo4_claim.condition_code4.blank? or ubo4_claim.condition_code4.nil? %>
+      <ConditionCodes>
+        <% unless  ubo4_claim.condition_code4.blank? or ubo4_claim.condition_code4.nil? %>
+          <ConditionCode><%=  ubo4_claim.condition_code4%></ConditionCode>
+        <% end %>
+      </ConditionCodes>
+    <% end %>
+    <% unless ubo4_claim.condition_code5.blank? or ubo4_claim.condition_code5.nil? %>
+      <ConditionCodes>
+        <% unless  ubo4_claim.condition_code5.blank? or ubo4_claim.condition_code5.nil? %>
+          <ConditionCode><%=  ubo4_claim.condition_code5%></ConditionCode>
+        <% end %>
+      </ConditionCodes>
+    <% end %>
+    <% unless ubo4_claim.condition_code6.blank? or ubo4_claim.condition_code6.nil? %>
+      <ConditionCodes>
+        <% unless  ubo4_claim.condition_code6.blank? or ubo4_claim.condition_code6.nil? %>
+          <ConditionCode><%=  ubo4_claim.condition_code6%></ConditionCode>
+        <% end %>
+      </ConditionCodes>
+    <% end %>
+    <% unless ubo4_claim.condition_code7.blank? or ubo4_claim.condition_code7.nil? %>
+      <ConditionCodes>
+        <% unless  ubo4_claim.condition_code7.blank? or ubo4_claim.condition_code7.nil? %>
+          <ConditionCode><%=  ubo4_claim.condition_code7%></ConditionCode>
+        <% end %>
+      </ConditionCodes>
+    <% end %>
+    <% unless ubo4_claim.condition_code8.blank? or ubo4_claim.condition_code8.nil? %>
+      <ConditionCodes>
+        <% unless  ubo4_claim.condition_code8.blank? or ubo4_claim.condition_code8.nil? %>
+          <ConditionCode><%=  ubo4_claim.condition_code8%></ConditionCode>
+        <% end %>
+      </ConditionCodes>
+    <% end %>
+    <% unless ubo4_claim.condition_code9.blank? or ubo4_claim.condition_code9.nil? %>
+      <ConditionCodes>
+        <% unless  ubo4_claim.condition_code9.blank? or ubo4_claim.condition_code9.nil? %>
+          <ConditionCode><%=  ubo4_claim.condition_code9%></ConditionCode>
+        <% end %>
+      </ConditionCodes>
+    <% end %>
+    <% unless ubo4_claim.condition_code10.blank? or ubo4_claim.condition_code10.nil? %>
+      <ConditionCodes>
+        <% unless  ubo4_claim.condition_code10.blank? or ubo4_claim.condition_code10.nil? %>
+          <ConditionCode><%=  ubo4_claim.condition_code10%></ConditionCode>
+        <% end %>
+      </ConditionCodes>
+    <% end %>
+    <% unless ubo4_claim.condition_code11.blank? or ubo4_claim.condition_code11.nil? %>
+      <ConditionCodes>
+        <% unless  ubo4_claim.condition_code11.blank? or ubo4_claim.condition_code11.nil? %>
+          <ConditionCode><%=  ubo4_claim.condition_code11%></ConditionCode>
+        <% end %>
+      </ConditionCodes>
+    <% end %>
+    <% unless  ubo4_claim.acdt_state.blank? or ubo4_claim.acdt_state.nil?%>
+      <ACDTstate><%=ubo4_claim.acdt_state%></ACDTstate>
+    <%end%>
+    <%ubo4_claim.occurences.each do |occurance|%>
+        <% unless occurance.code1.blank? or occurance.code1.nil? %>
+        <OccurrenceData>
+          <OccurCode><%=occurance.code1%></OccurCode>
+          <% unless occurance.date1.nil? or occurance.date1.blank?%>
+            <OccurDate><%=occurance.date1.to_datetime.strftime("%Y%m%d") if !occurance.date1.nil?%></OccurDate>
+          <%end%>
+        </OccurrenceData>
+      <%end%>
+      <% unless occurance.code2.blank? or occurance.code2.nil? %>
+        <OccurrenceData>
+          <OccurCode><%=occurance.code2%></OccurCode>
+          <% unless occurance.date2.nil? or occurance.date2.blank?%>
+            <OccurDate><%=occurance.date2.to_datetime.strftime("%Y%m%d") if !occurance.date2.nil?%></OccurDate>
+          <%end%>
+        </OccurrenceData>
+      <%end%>
+      <% unless occurance.code3.blank? or occurance.code3.nil? %>
+        <OccurrenceData>
+          <OccurCode><%=occurance.code3%></OccurCode>
+          <% unless occurance.date3.nil? or occurance.date3.blank?%>
+            <OccurDate><%=occurance.date3.to_datetime.strftime("%Y%m%d") if !occurance.date3.nil?%></OccurDate>
+          <%end%>
+        </OccurrenceData>
+      <%end%>
+      <% unless occurance.code4.blank? or occurance.code4.nil? %>
+        <OccurrenceData>
+          <OccurCode><%=occurance.code4%></OccurCode>
+          <% unless occurance.date4.nil? or occurance.date4.blank?%>
+            <OccurDate><%=occurance.date4.to_datetime.strftime("%Y%m%d") if !occurance.date4.nil?%></OccurDate>
+          <%end%>
+        </OccurrenceData>
+      <%end%>
+    <%end%>
+    <%ubo4_claim.occurence_spans.each do |occurance_span|%>
+      <% unless occurance_span.code1.blank? or occurance_span.code1.nil? %>
+        <OccurrenceSpanData>
+          <OccurSpanCode><%=occurance_span.code1%></OccurSpanCode>
+          <% unless occurance_span.from_date1.nil? or occurance_span.from_date1.blank?%>
+            <OccurSpanFromDate><%=occurance_span.from_date1.to_datetime.strftime("%Y%m%d")  if !occurance_span.from_date1.nil?%></OccurSpanFromDate>
+          <%end%>
+          <% unless occurance_span.through_date1.nil? or occurance_span.through_date1.blank?%>
+            <OccurSpanThroughDate><%=occurance_span.through_date1.to_datetime.strftime("%Y%m%d") if !occurance_span.through_date1.nil?%></OccurSpanThroughDate>
+          <%end%>
+        </OccurrenceSpanData>
+      <%end%>
+      <% unless occurance_span.code2.blank? or occurance_span.code2.nil? %>
+        <OccurrenceSpanData>
+          <OccurSpanCode><%=occurance_span.code2%></OccurSpanCode>
+          <% unless occurance_span.from_date2.nil? or occurance_span.from_date2.blank?%>
+            <OccurSpanFromDate><%=occurance_span.from_date2.to_datetime.strftime("%Y%m%d")  if !occurance_span.from_date2.nil?%></OccurSpanFromDate>
+          <%end%>
+          <% unless occurance_span.through_date2.nil? or occurance_span.through_date2.blank?%>
+            <OccurSpanThroughDate><%=occurance_span.through_date2.to_datetime.strftime("%Y%m%d") if !occurance_span.through_date2.nil?%></OccurSpanThroughDate>
+          <%end%>
+        </OccurrenceSpanData>
+      <%end%>
+    <%end%>
+
+    <% if !(ubo4_claim.subscriber_first_name.blank?) %>
+      <% unless  ubo4_claim.subscriber_first_name.blank? or ubo4_claim.subscriber_first_name.nil?%>
+        <SubscriberFirstName><%=ubo4_claim.subscriber_first_name%></SubscriberFirstName>
+      <%end%>
+      <% unless  ubo4_claim.subscriber_last_name.blank? or ubo4_claim.subscriber_last_name.nil?%>
+        <SubscriberLastName><%=ubo4_claim.subscriber_last_name%></SubscriberLastName>
+      <%end%>
+      <% unless  ubo4_claim.subscriber_address1.blank? or ubo4_claim.subscriber_address1.nil?%>
+        <SubscriberAddress1><%=ubo4_claim.subscriber_address1%></SubscriberAddress1>
+      <%end%>
+      <% unless  ubo4_claim.subscriber_address2.blank? or ubo4_claim.subscriber_address2.nil?%>
+        <SubscriberAddress2><%=ubo4_claim.subscriber_address2%></SubscriberAddress2>
+      <%end%>
+      <% unless  ubo4_claim.subscriber_city.blank? or ubo4_claim.subscriber_city.nil?%>
+        <SubscriberCity><%=ubo4_claim.subscriber_city%></SubscriberCity>
+      <%end%>
+      <% unless  ubo4_claim.subscriber_state.blank? or ubo4_claim.subscriber_state.nil?%>
+        <SubscriberState><%=ubo4_claim.subscriber_state%></SubscriberState>
+      <%end%>
+      <% unless  ubo4_claim.subscriber_zipcode.blank? or ubo4_claim.subscriber_zipcode.nil?%>
+        <SubscriberZipcode><%=ubo4_claim.subscriber_zipcode%></SubscriberZipcode>
+      <%end%>
+    <% else %>
+      <% unless  ubo4_claim.patient_first_name.blank? or ubo4_claim.patient_first_name.nil?%>
+        <SubscriberFirstName><%=ubo4_claim.patient_first_name%></SubscriberFirstName>
+      <%end%>
+      <% unless  ubo4_claim.patient_last_name.blank? or ubo4_claim.patient_last_name.nil?%>
+        <SubscriberLastName><%=ubo4_claim.patient_last_name%></SubscriberLastName>
+      <%end%>
+      <% unless  ubo4_claim.patient_address1.blank? or ubo4_claim.patient_address1.nil?%>
+        <SubscriberAddress1><%=ubo4_claim.patient_address1%></SubscriberAddress1>
+      <%end%>
+      <% unless  ubo4_claim.patient_city.blank? or ubo4_claim.patient_city.nil?%>
+        <SubscriberCity><%=ubo4_claim.patient_city%></SubscriberCity>
+      <%end%>
+      <% unless  ubo4_claim.patient_state.blank? or ubo4_claim.patient_state.nil?%>
+        <SubscriberState><%=ubo4_claim.patient_state%></SubscriberState>
+      <%end%>
+      <% unless  ubo4_claim.patient_zipcode.blank? or ubo4_claim.patient_zipcode.nil?%>
+        <SubscriberZipcode><%=ubo4_claim.patient_zipcode%></SubscriberZipcode>
+      <%end%>
+    <%  end %>
+
+    <%ubo4_claim.value_codes.each do |value|%>
+      <% unless value.code1.blank? or value.code1.nil? %>
+        <ValueCodeData>
+          <ValueCode><%=value.code1%></ValueCode>
+          <% unless value.amount1.blank? or value.amount1.nil? %>
+            <ValueAmount><%= "%.2f" % value.amount1%></ValueAmount>
+          <% end  %>
+        </ValueCodeData>
+      <%end%>
+      <% unless value.code2.blank? or value.code2.nil? %>
+        <ValueCodeData>
+          <ValueCode><%=value.code2%></ValueCode>
+          <% unless value.amount2.blank? or value.amount2.nil? %>
+            <ValueAmount><%=  "%.2f" % value.amount2%></ValueAmount>
+          <%  end %>
+        </ValueCodeData>
+      <%end%>
+    <%end%>
+    <ServiceLines>
+      <%ubo4_claim.ub04_serviceline_informations.each do |sline|%>
+        <ServiceLine>
+          <% unless  sline.rev_code.blank? or sline.rev_code.nil?%>
+            <RevCode><%=sline.rev_code%></RevCode>
+          <%end%>
+          <% unless  sline.hcpcs.blank? or sline.hcpcs.nil?%>
+            <HCPCS><%=sline.hcpcs%></HCPCS>
+          <%end%>
+          <% unless  sline.service_date.blank? or sline.service_date.nil?%>
+            <ServiceDate><%=sline.service_date.to_datetime.strftime("%Y%m%d") %></ServiceDate>
+          <%end%>
+          <% unless  sline.service_units.blank? or sline.service_units.nil?%>
+            <ServiceUnits><%=sline.service_units%></ServiceUnits>
+          <%end%>
+          <% unless  sline.charges.blank? or sline.charges.nil?%>
+            <Charge><%="%.2f" % sline.charges%></Charge>
+          <%end%>
+          <% unless  sline.non_covered_charges.blank? or sline.non_covered_charges.nil?%>
+            <NonCovCharge><%="%.2f" % sline.non_covered_charges%></NonCovCharge>
+          <%end%>
+        </ServiceLine>
+      <%end%>
+    </ServiceLines>
+    <% unless ubo4_claim.page_number.blank? or ubo4_claim.page_number.nil?%>
+      <PageNumber><%=ubo4_claim.page_number%></PageNumber>
+    <%end%>
+    <% unless ubo4_claim.page_total.blank? or ubo4_claim.page_total.nil?%>
+      <PageTotal><%=ubo4_claim.page_total%></PageTotal>
+    <%end%>
+    <% unless  ubo4_claim.creation_date.blank? or ubo4_claim.creation_date.nil?%>
+      <CreationDate><%=ubo4_claim.creation_date.to_datetime.strftime("%Y%m%d") %></CreationDate>
+    <%end%>
+    <% unless  ubo4_claim.total_charges.blank? or ubo4_claim.total_charges.nil?%>
+      <TotalCharges><%="%.2f" % ubo4_claim.total_charges%></TotalCharges>
+    <%end%>
+    <% unless  ubo4_claim.total_non_covered_charges.blank? or ubo4_claim.total_non_covered_charges.nil?%>
+      <TotalNonCoveredCharges><%="%.2f" % ubo4_claim.total_non_covered_charges%></TotalNonCoveredCharges>
+    <%end%>
+    <% payer_count = 1 %>
+    <%ubo4_claim.ub04payers.each do |payer|%>
+      <PayerData<%=payer_count%>>
+        <% unless payer.name.blank? or payer.name.nil? %>
+          <PayerName><%=payer.name%></PayerName>
+        <%end%>
+        <% unless  payer.health_planid.blank? or payer.health_planid.nil? %>
+          <HealthPlanID><%=payer.health_planid%></HealthPlanID>
+        <%end%>
+        <% unless payer.release_info.blank? or payer.release_info.nil? %>
+          <ReleaseInfo><%=payer.release_info%></ReleaseInfo>
+        <%end%>
+        <% unless payer.assign_benefits.blank? or payer.assign_benefits.nil? %>
+          <AssignBenefits><%=payer.assign_benefits%></AssignBenefits>
+        <%end%>
+        <% unless payer.prior_payments.blank? or payer.prior_payments.nil? %>
+          <PriorPayments><%=payer.prior_payments%></PriorPayments>
+        <%end%>
+        <% unless payer.est_amounts.blank? or payer.est_amounts.nil? %>
+          <EstAmount><%= payer.est_amounts%></EstAmount>
+        <%end%>
+        <% unless payer.insured_first_name.blank? or payer.insured_first_name.nil? %>
+          <InsuredFirstName><%=payer.insured_first_name%></InsuredFirstName>
+        <%end%>
+        <% unless payer.insured_last_name.blank? or payer.insured_last_name.nil? %>
+          <InsuredLastName><%=payer.insured_last_name%></InsuredLastName>
+        <%end%>
+        <% unless payer.patient_relationship.blank? or payer.patient_relationship.nil? and !((ubo4_claim.patient_first_name == ubo4_claim.subscriber_first_name) and ((ubo4_claim.patient_last_name == ubo4_claim.subscriber_last_name)) and ((ubo4_claim.patient_address1 == ubo4_claim.subscriber_address1)) and ((ubo4_claim.patient_first_name == ubo4_claim.subscriber_first_name))and ((ubo4_claim.patient_city == ubo4_claim.subscriber_city)) and ((ubo4_claim.patient_state == ubo4_claim.subscriber_state))and ((ubo4_claim.patient_zipcode == ubo4_claim.subscriber_zipcode)) ) %>
+            <% unless payer.patient_relationship.blank? or payer.patient_relationship.nil? %>
+            <PatientRelationship><%=payer.patient_relationship%></PatientRelationship>
+          <%end%>
+      <%end%>
+      <% unless payer.insured_id.blank? or payer.insured_id.nil? %>
+          <InsuredID><%=payer.insured_id%></InsuredID>
+        <%end%>
+        <% unless payer.group_name.blank? or payer.group_name.nil? %>
+          <Group><%=payer.group_name%></Group>
+        <%end%>
+        <% unless payer.group_no.blank? or payer.group_no.nil? %>
+          <GroupNo><%=payer.group_no%></GroupNo>
+        <%end%>
+        <% unless payer.treatment_authorisation.blank? or payer.treatment_authorisation.nil? %>
+          <TreatmentAuth><%=payer.treatment_authorisation%></TreatmentAuth>
+        <%end%>
+        <% unless  payer.document_control_no.blank? or payer.document_control_no.nil? %>
+          <DocumentControlNo><%=payer.document_control_no%></DocumentControlNo>
+        <%end%>
+        <% unless  payer.employer_name.blank? or payer.employer_name.nil? %>
+          <EmployerName><%=payer.employer_name%></EmployerName>
+        <%end%>
+      </PayerData<%=payer_count%>>
+      <% payer_count += 1 %>
+    <%end%>
+    <% unless  ubo4_claim.dx_version_qualifier.blank? or ubo4_claim.dx_version_qualifier.nil?%>
+      <DXVersionQualifier><%=ubo4_claim.dx_version_qualifier%></DXVersionQualifier>
+    <%end%>
+    <% unless  ubo4_claim.principal_diag.blank? or ubo4_claim.principal_diag.nil?%>
+      <PrincipalDiag><%=ubo4_claim.principal_diag%></PrincipalDiag>
+    <%end%>
+    <% unless ubo4_claim.other_diag1.blank? or ubo4_claim.other_diag1.nil? %>
+      <OtherDiags>
+        <% unless ubo4_claim.other_diag1.blank? or ubo4_claim.other_diag1.nil? %>
+          <OtherDiag><%=ubo4_claim.other_diag1%></OtherDiag>
+        <%end %>
+        <% unless ubo4_claim.other_diag2.blank? or ubo4_claim.other_diag2.nil? %>
+          <OtherDiag><%=ubo4_claim.other_diag2%></OtherDiag>
+        <%end%>
+        <% unless ubo4_claim.other_diag3.blank? or ubo4_claim.other_diag3.nil? %>
+          <OtherDiag><%=ubo4_claim.other_diag3%></OtherDiag>
+        <%end%>
+        <% unless ubo4_claim.other_diag4.blank? or ubo4_claim.other_diag4.nil? %>
+          <OtherDiag><%=ubo4_claim.other_diag4%></OtherDiag>
+        <%end%>
+        <% unless ubo4_claim.other_diag5.blank? or ubo4_claim.other_diag5.nil? %>
+          <OtherDiag><%=ubo4_claim.other_diag5%></OtherDiag>
+        <%end%>
+        <% unless ubo4_claim.other_diag6.blank? or ubo4_claim.other_diag6.nil? %>
+          <OtherDiag><%=ubo4_claim.other_diag6%></OtherDiag>
+        <%end%>
+        <% unless ubo4_claim.other_diag7.blank? or ubo4_claim.other_diag7.nil? %>
+          <OtherDiag><%=ubo4_claim.other_diag7%></OtherDiag>
+        <%end%>
+        <% unless ubo4_claim.other_diag8.blank? or ubo4_claim.other_diag8.nil? %>
+          <OtherDiag><%=ubo4_claim.other_diag8%></OtherDiag>
+        <%end%>
+        <% unless ubo4_claim.other_diag9.blank? or ubo4_claim.other_diag9.nil? %>
+          <OtherDiag><%=ubo4_claim.other_diag9%></OtherDiag>
+        <%end%>
+        <% unless ubo4_claim.other_diag10.blank? or ubo4_claim.other_diag10.nil? %>
+          <OtherDiag><%=ubo4_claim.other_diag10%></OtherDiag>
+        <%end%>
+        <% unless ubo4_claim.other_diag11.blank? or ubo4_claim.other_diag11.nil? %>
+          <OtherDiag><%=ubo4_claim.other_diag11%></OtherDiag>
+        <%end%>
+        <% unless ubo4_claim.other_diag12.blank? or ubo4_claim.other_diag12.nil? %>
+          <OtherDiag><%=ubo4_claim.other_diag12%></OtherDiag>
+        <%end%>
+        <% unless ubo4_claim.other_diag13.blank? or ubo4_claim.other_diag13.nil? %>
+          <OtherDiag><%=ubo4_claim.other_diag13%></OtherDiag>
+        <%end%>
+        <% unless ubo4_claim.other_diag14.blank? or ubo4_claim.other_diag14.nil? %>
+          <OtherDiag><%=ubo4_claim.other_diag14%></OtherDiag>
+        <%end%>
+        <% unless ubo4_claim.other_diag15.blank? or ubo4_claim.other_diag15.nil? %>
+          <OtherDiag><%=ubo4_claim.other_diag15%></OtherDiag>
+        <%end%>
+        <% unless ubo4_claim.other_diag16.blank? or ubo4_claim.other_diag16.nil? %>
+          <OtherDiag><%=ubo4_claim.other_diag16%></OtherDiag>
+        <%end%>
+        <% unless ubo4_claim.other_diag17.blank? or ubo4_claim.other_diag17.nil? %>
+          <OtherDiag><%=ubo4_claim.other_diag17%></OtherDiag>
+        <%end%>
+      </OtherDiags>
+    <%end%>
+    <% unless  ubo4_claim.admit_diag.blank? or ubo4_claim.admit_diag.nil?%>
+      <AdmitDiag><%=ubo4_claim.admit_diag%></AdmitDiag>
+    <%end%>
+    <% unless  ubo4_claim.patient_reason_visit_code1.blank? or ubo4_claim.patient_reason_visit_code1.nil?%>
+      <PatientReasonVisitCodes>
+        <PatientReasonVisitCode><%=ubo4_claim.patient_reason_visit_code1%></PatientReasonVisitCode>
+      </PatientReasonVisitCodes>
+    <%end%>
+    <% unless  ubo4_claim.patient_reason_visit_code2.blank? or ubo4_claim.patient_reason_visit_code2.nil?%>
+      <PatientReasonVisitCodes>
+        <PatientReasonVisitCode><%=ubo4_claim.patient_reason_visit_code2%></PatientReasonVisitCode>
+      </PatientReasonVisitCodes>
+    <%end%>
+    <% unless  ubo4_claim.patient_reason_visit_code3.blank? or ubo4_claim.patient_reason_visit_code3.nil?%>
+      <PatientReasonVisitCodes>
+        <PatientReasonVisitCode><%=ubo4_claim.patient_reason_visit_code3%></PatientReasonVisitCode>
+      </PatientReasonVisitCodes>
+    <%end%>
+    <% unless  ubo4_claim.pps_code.blank? or ubo4_claim.pps_code.nil?%>
+      <PPScode><%=ubo4_claim.pps_code%></PPScode>
+    <%end%>
+    <% unless  ubo4_claim.eci_code1.blank? or ubo4_claim.eci_code1.nil?%>
+      <ECIcodes>
+        <ECIcode><%=ubo4_claim.eci_code1%></ECIcode>
+      </ECIcodes>
+    <%end%>
+    <% unless  ubo4_claim.eci_code2.blank? or ubo4_claim.eci_code2.nil?%>
+      <ECIcodes>
+        <ECIcode><%=ubo4_claim.eci_code2%></ECIcode>
+      </ECIcodes>
+    <%end%>
+    <% unless  ubo4_claim.eci_code3.blank? or ubo4_claim.eci_code3.nil?%>
+      <ECIcodes>
+        <ECIcode><%=ubo4_claim.eci_code3%></ECIcode>
+      </ECIcodes>
+    <%end%>
+    <% unless  ubo4_claim.principal_proc_code.blank? or ubo4_claim.principal_proc_code.nil?%>
+      <PrincipalProcCode><%=ubo4_claim.principal_proc_code%></PrincipalProcCode>
+    <%end%>
+    <% unless  ubo4_claim.principal_proc_date.blank? or ubo4_claim.principal_proc_date.nil?%>
+      <PrincipalProcDate><%=ubo4_claim.principal_proc_date.to_datetime.strftime("%Y%m%d") %></PrincipalProcDate>
+    <%end%>
+    <% unless  ubo4_claim.other_proc_code1.blank? or ubo4_claim.other_proc_code1.nil?%>
+      <OtherProcCodes>
+        <% unless  ubo4_claim.other_proc_code1.blank? or ubo4_claim.other_proc_code1.nil?%>
+          <OtherProcCode><%=ubo4_claim.other_proc_code1%></OtherProcCode>
+        <%end%>
+        <% unless  ubo4_claim.other_proc_date1.blank? or ubo4_claim.other_proc_date1.nil?%>
+          <OtherProcDate><%=ubo4_claim.other_proc_date1.to_datetime.strftime("%Y%m%d") %></OtherProcDate>
+        <%end%>
+      </OtherProcCodes>
+    <%end%>
+    <% unless  ubo4_claim.other_proc_code2.blank? or ubo4_claim.other_proc_code2.nil?%>
+      <OtherProcCodes>
+        <% unless  ubo4_claim.other_proc_code2.blank? or ubo4_claim.other_proc_code2.nil?%>
+          <OtherProcCode><%=ubo4_claim.other_proc_code2%></OtherProcCode>
+        <%end%>
+        <% unless  ubo4_claim.other_proc_date2.blank? or ubo4_claim.other_proc_date2.nil?%>
+          <OtherProcDate><%=ubo4_claim.other_proc_date2.to_datetime.strftime("%Y%m%d") %></OtherProcDate>
+        <%end%>
+      </OtherProcCodes>
+    <%end%>
+    <% unless  ubo4_claim.other_proc_code3.blank? or ubo4_claim.other_proc_code3.nil?%>
+      <OtherProcCodes>
+        <% unless  ubo4_claim.other_proc_code3.blank? or ubo4_claim.other_proc_code3.nil?%>
+          <OtherProcCode><%=ubo4_claim.other_proc_code3%></OtherProcCode>
+        <%end%>
+        <% unless  ubo4_claim.other_proc_date3.blank? or ubo4_claim.other_proc_date3.nil?%>
+          <OtherProcDate><%=ubo4_claim.other_proc_date3.to_datetime.strftime("%Y%m%d") %></OtherProcDate>
+        <%end%>
+      </OtherProcCodes>
+    <%end%>
+    <% unless  ubo4_claim.other_proc_code4.blank? or ubo4_claim.other_proc_code4.nil?%>
+      <OtherProcCodes>
+        <% unless  ubo4_claim.other_proc_code1.blank? or ubo4_claim.other_proc_code4.nil?%>
+          <OtherProcCode><%=ubo4_claim.other_proc_code4%></OtherProcCode>
+        <%end%>
+        <% unless  ubo4_claim.other_proc_date4.blank? or ubo4_claim.other_proc_date4.nil?%>
+          <OtherProcDate><%=ubo4_claim.other_proc_date4.to_datetime.strftime("%Y%m%d") %></OtherProcDate>
+        <%end%>
+      </OtherProcCodes>
+    <%end%>
+    <% unless  ubo4_claim.other_proc_code5.blank? or ubo4_claim.other_proc_code5.nil?%>
+      <OtherProcCodes>
+        <% unless  ubo4_claim.other_proc_code5.blank? or ubo4_claim.other_proc_code5.nil?%>
+          <OtherProcCode><%=ubo4_claim.other_proc_code5%></OtherProcCode>
+        <%end%>
+        <% unless  ubo4_claim.other_proc_date5.blank? or ubo4_claim.other_proc_date5.nil?%>
+          <OtherProcDate><%=ubo4_claim.other_proc_date5.to_datetime.strftime("%Y%m%d") %></OtherProcDate>
+        <%end%>
+      </OtherProcCodes>
+    <%end%>
+    <% unless  ubo4_claim.attending_npi.blank? or ubo4_claim.attending_npi.nil?%>
+      <AttendingNPI><%=ubo4_claim.attending_npi%></AttendingNPI>
+    <%end%>
+    <% unless  ubo4_claim.attending_qual.blank? or ubo4_claim.attending_qual.nil?%>
+      <AttendingQual><%=ubo4_claim.attending_qual%></AttendingQual>
+    <%end%>
+    <% unless  ubo4_claim.attendingid.blank? or ubo4_claim.attendingid.nil?%>
+      <AttendingID><%=ubo4_claim.attendingid%></AttendingID>
+    <%end%>
+    <% unless  ubo4_claim.attending_provider_first_name.blank? or ubo4_claim.attending_provider_first_name.nil?%>
+      <AttendingProviderFirstName><%=ubo4_claim.attending_provider_first_name%></AttendingProviderFirstName>
+    <%end%>
+    <% unless  ubo4_claim.attending_provider_last_name.blank? or ubo4_claim.attending_provider_last_name.nil?%>
+      <AttendingProviderLastName><%=ubo4_claim.attending_provider_last_name%></AttendingProviderLastName>
+    <%end%>
+    <% unless  ubo4_claim.operating_npi.blank? or ubo4_claim.operating_npi.nil?%>
+      <OperatingNPI><%=ubo4_claim.operating_npi%></OperatingNPI>
+    <%end%>
+    <% unless  ubo4_claim.operating_qual.blank? or ubo4_claim.operating_qual.nil?%>
+      <OperatingQual><%=ubo4_claim.operating_qual%></OperatingQual>
+    <%end%>
+    <% unless  ubo4_claim.operatingid.blank? or ubo4_claim.operatingid.nil?%>
+      <OperatingID><%=ubo4_claim.operatingid%></OperatingID>
+    <%end%>
+    <% unless  ubo4_claim.operating_provider_first_name.blank? or ubo4_claim.operating_provider_first_name.nil?%>
+      <OperatingProviderFirstName><%=ubo4_claim.operating_provider_first_name%></OperatingProviderFirstName>
+    <%end%>
+    <% unless  ubo4_claim.operating_provider_last_name.blank? or ubo4_claim.operating_provider_last_name.nil?%>
+      <OperatingProviderLastName><%=ubo4_claim.operating_provider_last_name%></OperatingProviderLastName>
+    <%end%>
+    <% unless  ubo4_claim.other_npi1.blank? or ubo4_claim.other_npi1.nil?%>
+      <OtherNPI1><%=ubo4_claim.other_npi1%></OtherNPI1>
+    <%end%>
+    <% unless  ubo4_claim.other_qual1.blank? or ubo4_claim.other_qual1.nil?%>
+      <OtherQual1><%=ubo4_claim.other_qual1%></OtherQual1>
+    <%end%>
+    <% unless  ubo4_claim.otherid1.blank? or ubo4_claim.otherid1.nil?%>
+      <OtherID1><%=ubo4_claim.otherid1%></OtherID1>
+    <%end%>
+    <% unless  ubo4_claim.other_provider_first_name1.blank? or ubo4_claim.other_provider_first_name1.nil?%>
+      <OtherProviderFirstName1><%=ubo4_claim.other_provider_first_name1%></OtherProviderFirstName1>
+    <%end%>
+    <% unless  ubo4_claim.other_provider_last_name1.blank? or ubo4_claim.other_provider_last_name1.nil?%>
+      <OtherProviderLastName1><%=ubo4_claim.other_provider_last_name1%></OtherProviderLastName1>
+    <%end%>
+    <% unless  ubo4_claim.other_npi2.blank? or ubo4_claim.other_npi2.nil?%>
+      <OtherNPI2><%=ubo4_claim.other_npi2%></OtherNPI2>
+    <%end%>
+    <% unless  ubo4_claim.other_qual2.blank? or ubo4_claim.other_qual2.nil?%>
+      <OtherQual2><%=ubo4_claim.other_qual2%></OtherQual2>
+    <%end%>
+    <% unless  ubo4_claim.otherid2.blank? or ubo4_claim.otherid2.nil?%>
+      <OtherID2><%=ubo4_claim.otherid2%></OtherID2>
+    <%end%>
+    <% unless  ubo4_claim.other_provider_first_name2.blank? or ubo4_claim.other_provider_first_name2.nil?%>
+      <OtherProviderFirstName2><%=ubo4_claim.other_provider_first_name2%></OtherProviderFirstName2>
+    <%end%>
+    <% unless  ubo4_claim.other_provider_last_name2.blank? or ubo4_claim.other_provider_last_name2.nil?%>
+      <OtherProviderLastName2><%=ubo4_claim.other_provider_last_name2%></OtherProviderLastName2>
+    <%end%>
+    <% unless  ubo4_claim.remarks.blank? or ubo4_claim.remarks.nil?%>
+      <Remarks><%=ubo4_claim.remarks.gsub(/\n+/,",").chop%></Remarks>
+    <%end%>
+    <%ubo4_claim.qualifier_code_values.each do |qcv|%>
+        <% unless  qcv.qualifier.blank? or qcv.qualifier.nil?%>
+        <Box81QualCodeValueData>
+          <% unless qcv.qualifier.blank? or qcv.qualifier.nil?%>
+            <Qual><%=qcv.qualifier%></Qual>
+          <%end%>
+          <% unless qcv.code.blank? or qcv.code.nil?%>
+            <Code><%=qcv.code%></Code>
+          <%end%>
+          <% unless qcv.value.blank? or qcv.value.nil?%>
+            <Value><%=qcv.value%></Value>
+          <%end%>
+        </Box81QualCodeValueData>
+      <%end%>
+    <%end%>
+  <% else %>
+    <PaperClaimStatus>Rejected</PaperClaimStatus>
+    <PaperClaimMessage><%= job.processor_comments %></PaperClaimMessage>
+  <% end %>
+  </ClaimData>
+<% end %>
+<%end%>
+</SecureEDI_UBCLAIM_XML>

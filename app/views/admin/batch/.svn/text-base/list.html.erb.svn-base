@@ -1,0 +1,22 @@
+<div id="login_main">
+<h1>Listing batches</h1>
+
+<div class="light_info">
+  <%= link_to 'New batch', :action => 'new' %> | <%= link_to 'Import Batches from CSV file', :controller => '/admin/upload', :action => 'upload', :type => 'batch'%>  
+</div>
+<div class="light_info">
+  <%= form_tag :action => 'list' do %>
+    <%= select_tag 'criteria', optionize('Batch ID', 'Date', 'Facility', 'Client', 'Estimated EOB')%> 
+    <%= select_tag 'compare', optionize('=','>', '<')%>
+    <%= text_field_tag 'to_find', nil, :size => '10' %>
+    <%= submit_tag 'Filter', :class => 'button' %>
+    <%= image_tag("/assets/spinner.gif", :align => 'absmiddle',:border=>"0", :id => "spinner", :style=>"display: none;" ) %>
+  <% end %>
+  <%= set_focus 'to_find' %>
+</div>
+
+<div id="table">
+  <%= render :partial => "batches_list" %>
+</div>
+</div>
+

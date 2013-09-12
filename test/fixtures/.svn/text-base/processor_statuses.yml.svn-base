@@ -1,0 +1,20 @@
+# == Schema Information
+# Schema version: 69
+#
+# Table name: processor_statuses
+#
+#  id   :integer(11)   not null, primary key
+#  name :string(255)   
+#
+
+ps1:
+  id:            1
+  name:         'New'
+  
+ps2:
+  id:            2
+  name:         'Processor Allocated'
+
+ps3:
+  id:            3
+  name:         'Processor Complete'

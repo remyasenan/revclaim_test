@@ -1,0 +1,20 @@
+<div id="login_main">
+<h1>Listing Sampling rates</h1>
+
+<table>
+  <tr>
+ <th style="width: 290px">Slab</th>
+    <th style="width: 318px">Value</th>
+    <th style="width: 150px"> &nbsp;</th>
+
+  </tr>
+
+<% for sampling_rate in @sampling_rates %>
+  <tr>
+    <td><%= sampling_rate.slab %></td>
+    <td><%= sampling_rate.value %></td>
+    <td ><%= link_to image_tag("report_edit.png", :alt => "Edit",:border=>"0"), :action => 'edit', :id => sampling_rate %></td>
+  </tr>
+<% end %>
+</table>
+</div>

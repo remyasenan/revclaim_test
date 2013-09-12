@@ -1,0 +1,113 @@
+K 25
+svn:wc:ra_dav:version-url
+V 50
+/revenuemed/revclaim/!svn/ver/1488/trunk/lib/tasks
+END
+has_details_tasks.rake
+K 25
+svn:wc:ra_dav:version-url
+V 72
+/revenuemed/revclaim/!svn/ver/932/trunk/lib/tasks/has_details_tasks.rake
+END
+comments.rake
+K 25
+svn:wc:ra_dav:version-url
+V 63
+/revenuemed/revclaim/!svn/ver/932/trunk/lib/tasks/comments.rake
+END
+admin_data_tasks.rake
+K 25
+svn:wc:ra_dav:version-url
+V 71
+/revenuemed/revclaim/!svn/ver/932/trunk/lib/tasks/admin_data_tasks.rake
+END
+environments.rake
+K 25
+svn:wc:ra_dav:version-url
+V 67
+/revenuemed/revclaim/!svn/ver/879/trunk/lib/tasks/environments.rake
+END
+populate.rake
+K 25
+svn:wc:ra_dav:version-url
+V 63
+/revenuemed/revclaim/!svn/ver/879/trunk/lib/tasks/populate.rake
+END
+ocr_folderstructure.rake
+K 25
+svn:wc:ra_dav:version-url
+V 75
+/revenuemed/revclaim/!svn/ver/1472/trunk/lib/tasks/ocr_folderstructure.rake
+END
+input.rake
+K 25
+svn:wc:ra_dav:version-url
+V 61
+/revenuemed/revclaim/!svn/ver/1472/trunk/lib/tasks/input.rake
+END
+output.rake
+K 25
+svn:wc:ra_dav:version-url
+V 62
+/revenuemed/revclaim/!svn/ver/1470/trunk/lib/tasks/output.rake
+END
+ub_errors.rake
+K 25
+svn:wc:ra_dav:version-url
+V 64
+/revenuemed/revclaim/!svn/ver/879/trunk/lib/tasks/ub_errors.rake
+END
+extract_fixtures.rake
+K 25
+svn:wc:ra_dav:version-url
+V 72
+/revenuemed/revclaim/!svn/ver/1472/trunk/lib/tasks/extract_fixtures.rake
+END
+capistrano.rake
+K 25
+svn:wc:ra_dav:version-url
+V 65
+/revenuemed/revclaim/!svn/ver/879/trunk/lib/tasks/capistrano.rake
+END
+addclientandfacility_ansamli.rake
+K 25
+svn:wc:ra_dav:version-url
+V 84
+/revenuemed/revclaim/!svn/ver/1470/trunk/lib/tasks/addclientandfacility_ansamli.rake
+END
+mysql.rake
+K 25
+svn:wc:ra_dav:version-url
+V 60
+/revenuemed/revclaim/!svn/ver/879/trunk/lib/tasks/mysql.rake
+END
+rails.rake
+K 25
+svn:wc:ra_dav:version-url
+V 61
+/revenuemed/revclaim/!svn/ver/1472/trunk/lib/tasks/rails.rake
+END
+add_patient.rake
+K 25
+svn:wc:ra_dav:version-url
+V 67
+/revenuemed/revclaim/!svn/ver/1470/trunk/lib/tasks/add_patient.rake
+END
+ub04ocr.rake
+K 25
+svn:wc:ra_dav:version-url
+V 63
+/revenuemed/revclaim/!svn/ver/1472/trunk/lib/tasks/ub04ocr.rake
+END
+batch_load.rake
+K 25
+svn:wc:ra_dav:version-url
+V 66
+/revenuemed/revclaim/!svn/ver/1488/trunk/lib/tasks/batch_load.rake
+END
+annotate_models_tasks.rake
+K 25
+svn:wc:ra_dav:version-url
+V 76
+/revenuemed/revclaim/!svn/ver/932/trunk/lib/tasks/annotate_models_tasks.rake
+END

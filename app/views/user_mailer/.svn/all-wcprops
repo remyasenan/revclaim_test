@@ -1,0 +1,17 @@
+K 25
+svn:wc:ra_dav:version-url
+V 62
+/revenuemed/revclaim/!svn/ver/1453/trunk/app/views/user_mailer
+END
+signup_notification.html.erb
+K 25
+svn:wc:ra_dav:version-url
+V 91
+/revenuemed/revclaim/!svn/ver/1453/trunk/app/views/user_mailer/signup_notification.html.erb
+END
+activation.html.erb
+K 25
+svn:wc:ra_dav:version-url
+V 82
+/revenuemed/revclaim/!svn/ver/1453/trunk/app/views/user_mailer/activation.html.erb
+END

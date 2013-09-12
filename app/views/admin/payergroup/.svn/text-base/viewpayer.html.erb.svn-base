@@ -1,0 +1,71 @@
+<h1>Listing payers</h1>
+
+<b><%= link_to  ' Insert Payers',:action => 'listpayer',:id =>"#{@pgid}"%><br></b>
+<% if @user.role == 'Processor' %>		
+	<div class="light_info">
+		<%= link_to 'New payer', :action => 'new' %>
+  </div>
+<% end %>
+
+
+<% if @pay.size > 0 %>
+
+<% end %>
+
+<% unless @pay.empty? %>
+  <% pagination = create_pagination(@payer_pages,'payergroup',params[:page]) %>
+<%= pagination %>
+ <% form_tag :action => 'delete', :id => @payers_to_delete do %>
+ 
+<table>
+  <tr>
+		<!-- <th>Date Added</th>
+		<th>Initials</th>
+		<th>From</th> -->
+		
+		<th>Gateway</th>
+		<th>Payer ID</th>
+		<th>Payer</th>
+		
+		<th>GR Name</th>
+		
+		<th>Address One</th>
+		<th>Address Two</th>
+		<th>Address Three</th>
+		<th>Address Four</th>
+		<% if @user.role == 'Supervisor' or @user.role == 'Admin'%>
+		<th><input type="checkbox" name="all" onClick="checkAll(document.forms[1].toggle,this)"></th></tr>
+		<% end %>
+	<!--	<th>Phone</th> -->
+<% for pay in @pay %>
+  <tr>
+		
+		<td><%= pay.gateway %></td>
+		<td><%= pay.payid %></td>
+		<td><%= pay.payer %></td>
+		<td><%= pay.gr_name %></td>
+		<td><%= pay.pay_address_one %></td>
+		<td><%= pay.pay_address_two %></td>
+		<td><%= pay.pay_address_three %></td>
+		<td><%= pay.pay_address_four%></td>
+<% if @user.role == 'Supervisor' or @user.role == 'Admin'%>		
+    <td><%= check_box :payers_to_delete, pay.id, :id => 'toggle' %> </td>
+   
+<% end %>
+  </tr>
+<% end %>
+</table>
+
+
+
+ <br/>
+<% if @user.role == 'Supervisor' or @user.role == 'Admin'%>		
+  <%= submit_tag 'Remove', :class => 'button' if @pay.size > 0 %>
+<% end %>
+	 <% end %>	
+<% else %>
+
+  <h4> No Payers found. Click 'Insert Payers' to create Payers. </h4>
+<% end %><br><br>
+<%= link_to image_tag("arrow_undo.png", :alt => "Cancel"), :action => 'list' %>
+

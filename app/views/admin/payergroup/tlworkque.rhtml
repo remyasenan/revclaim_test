@@ -1,0 +1,54 @@
+ <%if @payers.length !=0  %>
+<h1>Payer Group Wise Job List</h1>
+
+<% pagination = create_pagination(@payer_pages,'payergroup',params[:page]) %>
+<%= pagination %>
+
+<table>
+  <tr>
+   
+    <th>Payer GroupName</th>
+     
+ 
+    <th>Job <br/> Count</th>
+
+    <th>Estimated <br/> EOBs</th>
+    <th>Earliest <br/> Contracted Time</th>
+    <th>Earliest <br/> Expected Time</th>
+
+  </tr>
+ <%  @payers.each do |payer1| %>
+<%  payer1.each do |payer| %>
+ 
+ 
+    <tr>
+
+<% payer.id %>
+
+      <td><%=link_to  payer.payergroupname,:controller=>'payergroup',:action=>'jobfind' ,:id => payer.id %></td>
+ 
+
+
+      <td><%= payer.count %></td>
+
+      <td><%= payer.eobs %></td>
+      
+      <% if payer.tat.nil? %>
+      <td>N/A</td>
+      <% else %>
+      <td><%= format_datetime(payer.tat) %></td>
+      <% end %>
+      <% if payer.etc.nil? %>
+      <td>New</td>
+      <% else %>
+      <td><%= format_datetime(payer.etc) %></td>
+      <% end %>
+
+    </tr>
+<% end %>
+<% end %>
+
+</table>
+<%else%>
+   <h4>You don't have any assigned jobs!!</h4>
+  <%end%>

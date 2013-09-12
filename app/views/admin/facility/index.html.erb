@@ -1,0 +1,65 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+    <title>Revclaim</title>
+    
+  </head>
+  <body>
+    <div class="inner_cont">
+      <div id="page_left">
+        <%if flash[:notice]%>
+          <div class="caption_success">
+            <%= flash[:notice]%>
+          </div>
+        <%end%>
+<div class="page_caption">
+          	<table>
+          		</table>
+</div>
+        <table id="table-list" style="width:50%; float:left;">
+          <thead>
+            <tr>
+              <th>Facility Name</th>
+              <th>Client Name</th>
+              <th>Sitecode</th>
+              <th>Internal Tat</th>
+              <th>Edit</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% if @facilities.size > 0%>
+              <% @facilities.each do |f|%>
+                <%#if (f.status == "DEACTIVATE")%>
+                  <%#cls = 'disable'%>
+                <%#else%>
+                  <%#cls = ''%>
+                <%#end%>
+
+                <tr>
+                  <td><%= link_to f.name,{:action => 'show',:id => f.id}%></td>
+                  <td><%= f.client.name if f.client%> </td>
+                  <td><%= f.sitecode%></td>
+                  <td><%= f.internal_tat%> </td>
+                  
+                  <td align="center"> <%= link_to image_tag("report_edit.png", :alt => "Edit",:border=>"0"),:action => 'edit', :id => f.id %></td>
+                  <td><%= f.status%> </td>
+                </tr>
+              <%end%>
+            <%end%>
+          </tbody>
+        </table>
+        <!--end_table-->
+      </div>
+      <!--end_revclaim_page_left-->
+      <div id="page_right">
+        <!-- <div class="caption_not_found">User Not Found
+        </div>-->
+        
+        <%= link_to 'Add New Facility',{:action => 'new'} %>
+      </div>
+      <!--end_revclaim_page_right-->
+    </div><!--end_revclaim_inner_cont-->
+  </body>
+</html>

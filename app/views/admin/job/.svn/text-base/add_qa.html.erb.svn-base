@@ -1,0 +1,41 @@
+<div id="login_main">
+<h1>Select QA</h1>
+
+<% unless @users.empty? %>
+  <table>
+    <tr>
+      <th>User Name</th>
+      <th>User ID</th>
+      <th>Shift</th>
+      <th>Remark</th>
+      <th>Jobs Allocated</th>
+      <th>Comment for QA</th>
+    </tr>
+    <% @users.each do |user| %>
+
+    <tr>
+      <td><%= user.name %></td>
+      <td><%= user.login %></td>
+      <td><%= user.shift.name %></td>
+      <td>&nbsp;<%= user.remark %></td>
+      <td align='right'><%= user.allocated_jobs_qa.size %></td>
+      <%= form_tag :action => 'assign', :jobs => @jobs, :user => user, :type => 'qa', :back_page=>params[:back_page], :payer => params[:payer], :from => params[:from], :jobs_of_user => params[:jobs_of_user] do %>
+        <td><%= text_field 'qa', 'comment', :size => 10  %></td>
+        <td><%= submit_tag "Allocate QA", :class => 'button' %></td>
+			<% end %>
+    </tr>
+    <% end %>
+  </table>
+<% else  %>
+  <h4> No QA created/online.</h4>
+<% end %>
+
+<%  if params[:from] == 'payer' %>
+	<%= link_to image_tag("arrow_undo.png", :alt => "Back"), :action => 'allocate_payer_jobs', :back_page=>params[:back_page], :payer => params[:payer] %>
+<% elsif params[:from] == 'user' %>
+	<%= link_to image_tag("arrow_undo.png", :alt => "Back"), :action => 'user_jobs', :back_page=>params[:back_page], :user => params[:jobs_of_user] %>
+<% else %>
+	           <%= link_to image_tag("arrow_undo.png", :alt => "Back"),:page => params[:page],:controller => '/admin/batch', :action => 'allocate' %>
+<% end %>
+</div>
+

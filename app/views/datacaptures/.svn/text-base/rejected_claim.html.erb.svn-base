@@ -1,0 +1,1913 @@
+<head>
+  <%= javascript_include_tag "viewone" %>
+  <%= javascript_include_tag 'restrict' %>
+  <script type="text/javascript">
+      Event.observe(window, 'load', function() {
+          //extract the coordinates and page attributes from each element and highlight corresponding area in the image
+          count = 0;
+          $$(".ocr_data").each(
+              // in OCR mode, set the tabIndex of MPI search button to zero
+                  function (item) {
+                      try {
+                          myHandler = new ViewOneHandler(parent.document.getElementById("viewONE"));
+                      } catch (e) {
+                      }
+                      item.observe('focus', function(event) {
+                          element = event.findElement();
+                          coordinates = element.getAttribute('coordinates');
+                          var x, y;
+                          if (coordinates != null)
+                          {
+                              var coordinates_array = coordinates.split(',');
+                              x = parseFloat(coordinates_array[0]);
+                              y = parseFloat(coordinates_array[1]);
+                              width = parseFloat(coordinates_array[2]);
+                              height = parseFloat(coordinates_array[3]);
+                              page = 1
+                              if (x != 0 && y != 0)
+                              {
+                                  try {
+                                      myHandler.setPage(page);
+                                      myHandler.highlightArea(page, x, y, width, height, true, -1, count++);
+                                      //adjust the position of the scroll bar to show the highlighted area
+                                      image_height = myHandler.getImageHeight();
+                                      image_width = myHandler.getImageWidth();
+                                      y = ( y - (image_height * 0.1));
+                                      x = ( x - (image_width * 0.2));
+                                      myHandler.setXYScroll(x, y);
+                                  } catch (e) {
+                                  }
+                              }
+                          }
+
+                      });
+                      item.observe('blur', function() {
+                          try {
+                              myHandler.removeHighlight();
+                          } catch (e) {
+                          }
+                      });
+                  });
+      });
+  </script>
+  <%= javascript_include_tag "ans_cms" %>
+  <%= javascript_include_tag "highlight" %>
+  <%= javascript_include_tag "auto_complete" %>
+</head>
+<body onload="countr()">
+<script type="text/javascript" charset="utf-8">
+    //<![CDATA[
+    document.observe("dom:loaded", function() {
+        if ($('cpthcpcd_id') == null)
+        {
+            for (var i = 1; i <= 40; i++)
+            {
+                $("cpthcpcd_id" + i).observe("keyup", function() {
+                    if ($(this).value.length == 5) {
+                        var url = "/cpt_codes/show?code=" + $(this).value;
+                        //"/cpt_codes/show?code=" + $(this).value;
+                        new Ajax.Request(url, {
+                            method: 'get',
+                            onSuccess: function(transport) {
+                                $("cpt_code_description").update("CPT Code description : " + transport.responseText);
+                            }
+                        })
+                    } else {
+                        $("cpt_code_description").update("CPT Code description : CODE INCOMPLETE");
+                    }
+                });
+            }
+
+        }
+        else
+        {
+            $("cpthcpcd_id").observe("keyup", function() {
+                if ($(this).value.length == 5) {
+                    var url = "/cpt_codes/show?code=" + $(this).value;
+                    new Ajax.Request(url, {
+                        method: 'get',
+                        onSuccess: function(transport) {
+                            $("cpt_code_description").update(transport.responseText);
+                        }
+                    })
+                } else {
+                    $("cpt_code_description").update(" CODE INCOMPLETE");
+                }
+            });
+        }
+    });
+        //]]>
+</script>
+
+    <div id="Layer2">
+      <script LANGUAGE="JavaScript">
+          imagedisply('<%=@image.public_filename()%>')
+      </script>
+    </div>
+    <!--Space for Main Form -->
+    <div id="down_table">
+      <%= will_paginate @patientinfo %>
+      <% @patientinfo.each do |patient_info| %>
+    <%= form_tag({:action => 'rejected_claim_update', :batchid=>params[:batch_type], :payerid =>session[:payerid], :jobid => @jobid}, :claimid =>patient_info.id, :name=>'form1', :onKeyUp=>"highlight1(event)", :onClick=>"highlight1(event)") do %>
+       <%#form_tag :name=>'form1',:action => 'submit',:batchid=>session[:batchid],:payerid =>session[:payerid],:jobid => @jobid do%>
+       <%= hidden_field_tag 'jobid',"", :value => @jobid %>
+       <%= hidden_field_tag 'batchid',"", :value => session[:batchid] %>
+       <%= hidden_field_tag 'batch_type',"", :value => session[:batch_type] %>
+       <%= hidden_field_tag 'claimid' , "" , :value => patient_info.id %>
+         <table width="100%" border="0" cellpadding="0" cellspacing="0">
+          <tr>
+            <th>PayerName</th>
+            <th>PayerAddressOne</th>
+            <th>PayerAddressTwo</th>
+            <th>PayerCity</th>
+            <th>PayerState</th>
+            <th>PayerZipcode</th>
+          </tr>
+          <tr>
+            <td><%= text_field_with_auto_complete :payer, :name, :size=>"12", :class => "black_text #{patient_info.payer.style('payer') unless patient_info.payer.nil?}",
+                                                  :onkeypress => "enlargeTextfieldSize('payer_name',12)",
+                                                  :onblur => "resetTextfieldSize('payer_name',12); payerInformations()",
+                                                  :coordinates => (patient_info.payer.coordinates("payer") unless patient_info.nil?),
+                                                  :style=>"width:350px", :tabindex=>"1", :value => (patient_info.payer.payer unless patient_info.payer.nil?) %></td>
+            <td><%= text_field_tag :pay_add_one, "", :size=>"12",
+                                   :onkeypress => "enlargeTextfieldSize('pay_add_one',12)",
+                                   :onblur => "resetTextfieldSize('pay_add_one',12);",
+                                   :coordinates => (patient_info.payer.coordinates("pay_address_one") unless patient_info.nil?),
+                                   :class => "black_text #{patient_info.payer.style('pay_address_one') unless patient_info.payer.nil?}",
+                                   :tabindex=>"2", :value => (patient_info.payer.pay_address_one unless patient_info.payer.nil?) %></td>
+            <td><%= text_field_tag :pay_add_two, "", :size=>"12",
+                                   :class => "black_text #{patient_info.payer.style('pay_address_two') unless patient_info.payer.nil?}",
+                                   :onkeypress => "enlargeTextfieldSize('pay_add_two',12)",
+                                   :onblur => "resetTextfieldSize('pay_add_two',12);",
+                                   :coordinates => (patient_info.payer.coordinates("pay_address_two") unless patient_info.nil?),
+                                   :tabindex=>"3", :value => (patient_info.payer.pay_address_two unless patient_info.payer.nil?) %></td>
+            <td><%= text_field_tag :payer_city, "", :size=>"12", :class => "black_text #{patient_info.payer.style('city') unless patient_info.payer.nil?}",
+                                   :onkeypress => "enlargeTextfieldSize('payer_city',12)",
+                                   :onblur => "resetTextfieldSize('payer_city',12);",
+                                   :coordinates => (patient_info.payer.coordinates("city") unless patient_info.nil?),
+                                   :tabindex=>"4", :value => (patient_info.payer.city unless patient_info.payer.nil?) %></td>
+            <td><%= select_tag 'payer_state', options_for_select(@state,patient_info.payer.state), :id=>"payer_state", :tabindex=>"5" , :value => (patient_info.payer.state unless patient_info.payer.nil?) %></td>
+            <td><%= text_field_tag :payer_zipcode, "", :size=>"12", :class => "black_text #{patient_info.payer.style('zipcode') unless patient_info.payer.nil?}", :coordinates => (patient_info.payer.coordinates("zipcode") unless patient_info.nil?), :tabindex=>"6", :value => (patient_info.payer.zipcode unless patient_info.payer.nil?) %></td>
+          </tr>
+        </table>
+        <table width="900">
+        <tbody>
+        <tr>
+        <td align="left" valign="top" width="650">
+        <table width="650">
+          <tbody>
+          <tr>
+            <th align="left"><span class="button">1.</span> MEDICARE</th>
+            <th align="left">MEDICAID</th>
+            <th align="left">TRICARE CHAMPUS</th>
+            <th align="left">CHAMPVA</th>
+            <th align="left">GROUP <br>
+              HEALTH PLAN
+            </th>
+            <th align="left">&nbsp;FECABLK <br>
+              LUNG
+            </th>
+            <th align="left">&nbsp;OTHER</th>
+            <th align="left">&nbsp;None</th>
+          </tr>
+          <tr>
+            <% if patient_info
+                if patient_info.insurance_type=='MEDICAID'
+                    @medicaid = true
+                elsif patient_info.insurance_type=='MEDICARE'
+                    @medicare = true
+                elsif patient_info.insurance_type=='TRICARECHAMPUS'
+                    @TRICARECHAMPUS = true
+                elsif patient_info.insurance_type=='CHAMPVA'
+                    @CHAMPVA = true
+                elsif patient_info.insurance_type=='GROUPHEALTHPLAN'
+                    @GROUPHEALTHPLAN = true
+                elsif patient_info.insurance_type=='FECABLKLUNG'
+                    @FECABLKLUNG = true
+                elsif patient_info.insurance_type=='OTHER'
+                    @OTHER = true
+                end
+            end
+            %>
+            <td align="right">
+              <%= radio_button(:cms1500, :insurance_type, 'MEDICARE', :onFocus=>"setXYScroll(85)", :checked=>@medicare, :tabindex=>"7") %>
+              <br>
+              (Medicare #)
+            </td>
+            <td align="right">  <%= radio_button(:cms1500, :insurance_type, 'MEDICAID', :onFocus=>"setXYScroll(85)", :checked=>@medicaid, :tabindex=>"7") %>
+              <br>
+              (Medicaid #)
+            </td>
+            <td align="right">   <%= radio_button(:cms1500, :insurance_type, 'TRICARECHAMPUS', :onFocus=>"setXYScroll(85)", :checked=>@TRICARECHAMPUS, :tabindex=>"7") %>
+              <br>
+              (Sponsor's SSN)
+            </td>
+            <td align="right"> <%= radio_button(:cms1500, :insurance_type, 'CHAMPVA', :onFocus=>"setXYScroll(85)", :checked=>@CHAMPVA, :tabindex=>"7") %>
+              <br>
+              (Member ID#)
+            </td>
+            <td align="right"> <%= radio_button(:cms1500, :insurance_type, 'GROUPHEALTHPLAN', :onFocus=>"setXYScroll(85)", :checked=>@GROUPHEALTHPLAN, :tabindex=>"7") %>
+              <br>
+              (SSN or ID)
+            </td>
+            <td align="right"> <%= radio_button(:cms1500, :insurance_type, 'FECABLKLUNG', :onFocus=>"setXYScroll(85)", :checked=>@FECABLKLUNG, :tabindex=>"7") %>
+              <br>
+              (SSN)
+            </td>
+            <td align="right"> <%= radio_button(:cms1500, :insurance_type, 'OTHER', :onFocus=>"setXYScroll(85)", :checked=> @OTHER, :tabindex=>"7") %>
+              <br>
+              (ID)
+            </td>
+            <td align="right"> <%= radio_button(:cms1500, :insurance_type, 'NULL', :onFocus=>"setXYScroll(85)", :tabindex=>"7") %>
+              <br>
+            </td>
+          </tr>
+
+          </tbody>
+        </table>
+        <table width="650">
+        <tbody>
+        <tr>
+          <th align="left" width="270"><span class="button">2.</span> PATIENT'S NAME </br>
+            <span class="small">[Last Name] [Suffix] [First Name] [Middle Intial]</span></th>
+          <th align="left" width="218"><span class="button">3.</span> PATIENT'S BIRTH DATE</th>
+
+          <th align="left" width="88">SEX</th>
+        </tr>
+        <tr>
+          <td align="right">
+            <%= text_field :cms1500, :patient_last_name, :class => "black_text #{(patient_info.style('patient_last_name') if patient_info)}",
+                           :size => "10", :onFocus=>"setXYScroll(120)", :tabindex=>"9",
+                           :onkeypress => "enlargeTextfieldSize('cms1500_patient_last_name',10)",
+                           :onblur => "resetTextfieldSize('cms1500_patient_last_name',10);",
+                           :coordinates => (patient_info.coordinates("patient_last_name") unless patient_info.nil?),
+                           :value =>(display_patient_details(patient_info,@patient_informations,'patient_last_name','lastname')) %>
+
+            <%= text_field :cms1500, :patient_suffix, :class => "black_text #{patient_info.style('patient_suffix')}",
+                           :onkeypress => "enlargeTextfieldSize('cms1500_patient_suffix',10)",
+                           :onblur => "resetTextfieldSize('cms1500_patient_suffix',10);",
+                           :style => "width:30px", :maxlength => '3', :onFocus => "setXYScroll(120)", :tabindex => "10",
+                           :coordinates => (patient_info.coordinates("patient_suffix") unless patient_info.nil?),
+                           :value => (patient_info.patient_suffix unless patient_info.nil?) %>
+
+            <%= text_field :cms1500, :patient_first_name, :class => "black_text #{patient_info.style('patient_first_name')}",
+                           :size => "10", :onFocus=>"setXYScroll(120)", :tabindex=>"11",
+                           :onkeypress => "enlargeTextfieldSize('cms1500_patient_first_name',10)",
+                           :onblur => "resetTextfieldSize('cms1500_patient_first_name',10);",
+                           :coordinates => (patient_info.coordinates("patient_first_name") unless patient_info.nil?),
+                           :value =>(display_patient_details(patient_info,@patient_informations,'patient_first_name','firstname'))  %>
+
+            <%= text_field :cms1500, :patient_middle_initial, :style => "width:20px", :class => "black_text #{patient_info.style('patient_middle_initial')}", :coordinates => (patient_info.coordinates("patient_middle_initial") unless patient_info.nil?), :size => "2", :onFocus => "setXYScroll(120)", :maxlength => '1', :tabindex => "12", :value => (patient_info.patient_middle_initial unless patient_info.nil?) %>
+
+          </td>
+          <td align="right" width="218">
+
+            <%
+               if patient_info
+                   @patientmonth =(patient_info.patient_dob).try(:strftime,"%m")
+                   @patientdate =(patient_info.patient_dob).try(:strftime,"%d")
+                   @patientyear =(patient_info.patient_dob).try(:strftime,"%Y")
+               end
+            %>
+
+            <%= text_field_tag :month, "", :id=>"patient_dob_month", :size=>"1", :style=>"width:20px", :class => "black_text #{patient_info.style('month')}", :coordinates => (patient_info.coordinates("month") unless patient_info.nil?), :maxlength=>'2', :onFocus=>"setXYScroll(120)", :tabindex=>"13", :value =>(display_patient_details(patient_info,@patient_informations,'patient_dob','dob').to_s.slice(5,2))%>
+            /
+            <%= text_field_tag :date, "", :id=>"patient_dob_date", :size=>"1", :style=>"width:20px", :class => "black_text #{patient_info.style('date')}", :coordinates => (patient_info.coordinates("date") unless patient_info.nil?), :maxlength=>'2', :onFocus=>"setXYScroll(120)", :tabindex=>"14", :value =>(display_patient_details(patient_info,@patient_informations,'patient_dob','dob').to_s.slice(8,2))%>
+            /
+            <%= text_field_tag :year, "", :id=>"patient_dob_year", :size=>"2", :maxlength=>'4', :class => "black_text #{patient_info.style('year')}", :coordinates => (patient_info.coordinates("year") unless patient_info.nil?), :onFocus=>"setXYScroll(120)", :onBlur => "isDOB('patient_dob_month','patient_dob_date','patient_dob_year')", :tabindex=>"15", :value =>(display_patient_details(patient_info,@patient_informations,'patient_dob','dob').to_s.slice(0,4)) %>
+            &nbsp;</td>
+
+          <td align="right" width="92">
+            <table width="100%" border="0" cellpadding="0" cellspacing="0">
+              <tr>
+                <td>
+                  M
+                  <%
+                       if patient_info
+                                if patient_info.patient_sex=='M'
+                                  @m=true
+                                elsif patient_info.patient_sex=='F'
+                                  @f=true
+                                elsif patient_info.patient_sex=='U'
+                                  @u=true
+                                end
+                                end
+                  %>
+                      <%= radio_button(:cms1500, :patient_sex, 'M', :checked=>@m, :onFocus=>"setXYScroll(120)", :tabindex=>"16") %></td>
+                <td>F <%= radio_button(:cms1500, :patient_sex, 'F', :checked=>@f, :onFocus=>"setXYScroll(120)", :tabindex=>"16") %></td>
+                <td>U <%= radio_button(:cms1500, :patient_sex, 'U',:checked=>@u,:onFocus=>"setXYScroll(120)",:tabindex=>"16")%></td>
+              </tr>
+            </table>
+          </td>
+
+        </tr>
+        <tr>
+          <td rowspan="2" align="left" valign="top">
+            <table width="100%">
+              <tbody>
+              <tr>
+                <th align="left"><span class="button">5.</span>PATIENT'S ADDRESS (No., Street)</th>
+              </tr>
+              <tr>
+                <td><%= text_field :cms1500, :patient_address, :class=>"black_text #{patient_info.style('patient_address')}",
+                                   :size=>"35", :onFocus=>"setXYScroll(157)", :tabindex=>"17",
+                                   :onkeypress => "enlargeTextfieldSize('cms1500_patient_address',35)",
+                                   :onblur => "resetTextfieldSize('cms1500_patient_address',35);",
+                                   :coordinates => (patient_info.coordinates("patient_address") unless patient_info.nil?),
+                                   :value =>(display_patient_details(patient_info,@patient_informations,'patient_address','address'))  %></td>
+              </tr>
+              </tbody>
+            </table>
+            <table width="100%">
+
+              <tbody>
+              <tr>
+                <th align="left" width="70%">CITY</th>
+                <th align="left" width="30%">STATE</th>
+              </tr>
+              <tr>
+                <td><%= text_field :cms1500, :patient_city, :class=>"black_text #{patient_info.style('patient_city')}",
+                                   :size=>"30", :onFocus=>"setXYScroll(193)", :tabindex=>"18",
+                                   :onkeypress => "enlargeTextfieldSize('cms1500_patient_city',30)",
+                                   :onblur => "resetTextfieldSize('cms1500_patient_city',30);",
+                                   :coordinates => (patient_info.coordinates("patient_city") unless patient_info.nil?),
+                                   :value=>(patient_info.patient_city unless patient_info.nil?) %></td>
+                <td> <%= select_tag 'state', options_for_select(@state, display_patient_details(patient_info,@patient_informations,'patient_state','state')), :id=>"cms1500_patient_state", :onFocus=>"setXYScroll(193)", :coordinates => (patient_info.coordinates("patient_state") unless patient_info.nil?), :tabindex=>"19" %></td>
+              </tr>
+              </tbody>
+            </table>
+            <table width="100%">
+              <tbody>
+              <tr>
+                <th align="left">ZIP CODE</th>
+                <th align="left">TELEPHONE (Include Area Code)</th>
+              </tr>
+              <tr>
+                <td><%= text_field :cms1500, :patient_zipcode, :class=>"black_text #{patient_info.style('patient_zipcode')}", :size=>"9", :maxlength=>'10', :onFocus=>"setXYScroll(228)", :tabindex=>"20", :coordinates => (patient_info.coordinates("patient_zipcode") unless patient_info.nil?), :value=>(display_patient_details(patient_info,@patient_informations,'patient_zipcode','zipcode'))  %></td>
+                <td><%= text_field :cms1500, :patient_telephone, :disabled=>true, :class=>"black_text #{patient_info.style('patient_telephone')}", :size=>"15", :onFocus=>"setXYScroll(228)", :disabled=>true, :tabindex=>"21", :coordinates => (patient_info.coordinates("patient_telephone") unless patient_info.nil?), :value=>(patient_info.patient_telephone unless patient_info.nil?) %></td>
+              </tr>
+              </tbody>
+            </table>
+            <table width="100%">
+              <tbody>
+              <tr>
+                <th align="left"><span class="button">9.</span> OTHER INSURED'S NAME<br><span class="small">[Last Name] [Suffix] [First Name] [Middle Intial]</span>
+                </th>
+              </tr>
+              <tr>
+                <% if params[:batch_type].include?("AMLI") %>
+                <td><%= text_field :cms1500, :other_insured_last_name, :class=>"black_text #{patient_info.style('other_insured_last_name')}",
+                                   :size=>"6", :value=>'', :onFocus=>"setXYScroll(270)",
+                                   :onkeypress => "enlargeTextfieldSize('cms1500_other_insured_last_name',6)",
+                                   :onblur => "resetTextfieldSize('cms1500_other_insured_last_name',6);",
+                                   :coordinates => (patient_info.coordinates("patient_city") unless patient_info.nil?),
+                                   :value=>(patient_info.other_insured_last_name unless patient_info.nil?), :disabled => true %>
+                  <%= text_field :cms1500, :other_insured_suffix, :class=>"black_text #{patient_info.style('other_insured_suffix')}",
+                                 :style=>"width:30px", :maxlength=>'3', :value=>'', :onFocus=>"setXYScroll(270)",
+                                 :coordinates => (patient_info.coordinates("other_insured_suffix") unless patient_info.nil?),
+                                 :value=>(patient_info.other_insured_suffix unless patient_info.nil?), :disabled => true %>
+                  <%= text_field :cms1500, :other_insured_first_name, :class=>"black_text #{patient_info.style('other_insured_first_name')}",
+                                 :size=>"6", :value=>'', :maxlength => '1', :onFocus=>"setXYScroll(270)",
+                                 :onkeypress => "enlargeTextfieldSize('cms1500_other_insured_suffix',6)",
+                                 :onblur => "resetTextfieldSize('cms1500_other_insured_suffix',6);",
+                                 :coordinates => (patient_info.coordinates("other_insured_first_name") unless patient_info.nil?),
+                                 :value=>(patient_info.other_insured_first_name unless patient_info.nil?), :disabled => true %>
+                  <%= text_field :cms1500, :other_insured_middle_initial, :onkeypress => "enlargeTextfieldSize('cms1500_other_insured_middle_initial',6)",
+                                 :onblur => "resetTextfieldSize('cms1500_other_insured_middle_initial',6);",
+                                 :class=>"black_text #{patient_info.style('other_insured_middle_initial')}",
+                                 :coordinates => (patient_info.coordinates("other_insured_middle_initial") unless patient_info.nil?),
+                                 :size=>"6", :value=>'', :onFocus=>"setXYScroll(270)",
+                                 :value=>(patient_info.other_insured_middle_initial unless patient_info.nil?), :disabled => true %></td>
+                <% else %>
+                  <td><%= text_field :cms1500, :other_insured_last_name, :class=>"black_text #{patient_info.style('other_insured_last_name')}",
+                                   :size=>"6", :value=>'', :onFocus=>"setXYScroll(270)",
+                                   :onkeypress => "enlargeTextfieldSize('cms1500_other_insured_last_name',6)",
+                                   :onblur => "resetTextfieldSize('cms1500_other_insured_last_name',6);",
+                                   :coordinates => (patient_info.coordinates("patient_city") unless patient_info.nil?),
+                                   :value=>(patient_info.other_insured_last_name unless patient_info.nil?) %>
+                  <%= text_field :cms1500, :other_insured_suffix, :class=>"black_text #{patient_info.style('other_insured_suffix')}",
+                                 :style=>"width:30px", :maxlength=>'3', :value=>'', :onFocus=>"setXYScroll(270)",
+                                 :coordinates => (patient_info.coordinates("other_insured_suffix") unless patient_info.nil?),
+                                 :value=>(patient_info.other_insured_suffix unless patient_info.nil?) %>
+                  <%= text_field :cms1500, :other_insured_first_name, :class=>"black_text #{patient_info.style('other_insured_first_name')}",
+                                 :size=>"6", :value=>'', :maxlength => '1', :onFocus=>"setXYScroll(270)",
+                                 :onkeypress => "enlargeTextfieldSize('cms1500_other_insured_suffix',6)",
+                                 :onblur => "resetTextfieldSize('cms1500_other_insured_suffix',6);",
+                                 :coordinates => (patient_info.coordinates("other_insured_first_name") unless patient_info.nil?),
+                                 :value=>(patient_info.other_insured_first_name unless patient_info.nil?) %>
+                  <%= text_field :cms1500, :other_insured_middle_initial, :onkeypress => "enlargeTextfieldSize('cms1500_other_insured_middle_initial',6)",
+                                 :onblur => "resetTextfieldSize('cms1500_other_insured_middle_initial',6);",
+                                 :class=>"black_text #{patient_info.style('other_insured_middle_initial')}",
+                                 :coordinates => (patient_info.coordinates("other_insured_middle_initial") unless patient_info.nil?),
+                                 :size=>"6", :value=>'', :onFocus=>"setXYScroll(270)",
+                                 :value=>(patient_info.other_insured_middle_initial unless patient_info.nil?) %></td>
+                  <% end %>
+              </tr>
+              <tr>
+                <th align="left"><span class="button">a.</span> OTHER INSURED'S POLICY OR GROUP NUMBER</th>
+              </tr>
+              <tr>
+                <% if params[:batch_type].include?("AMLI") %>
+                <td><%= text_field :cms1500, :other_insured_policy_or_group_number, :class=>"black_text #{patient_info.style('other_insured_policy_or_group_number')}",
+                                   :size=>"40", :onkeypress => "enlargeTextfieldSize('cms1500_other_insured_policy_or_group_number',40)",
+                                   :onblur => "resetTextfieldSize('cms1500_other_insured_policy_or_group_number',40);",
+                                   :coordinates => (patient_info.coordinates("other_insured_policy_or_group_number") unless patient_info.nil?),
+                                   :value=>'', :maxlength=>'28', :onFocus=>"setXYScroll(300)", :disabled => true,
+                                   :value =>(patient_info.other_insured_policy_or_group_number unless patient_info.nil?) %></td>
+                <% else %>
+                <td><%= text_field :cms1500, :other_insured_policy_or_group_number, :class=>"black_text #{patient_info.style('other_insured_policy_or_group_number')}",
+                                   :size=>"40", :onkeypress => "enlargeTextfieldSize('cms1500_other_insured_policy_or_group_number',40)",
+                                   :onblur => "resetTextfieldSize('cms1500_other_insured_policy_or_group_number',40);",
+                                   :coordinates => (patient_info.coordinates("other_insured_policy_or_group_number") unless patient_info.nil?),
+                                   :value=>'', :maxlength=>'28', :onFocus=>"setXYScroll(300)", :disabled => true,
+                                   :value =>(patient_info.other_insured_policy_or_group_number unless patient_info.nil?) %></td>
+                <% end %>
+              </tr>
+              <tr>
+                <th align="left"><span class="button">b.</span> OTHER INSURED'S DATE OF BIRTH</th>
+              </tr>
+              <tr>
+                <%
+                   if patient_info
+                       @otherinsured_patientmonth =(patient_info.other_insured_dob).try(:strftime,"%m")
+                       @otherinsured_patientdate =(patient_info.other_insured_dob).try(:strftime,"%d")
+                       @otherinsured_patientyear =(patient_info.other_insured_dob).try(:strftime,"%Y")
+                   end
+                %>
+                <td><%= text_field :cms15001, :other_dob_month, :id => "other_dob_month", :class=>"black_text #{patient_info.style('other_dob_month')}", :coordinates => (patient_info.coordinates("other_dob_month") unless patient_info.nil?), :style=>"width:20px", :value=>@otherinsured_patientmonth, :maxlength=>'2', :onFocus=>"setXYScroll(335)", :disabled => true %>
+                  /
+                  <%= text_field :cms15001, :other_dob_date, :id => "other_dob_date", :class=>"black_text #{patient_info.style('other_dob_date')}",  :coordinates => (patient_info.coordinates("other_dob_date") unless patient_info.nil?), :style=>"width:20px", :value=>@otherinsured_patientdate, :maxlength=>'2', :onFocus=>"setXYScroll(335)", :disabled => true %>
+                  /
+                  <%= text_field :cms15001, :other_dob_year, :id => "other_dob_year", :class=>"black_text #{patient_info.style('other_dob_year')}",  :coordinates => (patient_info.coordinates("other_dob_year") unless patient_info.nil?), :size=>"1", :value=>@otherinsured_patientyear, :maxlength=>'4', :onFocus=>"setXYScroll(335)", :onBlur => "isDOB_nonmandatory('other_dob_month','other_dob_date','other_dob_year')", :disabled => true %>
+                  &nbsp; &nbsp;&nbsp;</td>
+              </tr>
+
+              <tr>
+                <% if patient_info
+                                      if patient_info.other_insured_sex=='M'
+                                        @other_m=true
+                                      elsif patient_info.other_insured_sex=='F'
+                                        @other_f=true
+                                      elsif patient_info.other_insured_sex=='U'
+                                        @other_u=true
+                                      end
+                                      end
+                %>
+                <td>
+                  <table width="100%" border="0" cellpadding="0" cellspacing="0">
+                    <tr>
+                      <td><span class="black_text"><strong>SEX</strong></span>&nbsp; M
+                        <%= radio_button(:cms1500, :other_insured_sex, 'M', :checked=>@other_m, :onFocus=>"setXYScroll(335)", :disabled =>true) %>
+                      </td>
+                      <td>F
+                        <%= radio_button(:cms1500, :other_insured_sex, 'F', :checked=>@other_f, :onFocus=>"setXYScroll(335)", :disabled =>true) %></td>
+                      <td>U
+                        <%=radio_button(:cms1500, :other_insured_sex, 'U' ,:checked=>@other_u,:onFocus=>"setXYScroll(335)",:disabled =>true)%></td>
+                    </tr>
+                  </table>
+                </td>
+              </tr>
+              <tr>
+                <th align="left"><span class="button">c.</span> EMPLOYER'S NAME OR SCHOOL NAME</th>
+              </tr>
+              <tr>
+                <td><%= text_field :cms1500, :other_insured_employers_or_school_name, :class=>"black_text #{patient_info.style('other_insured_employers_or_school_name')}",
+                                   :size=>"30", :value=>(patient_info.other_insured_employers_or_school_name unless patient_info.nil?),
+                                   :onkeypress => "enlargeTextfieldSize('cms1500_other_insured_employers_or_school_name',30)",
+                                   :onblur => "resetTextfieldSize('cms1500_other_insured_employers_or_school_name',30);",
+                                   :coordinates => (patient_info.coordinates("other_insured_employers_or_school_name") unless patient_info.nil?),
+                                   :onFocus=>"setXYScroll(375)", :disabled =>true %></td>
+              </tr>
+              <tr>
+                <th align="left"><span class="button">d.</span> INSURANCE PLAN NAME OR PROGRAM NAME</th>
+              </tr>
+              <tr>
+                <% if params[:batch_type].include?("AMLI") %>
+                <td><%= text_field :cms1500, :other_insured_insurance_plan_name, :class=>"black_text #{patient_info.style('other_insured_insurance_plan_name')}",
+                                   :size=>30, :value=>(patient_info.other_insured_insurance_plan_name unless patient_info.nil?),
+                                   :onkeypress => "enlargeTextfieldSize('cms1500_other_insured_insurance_plan_name',30)",
+                                   :coordinates => (patient_info.coordinates("other_insured_insurance_plan_name") unless patient_info.nil?),
+                                   :onblur => "resetTextfieldSize('cms1500_other_insured_insurance_plan_name',30);",
+                                   :onFocus=>"setXYScroll(410)", :disabled =>true %></td>
+              </tr>
+              <%else%>
+              <td><%= text_field :cms1500, :other_insured_insurance_plan_name, :class=>"black_text #{patient_info.style('other_insured_insurance_plan_name')}",
+                                   :size=>30, :value=>(patient_info.other_insured_insurance_plan_name unless patient_info.nil?),
+                                   :onkeypress => "enlargeTextfieldSize('cms1500_other_insured_insurance_plan_name',30)",
+                                   :coordinates => (patient_info.coordinates("other_insured_insurance_plan_name") unless patient_info.nil?),
+                                   :onblur => "resetTextfieldSize('cms1500_other_insured_insurance_plan_name',30);",
+                                   :onFocus=>"setXYScroll(410)" %></td>
+              <% end %>
+              </tbody>
+            </table>
+          </td>
+        </tr>
+        <tr>
+        <td colspan="2" align="right" valign="top">
+        <table width="100%">
+          <tbody>
+          <tr>
+            <th align="left"><span class="button">6.</span> PATIENT RELATIONSHIP TO INSURED</th>
+          </tr>
+          <tr>
+            <%
+
+                   if display_patient_details(patient_info,@patient_informations,'patient_relationship_to_insured','relationship')=='SELF'
+                       @self = true
+                   else
+                       if display_patient_details(patient_info,@patient_informations,'patient_relationship_to_insured','relationship')=='SPOUSE'
+                           @spouse = true
+                       else
+                           if display_patient_details(patient_info,@patient_informations,'patient_relationship_to_insured','relationship')=='CHILD'
+                               @child = true
+                           else
+                               if display_patient_details(patient_info,@patient_informations,'patient_relationship_to_insured','relationship')=='OTHERS'
+                                   @others = true
+                               else
+                                   if display_patient_details(patient_info,@patient_informations,'patient_relationship_to_insured','relationship')=='NONE'
+                                       @none = true
+                                   else
+                                       @self = false
+                                       @spouse = false
+                                       @child = false
+                                       @others = false
+                                       @none = false
+                                   end
+                               end
+                           end
+                       end
+                   end
+
+            %>
+
+            <td>
+
+              <table width="100%" border="0" cellpadding="0" cellspacing="0">
+                <tr>
+                  <td>Self
+                    <%= radio_button(:cms1500, :patient_relationship_to_insured, 'Self', :onkeyup =>'displayinfo()', :onFocus=>"setXYScroll(157)", :checked=>@self, :tabindex=>"22") %></td>
+                  <td>Spouse
+                    <%= radio_button(:cms1500, :patient_relationship_to_insured, 'Spouse', :onkeyup =>'clearinfo()', :onFocus=>"setXYScroll(157)", :checked=>@spouse, :tabindex=>"22") %></td>
+                  <td>Child
+                    <%= radio_button(:cms1500, :patient_relationship_to_insured, 'Child', :onkeyup =>'clearinfo()', :onFocus=>"setXYScroll(157)", :checked=>@child, :tabindex=>"22") %></td>
+                  <td>Others
+                    <%= radio_button(:cms1500, :patient_relationship_to_insured, 'Others', :checked=>@others, :onFocus=>"setXYScroll(157)", :onkeyup =>'clearinfo()', :tabindex=>"22") %></td>
+                  <td>None
+                    <%= radio_button(:cms1500, :patient_relationship_to_insured, 'None', :checked=>@none, :onFocus=>"setXYScroll(157)", :onkeyup =>'clearinfo()', :disabled =>true, :tabindex=>"22") %></td>
+                </tr>
+              </table>
+            </td>
+          </tr>
+          </tbody>
+        </table>
+        <table width="100%">
+          <tbody>
+          <tr>
+            <th align="left"><span class="button">8.</span> PATIENT STATUS</th>
+          </tr>
+          <tr>
+            <%
+               if patient_info
+                   if patient_info.patient_marital_status=='Single'
+                       @single = true
+                   else
+                       if patient_info.patient_relationship_to_insured=='Married'
+                           @married = true
+                       else
+                           if patient_info.patient_relationship_to_insured=='Others'
+                               @others_new = true
+                           else
+                               @single = false
+                               @married = false
+                               @others_new = false
+                           end
+                       end
+                   end
+               end
+
+            %>
+            <td>
+              <table width="100%" border="0" cellpadding="0" cellspacing="0">
+                <tr>
+                  <td>Single
+                    <%= radio_button(:cms1500, :patient_marital_status, 'Single', :onFocus=>"setXYScroll(193)", :checked=>@single, :disabled =>true, :tabindex=>"22") %></td>
+                  <td>Married
+                    <%= radio_button(:cms1500, :patient_marital_status, 'Married', :onFocus=>"setXYScroll(193)", :checked=>@married, :disabled =>true, :tabindex=>"22") %></td>
+                  <td>Others
+                    <%= radio_button(:cms1500, :patient_marital_status, 'Others', :onFocus=>"setXYScroll(193)", :checked=>@others_new, :disabled =>true, :tabindex=>"22") %></td>
+                  <td>None
+                    <%= radio_button(:cms1500, :patient_marital_status, 'NULL', :onFocus=>"setXYScroll(193)", :disabled =>true, :tabindex=>"22") %></td>
+                </tr>
+              </table>
+            </td>
+          </tr>
+          <tr>
+            <%
+               if patient_info
+                   if patient_info.patient_employment_status=='employed'
+                       @employed = true
+                   else
+                       if patient_info.patient_employment_status=='Full-Time Student'
+
+                           @fulltime = true
+                       else
+                           @parttime = true
+                       end
+                   end
+
+               end
+            %>
+            <td>
+              <table width="100%" border="0" cellpadding="0" cellspacing="0">
+                <tr>
+                  <td>Employed
+                    <%= radio_button(:cms1500, :patient_employment_status, 'employed', :onFocus=>"setXYScroll(193)", :checked=>@employed, :disabled =>true, :tabindex=>"22") %></td>
+                  <td>Full-Time Student
+                    <%= radio_button(:cms1500, :patient_employment_status, 'Full-Time Student', :onFocus=>"setXYScroll(193)", :checked=>@fulltime, :disabled =>true, :tabindex=>"22") %></td>
+                  <td>Part-Time Student
+                    <%= radio_button(:cms1500, :patient_employment_status, 'Part-Time Student', :onFocus=>"setXYScroll(193)", :checked=>@parttime, :disabled =>true, :tabindex=>"22") %></td>
+                  <td>None
+                    <%= radio_button(:cms1500, :patient_employment_status, 'NULL', :onFocus=>"setXYScroll(193)", :checked=>@parttime, :disabled =>true, :tabindex=>"22") %></td>
+                  </td>
+                </tr>
+              </table>
+          </tr>
+          </tbody>
+        </table>
+        <table width="100%">
+          <tbody>
+          <tr>
+            <th colspan="2" align="left"><span class="button">10.</span> IS PATIENT'S CONDITION RELATED TO:</th>
+          </tr>
+          <tr>
+            <%
+               if patient_info
+                   if patient_info.patient_condition_to_employment=='Yes'
+                       @emp_condition_y = true
+                   else
+                       @emp_condition_n = true
+                   end
+               end
+            %>
+            <td colspan="2" height="50">
+              a. EMPLOYMENT? (Current or Previous)
+              <table width="210" border="0" cellpadding="0" cellspacing="0">
+                <tr>
+                  <td>Yes
+                    <%= radio_button(:cms1500, :patient_condition_to_employment, 'Yes', :checked=>true, :onFocus=>"setXYScroll(270)", :checked=>@emp_condition_y, :tabindex=>"32") %></td>
+                  <td>No
+                    <%= radio_button(:cms1500, :patient_condition_to_employment, 'No', :onFocus=>"setXYScroll(270)", :checked=>@emp_condition_n, :tabindex=>"32") %></td>
+                </tr>
+              </table>
+            </td>
+          </tr>
+          <tr>
+            <%
+               if patient_info
+                   if patient_info.patient_condition_to_auto_accident=='Yes'
+                       @emp_auto_accident_y = true
+                       auto_acc_status = false
+                   else
+                       @emp_auto_accident_n = true
+                       auto_acc_status = true
+                   end
+               end
+            %>
+            <td height="50" width="64%">b. AUTO ACCIDENT?
+              <table width="100%" border="0" cellpadding="0" cellspacing="0">
+                <tr>
+                  <td>Yes
+                    <%= radio_button(:cms1500, :patient_condition_to_auto_accident, 'Yes', :checked=>true, :onFocus=>"setXYScroll(340)", :checked =>@emp_auto_accident_y, :onkeyup=>"enableAutoaccident()", :tabindex=>"33") %></td>
+                  <td>No
+                    <%= radio_button(:cms1500, :patient_condition_to_auto_accident, 'No', :onFocus=>"setXYScroll(340)", :checked =>@emp_auto_accident_n, :onkeyup=>"disableAutoaccident()", :tabindex=>"33") %></td>
+                </tr>
+              </table>
+            </td>
+            <td width="36%">PLACE (State)<br>
+              <%= text_field :cms1500, :patient_condition_to_auto_accident_place, :class=>"black_text #{patient_info.style('patient_condition_to_auto_accident_place')}", :coordinates => (patient_info.coordinates("patient_condition_to_auto_accident_place") unless patient_info.nil?), :style=>"width:15px", :size=>"3", :value=>'', :maxlength=>'2', :onFocus=>"setXYScroll(340)", :tabindex=>"34", :value =>(patient_info.patient_condition_to_auto_accident_place unless patient_info.nil?), :id=>'auto_accident_place_id' %>
+            </td>
+          </tr>
+          <tr>
+            <%
+               if patient_info
+                   if patient_info.patient_condition_to_other_accident=='Yes'
+                       @emp_other_accident_y = true
+                   else
+                       @emp_other_accident_n = true
+                   end
+               end
+            %>
+
+            <td colspan="2" height="50">c. OTHER ACCIDENT?
+              <table width="210" border="0" cellpadding="0" cellspacing="0">
+                <tr>
+                  <td>Yes
+                    <%= radio_button(:cms1500, :patient_condition_to_other_accident, 'Yes', :checked=>true, :onFocus=>"setXYScroll(378)", :checked =>@emp_other_accident_y, :tabindex=>"35") %></td>
+                  <td>No
+                    <%= radio_button(:cms1500, :patient_condition_to_other_accident, 'No', :onFocus=>"setXYScroll(378)", :checked =>@emp_other_accident_n, :tabindex=>"35") %></td>
+                </tr>
+              </table>
+            </td>
+          </tr>
+          <tr>
+            <td colspan="2"><span class="button">10d.</span> RESERVED FOR LOCAL USE<br>
+              <%= text_field :cms1500, :patient_condition_reserved_for_local_use, :class=>"black_text #{patient_info.style('patient_condition_reserved_for_local_use')}", :coordinates => (patient_info.coordinates("patient_condition_reserved_for_local_use") unless patient_info.nil?), :size=>"40", :maxlength=>'20', :value=>(patient_info.patient_condition_reserved_for_local_use unless patient_info.nil?), :onFocus=>"setXYScroll(340)", :disabled =>true, :tabindex=>"36" %>
+          </tr>
+          </tbody>
+        </table>
+        </td>
+        </tr>
+        </tbody>
+        </table>
+        <table border="0" cellpadding="0" cellspacing="0" width="100%">
+          <tbody>
+          <tr>
+            <td colspan="2" class="black_text">READ BACK OF FORM BEFORE COMPLETING &amp; SIGNING THIS FORM.</td>
+          </tr>
+          <tr>
+            <td colspan="2" height="60"><span class="button"><strong>12.</strong></span>
+              PATIENT'S OR AUTHORIZED PERSON'S SIGNATURE I authorize the release of
+              any medical or other information necessary to process this claim. I
+              also request payment of government benefits either to myself or to the
+              party who accepts assignment below.
+            </td>
+          </tr>
+          <tr>
+
+            <%
+               if patient_info
+                   if (patient_info.patient_signature_on_file=='Signature on File' or patient_info.patient_signature_on_file=='SIGNATURE-ON FILE' or patient_info.patient_signature_on_file=='SIGNATURE ON FILE' or patient_info.patient_signature_on_file)
+                       @pat_sign_on_file_y = true
+                   else
+                       if patient_info.patient_signature_on_file=='None'
+                           @pat_sign_on_file_n  = true
+                       end
+                   end
+               end
+            %>
+
+            <td width="316">
+
+              <table width="100%" border="0" cellpadding="0" cellspacing="0">
+                <tr>
+                  <td>Signature on File:</td>
+                  <td>
+                    Yes
+                    <%= radio_button(:cms1500, :patient_signature_on_file, 'Signature on File', :onFocus=>"setXYScroll(450)", :checked=>@pat_sign_on_file_y, :tabindex=>"44") %></td>
+                  <td>No
+                    <%= radio_button(:cms1500, :patient_signature_on_file, 'None', :onFocus=>"setXYScroll(450)", :checked=>@pat_sign_on_file_n, :tabindex=>"44") %></td>
+                  <td>None
+                    <%= radio_button(:cms1500, :patient_signature_on_file, 'NULL', :disabled =>true, :onFocus=>"setXYScroll(450)", :tabindex=>"45") %></td>
+                </tr>
+              </table>
+            </td>
+            <%
+               if patient_info
+                   @pat_signed_month =(patient_info.patient_signed_date).try(:strftime,"%m")
+                   @pat_signed_date  =(patient_info.patient_signed_date).try(:strftime,"%d")
+                   @pat_signed_year  =(patient_info.patient_signed_date).try(:strftime,"%Y")
+               end
+            %>
+            <td width="276">Date:
+              <%= text_field :cms15001, :signed_month, :class=>"black_text #{patient_info.style('signed_month')}", :coordinates => (patient_info.coordinates("signed_month") unless patient_info.nil?), :size=>"3", :style=>"width:20px", :id=>'signed_month_101', :value=>@pat_signed_month, :maxlength=>'2', :onFocus=>"setXYScroll(450)", :tabindex=>"46", :disabled =>true %>
+              /
+              <%= text_field :cms15001, :signed_date, :class=>"black_text #{patient_info.style('signed_date')}", :coordinates => (patient_info.coordinates("signed_date") unless patient_info.nil?), :size=>"3", :style=>"width:20px", :id=>'signed_date_102', :value=>@pat_signed_date, :maxlength=>'2', :onFocus=>"setXYScroll(450)", :tabindex=>"47", :disabled =>true %>
+              /
+              <%= text_field :cms15001, :signed_year, :class=>"black_text #{patient_info.style('signed_year')}", :coordinates => (patient_info.coordinates("signed_year") unless patient_info.nil?), :size=>"4", :id=>'signed_year_103', :value=>@pat_signed_year, :maxlength=>'4', :onFocus=>"setXYScroll(450)", :onBlur => "isDOB_nonmandatory('signed_month_101','signed_date_102','signed_year_103')", :tabindex=>"48", :disabled =>true %>
+              &nbsp; &nbsp;&nbsp;</td>
+          </tr>
+          </tbody>
+        </table>
+        </td>
+        <td align="left" valign="top" width="250">
+        <table width="100%">
+          <tbody>
+          <tr>
+            <th align="left"><span class="button">1a.</span> INSURED'S I.D. NUMBER</th>
+          </tr>
+          <tr>
+            <td><%= text_field :cms1500, :insured_id, :id =>'insureds_id', :class=>"black_text #{patient_info.style('insured_id')}", :coordinates => (patient_info.coordinates("insured_id") unless patient_info.nil?), :size=>"30", :onFocus=>"setXYScroll(83)", :value =>((display_patient_details(patient_info,@patient_informations,'insured_id','insured_id')) unless patient_info.nil?), :tabindex=>"8" %>
+              <%if params[:batch_type].include?("AMLI")%>
+            <%= submit_tag "Search", :class => 'button', :type => "button", :tabindex => "12", :onclick => "patient_Details_Popup()", :size =>150 %></td>
+            <% end %>
+          </tr>
+          </tbody>
+        </table>
+        <table width="100%">
+          <tbody>
+          <tr>
+            <th align="left"><span class="button">4.</span> INSURED'S NAME <br><span class="small">[Last Name] [Suffix] [First Name] [Middle Intial]</span>
+            </th>
+          </tr>
+          <tr>
+            <td><%= text_field :cms1500, :insured_last_name, :class=>"black_text #{patient_info.style(colorcode_patient_name_details(patient_info, "last_name"))}", :size=>"8",
+                               :onkeypress => "enlargeTextfieldSize('cms1500_insured_last_name',30)",
+                               :onblur => "resetTextfieldSize('cms1500_insured_last_name',30);",
+                               :coordinates => (patient_info.coordinates(colorcode_patient_name_details(patient_info, "last_name")) unless patient_info.nil?),
+                               :value=>(populate_patient_name_details(patient_info, "last_name")), :onFocus=>"setXYScroll(120)", :tabindex=>"23" %>
+              <%= text_field :cms1500, :insured_suffix, :class => "black_text #{patient_info.style(colorcode_patient_name_details(patient_info, "suffix"))}", :coordinates => (patient_info.coordinates(colorcode_patient_name_details(patient_info, "suffix")) unless patient_info.nil?), :maxlength => '3', :style=>"width:30px", :value=>(populate_patient_name_details(patient_info, "suffix")), :onFocus => "setXYScroll(120)", :tabindex => "24" %>
+              <%= text_field :cms1500, :insured_first_name, :class=>"black_text #{patient_info.style(colorcode_patient_name_details(patient_info, "first_name"))}",
+                             :onkeypress => "enlargeTextfieldSize('cms1500_insured_first_name',30)",
+                             :onblur => "resetTextfieldSize('cms1500_insured_first_name',30);",
+                             :coordinates => (patient_info.coordinates(colorcode_patient_name_details(patient_info, "first_name")) unless patient_info.nil?),
+                             :size=>"8", :value =>(populate_patient_name_details(patient_info, "first_name")), :onFocus=>"setXYScroll(120)", :tabindex=>"25" %>
+              <%= text_field :cms1500, :insured_middle_initial, :class => "black_text #{patient_info.style(colorcode_patient_name_details(patient_info, "middle_initial"))}", :coordinates => (patient_info.coordinates(colorcode_patient_name_details(patient_info, "middle_initial")) unless patient_info.nil?), :size => "2", :value=>(populate_patient_name_details(patient_info, "middle_initial")), :onFocus => "setXYScroll(120)", :maxlength => '1', :tabindex => "26" %>
+              <%= link_to("SAME", '#', :onclick => "samePatientNameDetails()") %>
+            </td>
+
+          </tr>
+          </tbody>
+        </table>
+        <table width="100%">
+          <tbody>
+          <tr>
+            <th align="left"><span class="button">7.</span> INSURED'S ADDRESS (No., Street)</th>
+          </tr>
+          <tr>
+            <td><%= text_field :cms1500, :insured_address, :class=>"black_text #{patient_info.style(colorcode_patient_address_details(patient_info, "address"))}",
+                               :onkeypress => "enlargeTextfieldSize('cms1500_insured_address',35)",
+                               :onblur => "resetTextfieldSize('cms1500_insured_address',35);",
+                               :coordinates => (patient_info.coordinates(colorcode_patient_address_details(patient_info, "address")) unless patient_info.nil?),
+                               :size=>"35", :value=>(populate_patient_address_details(patient_info, "address")), :onFocus=>"setXYScroll(157)", :tabindex=>"27" %>
+
+              <%= link_to("SAME", '#', :onclick => "samePatientAddressDetails()") %>
+            </td>
+          </tr>
+          </tbody>
+        </table>
+        <table width="100%">
+          <tbody>
+          <tr>
+            <th align="left" width="70%">CITY</th>
+            <th align="left" width="30%">STATE</th>
+          </tr>
+          <tr>
+            <td><%= text_field :cms1500, :insured_city, :class=>"black_text #{patient_info.style(colorcode_patient_address_details(patient_info, "city"))}", :size=>"24",
+                               :onkeypress => "enlargeTextfieldSize('cms1500_insured_city',24)",
+                               :onblur => "resetTextfieldSize('cms1500_insured_city',24);",
+                               :coordinates => (patient_info.coordinates(colorcode_patient_address_details(patient_info, "city")) unless patient_info.nil?),
+                               :value=>(populate_patient_address_details(patient_info, "city")), :onFocus=>"setXYScroll(193)", :tabindex=>"28" %></td>
+            <td><%= select_tag 'insured_state', options_for_select(@state, populate_patient_address_details(patient_info, "state")), :id=>"cms1500_insured_state", :onFocus=>"setXYScroll(193)", :tabindex=>"29" %></td>
+          </tr>
+          </tbody>
+        </table>
+        <table width="100%">
+          <tbody>
+          <tr>
+            <th align="left">ZIP CODE</th>
+            <th align="left">TELEPHONE (Include Area Code)</th>
+          </tr>
+          <tr>
+            <td><%= text_field :cms1500, :insured_zipcode, :class=>"black_text #{patient_info.style(colorcode_patient_address_details(patient_info, "zipcode"))}", :coordinates => (patient_info.coordinates(colorcode_patient_address_details(patient_info, "city")) unless patient_info.nil?), :maxlength=>'10', :size=>"10", :value=>(populate_patient_address_details(patient_info, "zipcode")), :onFocus=>"setXYScroll(228)", :tabindex=>"30" %></td>
+            <td><%= text_field :cms1500, :insured_telephone, :class=>"black_text #{patient_info.style(colorcode_patient_address_details(patient_info, "telephone"))}", :coordinates => (patient_info.coordinates(colorcode_patient_address_details(patient_info, "telephone")) unless patient_info.nil?),  :size=>"10", :disabled=>true, :value=>(populate_patient_address_details(patient_info, "telephone")), :onFocus=>"setXYScroll(228)", :tabindex=>"31" %></td>
+          </tr>
+          </tbody>
+        </table>
+        <table width="100%">
+
+          <tbody>
+          <tr>
+            <th align="left"><span class="button">11.</span> INSURED'S POLICY GROUP OR FECA NUMBER</th>
+          </tr>
+          <tr>
+            <td><%= text_field :cms1500, :insured_policy_group_or_feca_number, :id =>'feca', :class=>"black_text #{patient_info.style('insured_policy_group_or_feca_number')}", :size=>"20", :coordinates => (patient_info.coordinates("insured_policy_group_or_feca_number") unless patient_info.nil?),  :value=>(patient_info.insured_policy_group_or_feca_number unless patient_info.nil?), :onFocus=>"setXYScroll(270)", :tabindex=>"37" %></td>
+          </tr>
+          <tr>
+            <th align="left"><span class="button">a.</span> INSURED'S DATE OF BIRTH</th>
+          </tr>
+          <tr>
+            <%
+               if patient_info
+                   @insured_dob_month =(patient_info.insured_dob).try(:strftime,"%m")
+                   @insured_dob_date  =(patient_info.insured_dob).try(:strftime,"%d")
+                   @insured_dob_year  =(patient_info.insured_dob).try(:strftime,"%Y")
+               end
+            %>
+
+            <td><%= text_field :cms15001, :insured_dob_month, :id => "insured_dob_month", :class=>"black_text #{patient_info.style('insured_dob_month')}", :size=>"1", :style=>"width:20px", :coordinates => (patient_info.coordinates("insured_dob_month") unless patient_info.nil?), :value=>@insured_dob_month, :maxlength=>'2', :onFocus=>"setXYScroll(300)", :tabindex=>"38" %>
+              /
+              <%= text_field :cms15001, :insured_dob_date, :id => "insured_dob_date", :class=>"black_text #{patient_info.style('insured_dob_date')}", :size=>"1", :coordinates => (patient_info.coordinates("insured_dob_date") unless patient_info.nil?),  :style=>"width:20px", :value=>@insured_dob_date, :maxlength=>'2', :onFocus=>"setXYScroll(300)", :tabindex=>"39" %>
+              /
+              <%= text_field :cms15001, :insured_dob_year, :id => "insured_dob_year", :class=>"black_text #{patient_info.style('insured_dob_year')}", :coordinates => (patient_info.coordinates("insured_dob_year") unless patient_info.nil?),  :size=>"1", :value=>@insured_dob_year, :maxlength=>'4', :onFocus=>"setXYScroll(300)", :onBlur => "isDOB_nonmandatory('insured_dob_month','insured_dob_date','insured_dob_year')", :tabindex=>"40" %>
+              &nbsp; &nbsp;&nbsp;</td>
+          </tr>
+          <tr>
+            <%
+               if patient_info
+                                                                        if patient_info.insured_sex=='M'
+                                                                          @insured_sex_m = true
+                                                                        elsif patient_info.insured_sex=='F'
+                                                                          @insured_sex_f = true
+                                                                        elsif patient_info.insured_sex=='U'
+                                                                          @insured_sex_u = true
+                                                                        end
+                                                                        end
+            %>
+            <td>
+
+              <table width="100%" border="0" cellpadding="0" cellspacing="0">
+                <tr>
+                  <td><span class="black_text"><strong>SEX</strong></span></td>
+                  <td> M
+                    <%= radio_button(:cms1500, :insured_sex, 'M', :checked =>true, :onFocus=>"setXYScroll(300)", :checked=>@insured_sex_m, :tabindex=>"41") %></td>
+                  <td>F
+                    <%= radio_button(:cms1500, :insured_sex, 'F', :onFocus=>"setXYScroll(300)", :checked=>@insured_sex_f, :tabindex=>"41") %></td>
+                  <td>U
+                    <%= radio_button(:cms1500, :insured_sex, 'U',:onFocus=>"setXYScroll(300)",:checked=>@insured_sex_u,:tabindex=>"41")%></td>
+                </tr>
+              </table>
+            </td>
+          </tr>
+          <tr>
+            <th align="left"><span class="button">b.</span> EMPLOYER'S NAME OR SCHOOL NAME</th>
+          </tr>
+          <tr>
+            <td><%= text_field :cms1500, :insured_employers_or_school_name, :id =>'emp_name',
+                               :onkeypress => "enlargeTextfieldSize('emp_name',35)",
+                               :onblur => "resetTextfieldSize('emp_name',35);",
+                               :coordinates => (patient_info.coordinates("insured_employers_or_school_name") unless patient_info.nil?),
+                               :class=>"black_text #{patient_info.style('insured_employers_or_school_name')}", :size=>"35",
+                               :value=>(patient_info.insured_employers_or_school_name unless patient_info.nil?), :onFocus=>"setXYScroll(340)", :disabled =>true %></td>
+          </tr>
+          <tr>
+            <th align="left"><span class="button">c.</span> INSURANCE PLAN NAME OR PROGRAM NAME</th>
+          </tr>
+          <tr>
+            <td><%= text_field :cms1500, :insured_plan_name, :id =>'insurance_plan_name',
+                               :onkeypress => "enlargeTextfieldSize('insurance_plan_name',35)",
+                               :onblur => "resetTextfieldSize('insurance_plan_name',35);",
+                               :coordinates => (patient_info.coordinates("insured_plan_name") unless patient_info.nil?),
+                               :class=>"black_text #{patient_info.style('insured_plan_name')}", :size=>"45",
+                               :value=>(patient_info.insured_plan_name unless patient_info.nil?), :onFocus=>"setXYScroll(375)", :tabindex=>"43" %></td>
+          </tr>
+          <tr>
+            <th align="left"><span class="button">d.</span> IS THERE ANOTHER HEALTH BENEFIT PLAN?</th>
+          </tr>
+          <tr>
+            <%
+               if patient_info
+                   if patient_info.other_health_benefit_plan=='Yes'
+                       @health_plan_y = true
+                   else
+                       if patient_info.other_health_benefit_plan=='No'
+                           @health_plan_n = true
+                       else
+                           @health_plan_y = false
+                           @health_plan_n = false
+                       end
+                   end
+               end
+            %>
+            <td>
+              <table width="100%" border="0" cellpadding="0" cellspacing="0">
+                <tr>
+                  <td>Yes
+                    <%= radio_button(:cms1500, :other_health_benefit_plan, 'Yes', :onFocus=>"setXYScroll(410)", :checked=>@health_plan_y, :disabled =>true) %></td>
+                  <td>No
+                    <%= radio_button(:cms1500, :other_health_benefit_plan, 'No', :onFocus=>"setXYScroll(410)", :checked=>@health_plan_n, :disabled =>true) %></td>
+                </tr>
+              </table>
+              If <strong>yes</strong>, return to and complete item 9 a-d.
+            </td>
+          </tr>
+          </tbody>
+        </table>
+        <table border="0" cellpadding="0" cellspacing="0" width="100%">
+          <tbody>
+          <tr>
+            <td class="black_text">&nbsp;</td>
+          </tr>
+          <tr>
+            <td height="90"><span class="button"><strong>13.</strong></span>INSURED'S
+              OR AUTHORIZED PERSON'S SIGNATURE I authorize payment of medical
+              benefits to the undersigned physician or supplier for services
+              described below.
+            </td>
+          </tr>
+          <tr>
+
+            <%
+               if patient_info
+                   if (patient_info.insured_signature_on_file=='Signature on File' or patient_info.insured_signature_on_file=='SIGNATURE-ON FILE' or patient_info.insured_signature_on_file=='SIGNATURE ON FILE')
+                       @ins_sign_on_file_y = true
+                   else
+                       if patient_info.insured_signature_on_file=='None'
+                           @ins_sign_on_file_n  = true
+                       else
+                           @ins_sign_on_file_y = false
+                           @ins_sign_on_file_n  = false
+                       end
+                   end
+               end
+            %>
+            <td>
+              <table width="100%" border="0" cellpadding="0" cellspacing="0">
+                <tr>
+                  <td>Signature on File:</td>
+                  <td>Yes
+                    <%= radio_button(:cms1500, :insured_signature_on_file, 'Signature on File', :onFocus=>"setXYScroll(450)", :checked=>@ins_sign_on_file_y, :tabindex=>"49") %></td>
+                  <td>No
+                    <%= radio_button(:cms1500, :insured_signature_on_file, 'None', :onFocus=>"setXYScroll(450)", :checked=>@ins_sign_on_file_n, :tabindex=>"49") %></td>
+                  <td>None
+                    <%= radio_button(:cms1500, :insured_signature_on_file, 'None', :onFocus=>"setXYScroll(450)", :checked=>@ins_sign_on_file_n, :tabindex=>"49") %></td>
+                </tr>
+              </table>
+            </td>
+          </tr>
+          </tbody>
+        </table>
+        </td>
+        </tr>
+        <tr>
+          <td colspan="2" align="left" bgcolor="#016696" height="3" valign="top"></td>
+        </tr>
+        <tr>
+          <td align="left" valign="top">
+            <table width="100%" border="0" cellpadding="0" cellspacing="0" width="100%">
+
+              <tr>
+                <th colspan="2" align="left"><span class="button">14.</span> DATE OF CURRENT:</th>
+                <th colspan="3" align="left"><span class="button">15.</span> IF PATIENT HAS HAD SAME OR SIMILAR ILLNESS.
+                </th>
+              </tr>
+              <tr>
+                <%
+                   if patient_info
+                       @current_date_month =(patient_info.date_of_current_illness).try(:strftime,"%m")
+                       @current_date_date  =(patient_info.date_of_current_illness).try(:strftime,"%d")
+                       @current_date_year =(patient_info.date_of_current_illness).try(:strftime,"%Y")
+                   end
+                %>
+
+
+                <td height="90" width="181"><strong>Date:(MM:DD:YYYY)
+                </strong><br>
+                  <%= text_field :cms15001, :current_dob_month, :class=>"black_text", :id =>'current_month', :size=>"2", :style=>"width:20px", :maxlength=>'2', :onFocus=>"setXYScroll(520)", :value =>@current_date_month, :tabindex=>"50" %>
+                  /
+                  <%= text_field :cms15001, :current_dob_date, :class=>"black_text", :id =>'current_date', :size=>"2", :style=>"width:20px", :maxlength=>'2', :onFocus=>"setXYScroll(520)", :value =>@current_date_date, :tabindex=>"51" %>
+                  /
+                  <%= text_field :cms15001, :current_dob_year, :class=>"black_text", :id =>'current_year', :size=>"2", :maxlength=>'4', :onFocus=>"setXYScroll(520)", :onblur=>"isValidDate(current_month,current_date,current_year)", :value =>@current_date_year, :tabindex=>"52" %>
+                  &nbsp;</td>
+                <td width="142">ILLNESS (First symptom) OR<br>
+                  INJURY (Accident) OR<br>
+                  PREGNANCY(LMP)
+                </td>
+                <td colspan="3">GIVE FIRST DATE<br>
+                  <br>
+                  <%
+                     if patient_info
+                         @simillar_illness_month =(patient_info.first_date_similar_illness).try(:strftime,"%m")
+                         @simillar_illness_date  =(patient_info.first_date_similar_illness).try(:strftime,"%d")
+                         @simillar_illness_year =(patient_info.first_date_similar_illness).try(:strftime,"%Y")
+                     end
+                  %>
+
+                  <strong>Date:(MM:DD:YYYY)</strong><br>
+                  <%= text_field :cms15001, :similarillness_dob_month, :id =>'illness_month', :style=>"width:20px", :class=>"black_text", :size=>"4", :maxlength=>'2', :onFocus=>"setXYScroll(520)", :value=>@simillar_illness_month, :tabindex=>"53" %>
+                  /
+                  <%= text_field :cms15001, :similarillness_dob_date, :id => 'illness_date', :style=>"width:20px", :class=>"black_text", :size=>"4", :maxlength=>'2', :onFocus=>"setXYScroll(520)", :value=>@simillar_illness_date, :tabindex=>"54" %>
+                  /
+                  <%= text_field :cms15001, :similarillness_dob_year, :id =>'illness_year', :class=>"black_text", :size=>"4", :maxlength=>'4', :onFocus=>"setXYScroll(520)", :onblur=>"isValidDate(illness_month,illness_date,illness_year)", :value=>@simillar_illness_year, :tabindex=>"55" %>
+                  &nbsp;</td>
+              </tr>
+              <tr>
+                <th colspan="2" align="left"><span class="button">17.</span> NAME OF REFERRING PROVIDER OR OTHER
+                  SOURCE<br><span class="small">[First Name] [Middle] [Last Name] [Suffix]</span></th>
+                <td bgcolor="#ece9d8" width="26">17a.</td>
+                <td bgcolor="#ece9d8" width="25"><%= text_field :cms1500, :referring_provider_other_qualifier, :class=>"black_text #{patient_info.style('referring_provider_other_qualifier')}", :coordinates => (patient_info.coordinates("referring_provider_other_qualifier") unless patient_info.nil?), :id => 'ref_prv_a', :size=>"5", :style=>"width:20px", :onFocus=>"setXYScroll(550)", :value =>(patient_info.referring_provider_other_qualifier unless patient_info.nil?), :tabindex=>"63" %></td>
+                <td bgcolor="#ece9d8" width="221"><%= text_field :cms1500, :referring_provider_other_id, :class=>"black_text #{patient_info.style('referring_provider_other_id')}", :size=>"10", :coordinates => (patient_info.coordinates("referring_provider_other_id") unless patient_info.nil?),  :id =>'ref_prv_b', :onFocus=>"setXYScroll(550)", :value =>(patient_info.referring_provider_other_id unless patient_info.nil?), :maxlength=>'17', :tabindex=>"64" %></td>
+              </tr>
+              <tr>
+                <td colspan="2">
+                  <%= radio_button(:radio_choicerefprvname, :attribute, 'Yes', :checked=>true, :onkeyup=>"fieldenablerefprvl()", :onFocus=>"setXYScroll(550)", :tabindex=>"62") %>
+                  <%= text_field :cms1500, :referring_provider_first_name, :class=>"black_text #{patient_info.style('referring_provider_first_name')}",
+                                 :onkeypress => "enlargeTextfieldSize('ref_prv_name2',15)",
+                                 :onblur => "resetTextfieldSize('ref_prv_name2',15);",
+                                 :coordinates => (patient_info.coordinates("referring_provider_first_name") unless patient_info.nil?),
+                                 :size=>"15", :id =>'ref_prv_name2', :onFocus=>"setXYScroll(550)", :value =>(patient_info.referring_provider_first_name unless patient_info.nil?), :coordinates => (patient_info.coordinates("referring_provider_first_name") unless patient_info.nil?), :tabindex=>"62" %>
+                  <%= text_field :cms1500, :referring_provider_middle_initial, :class => "black_text #{patient_info.style('referring_provider_middle_initial')}", :style => "width:15px", :size => "2", :id => 'ref_prv_name3', :onFocus => "setXYScroll(550)", :value => (patient_info.referring_provider_middle_initial unless patient_info.nil?), :maxlength => '1', :tabindex => "62" %>
+                  <%= text_field :cms1500, :referring_provider_last_name, :class=>"black_text #{patient_info.style('referring_provider_last_name')}",
+                                 :onkeypress => "enlargeTextfieldSize('ref_prv_name',15)",
+                                 :onblur => "resetTextfieldSize('ref_prv_name',15);",
+                                 :coordinates => (patient_info.coordinates("referring_provider_last_name") unless patient_info.nil?),
+                                 :size=>"15", :id =>'ref_prv_name', :onFocus=>"setXYScroll(550)", :value =>(patient_info.referring_provider_last_name unless patient_info.nil?), :tabindex=>"62" %>
+                  <%= text_field :cms1500, :referring_provider_suffix, :class => "black_text #{patient_info.style('referring_provider_suffix')}", :coordinates => (patient_info.coordinates("referring_provider_suffix") unless patient_info.nil?), :style => "width:30px", :maxlength => '3', :id =>'ref_prv_name1', :onFocus => "setXYScroll(550)", :value => (patient_info.referring_provider_suffix unless patient_info.nil?), :tabindex => "62" %>
+                  <br><br> <%= radio_button(:radio_choicerefprvname, :attribute, 'Yes', :onkeyup=>'fieldrefprvorg()', :onFocus=>"setXYScroll(950)", :tabindex=>"62") %>
+                  Organisation Name :<br>
+                  <%= text_field :cms1500, :reffering_provider_organisation_name, :id=>"refprv_orgnname", :size =>33,
+                                 :onkeypress => "enlargeTextfieldSize('refprv_orgnname',30)",
+                                 :onblur => "resetTextfieldSize('refprv_orgnname',30);",
+                                 :coordinates => (patient_info.coordinates("reffering_provider_organisation_name") unless patient_info.nil?),
+                                 :onFocus=>"setXYScroll(950)", :value =>(patient_info.reffering_provider_organisation_name unless patient_info.nil?), :maxlength=>'35', :tabindex=>"62" %>
+                </td>
+                <td>17b.</td>
+                <td>NPI</td>
+                <td><%= text_field :cms1500, :referring_provider_npi_id, :id=>'ref_prv_npi', :class=>"black_text #{patient_info.style('referring_provider_npi_id')}", :coordinates => (patient_info.coordinates("referring_provider_npi_id") unless patient_info.nil?),  :size=>"10", :onFocus=>"setXYScroll(550)", :onBlur => "npivalidation()", :value =>(patient_info.referring_provider_npi_id unless patient_info.nil?), :maxlength=>'10', :tabindex=>"65" %></td>
+              </tr>
+        </tbody>
+        </table>
+        <table border="0" cellpadding="0" cellspacing="0" width="100%">
+          <tbody>
+          <tr>
+            <th colspan="2" align="left"><span class="button">19.</span> RESERVED FOR LOCAL USE</th>
+          </tr>
+          <tr>
+            <td colspan="2">
+              <textarea name="reserved_local_use" id='reserverd_area' cols="90" disabled="true" rows="4" class="black_text" onfocus="setXYScroll(590)"><%= patient_info.reserved_local_use %> </textarea>
+            </td>
+          </tr>
+         </tbody>
+        </table>
+        <table border="0" cellpadding="0" cellspacing="0" width="100%">
+          <tbody>
+          <tr>
+            <th colspan="5" align="left">21. DIAGNOSIS OR NATURE OF ILLNESS OR INJURY (Relate Items 1, 2, 3 ... 0 to Item
+              24E by Line)
+            </th>
+          </tr>
+          <tr>
+            <td height="40" width="25%">1
+              <%= text_field :cms1500, :nature_of_illness_or_injury_1, :id => 'injury1', :maxlength=>'9', :class=>"black_text #{patient_info.style('nature_of_illness_or_injury_1')}", :coordinates => (patient_info.coordinates("nature_of_illness_or_injury_1") unless patient_info.nil?),:size=>"10", :onFocus=>"setXYScroll(630)", :value => (patient_info.nature_of_illness_or_injury_1 unless patient_info.nil?), :tabindex=>"67" %></td>
+            <td width="25%">3
+              <%= text_field :cms1500, :nature_of_illness_or_injury_3, :id =>'injury3', :maxlength=>'9', :class=>"black_text #{patient_info.style('nature_of_illness_or_injury_3')}", :coordinates => (patient_info.coordinates("nature_of_illness_or_injury_3") unless patient_info.nil?), :size=>"10", :onFocus=>"setXYScroll(630)", :value => (patient_info.nature_of_illness_or_injury_3 unless patient_info.nil?), :tabindex=>"68" %></td>
+            <td width="25%">5
+              <%= text_field :cms1500, :nature_of_illness_or_injury_5, :id =>'injury5', :maxlength=>'9', :class=>"black_text #{patient_info.style('nature_of_illness_or_injury_5')}", :coordinates => (patient_info.coordinates("nature_of_illness_or_injury_5") unless patient_info.nil?), :size=>"10", :onFocus=>"setXYScroll(630)", :value => (patient_info.nature_of_illness_or_injury_5 unless patient_info.nil?), :tabindex=>"69" %></td>
+            <td width="25%">7
+              <%= text_field :cms1500, :nature_of_illness_or_injury_7, :id =>'injury7', :maxlength=>'9', :class=>"black_text #{patient_info.style('nature_of_illness_or_injury_7')}", :coordinates => (patient_info.coordinates("nature_of_illness_or_injury_7") unless patient_info.nil?), :size=>"10", :onFocus=>"setXYScroll(630)", :value => (patient_info.nature_of_illness_or_injury_7 unless patient_info.nil?), :tabindex=>"70" %></td>
+           </tr>
+          <tr>
+            <td height="40">2
+              <%= text_field :cms1500, :nature_of_illness_or_injury_2, :id =>'injury2', :maxlength=>'9', :class=>"black_text #{patient_info.style('nature_of_illness_or_injury_2')}", :coordinates => (patient_info.coordinates("nature_of_illness_or_injury_2") unless patient_info.nil?), :size=>"10", :onFocus=>"setXYScroll(630)", :value => (patient_info.nature_of_illness_or_injury_2 unless patient_info.nil?), :tabindex=>"67" %></td>
+            <td>4
+              <%= text_field :cms1500, :nature_of_illness_or_injury_4, :id =>'injury4', :maxlength=>'9', :class=>"black_text #{patient_info.style('nature_of_illness_or_injury_4')}", :coordinates => (patient_info.coordinates("nature_of_illness_or_injury_4") unless patient_info.nil?), :size=>"10", :onFocus=>"setXYScroll(630)", :value => (patient_info.nature_of_illness_or_injury_4 unless patient_info.nil?), :tabindex=>"68" %></td>
+            <td>6
+              <%= text_field :cms1500, :nature_of_illness_or_injury_6, :id =>'injury6', :maxlength=>'9', :class=>"black_text #{patient_info.style('nature_of_illness_or_injury_6')}", :coordinates => (patient_info.coordinates("nature_of_illness_or_injury_6") unless patient_info.nil?), :size=>"10", :onFocus=>"setXYScroll(630)", :value => (patient_info.nature_of_illness_or_injury_6 unless patient_info.nil?), :tabindex=>"69" %></td>
+            <td>8
+              <%= text_field :cms1500, :nature_of_illness_or_injury_8, :id =>'injury8', :maxlength=>'9', :class=>"black_text #{patient_info.style('nature_of_illness_or_injury_8')}", :coordinates => (patient_info.coordinates("nature_of_illness_or_injury_8") unless patient_info.nil?), :size=>"10", :onFocus=>"setXYScroll(630)", :value => (patient_info.nature_of_illness_or_injury_8 unless patient_info.nil?), :tabindex=>"70" %></td>
+          </tr>
+          </tbody>
+        </table>
+        </td>
+        <td align="left" valign="top">
+          <table width="100%">
+
+            <tbody>
+            <tr>
+              <th colspan="2" align="left"><span class="button">16.</span> DATES PATIENT UNABLE TO WORK IN CURRENT
+                OCCUPATION
+              </th>
+            </tr>
+            <tr>
+
+              <%
+                 if patient_info
+                     @unable_towork_from_month =(patient_info.patient_unable_to_work_from_date).try(:strftime,"%m")
+                     @unable_towork_from_date  =(patient_info.patient_unable_to_work_from_date).try(:strftime,"%d")
+                     @unable_towork_from_year =(patient_info.patient_unable_to_work_from_date).try(:strftime,"%Y")
+
+                     @unable_towork_to_month =(patient_info.patient_unable_to_work_to_date).try(:strftime,"%m")
+                     @unable_towork_to_date  =(patient_info.patient_unable_to_work_to_date).try(:strftime,"%d")
+                     @unable_towork_to_year =(patient_info.patient_unable_to_work_to_date).try(:strftime,"%Y")
+                 end
+              %>
+
+              <td colspan="2" height="70">
+                <div align="center">
+                  <%= text_field :cms15001, :patient_unable_work_from_dob_month, :id =>'occu_from_month', :class=>"black_text", :style=>"width:20px", :maxlength=>'2', :onFocus=>"setXYScroll(520)", :value =>@unable_towork_from_month, :tabindex=>"56" %>
+                  /
+                  <%= text_field :cms15001, :patient_unable_work_from_dob_date, :id =>'occu_from_date', :class=>"black_text", :style=>"width:20px", :maxlength=>'2', :onFocus=>"setXYScroll(520)", :value =>@unable_towork_from_date, :tabindex=>"57" %>
+                  /
+                  <%= text_field :cms15001, :patient_unable_work_from_dob_year, :id =>'occu_from_year', :class=>"black_text", :size=>"4", :maxlength=>'4', :onFocus=>"setXYScroll(520)", :onblur=>"isValidDate(occu_from_month,occu_from_date,occu_from_year)", :value=>@unable_towork_from_year, :tabindex=>"58" %>
+                  &nbsp;
+                  <br>
+                  <strong>To</strong><br>
+                  <%= text_field :cms15001, :patient_unable_work_to_dob_month, :id =>'occu_to_month', :class=>"black_text", :style=>"width:20px", :maxlength=>'2', :onFocus=>"setXYScroll(520)", :value =>@unable_towork_to_month, :tabindex=>"59" %>
+                  /
+                  <%= text_field :cms15001, :patient_unable_work_to_dob_date, :id =>'occu_to_date', :class=>"black_text", :style=>"width:20px", :maxlength=>'2', :onFocus=>"setXYScroll(520)", :value =>@unable_towork_to_date, :tabindex=>"60" %>
+                  /
+                  <%= text_field :cms15001, :patient_unable_work_to_dob_year, :id =>'occu_to_year', :class=>"black_text", :size=>"4", :maxlength=>'4', :onFocus=>"setXYScroll(520)", :onblur=>"compareDates_occupation(); isValidDate(occu_to_month,occu_to_date,occu_to_year)", :value =>@unable_towork_to_year, :tabindex=>"61" %>
+                </div>
+              </td>
+            </tr>
+            <tr>
+              <th colspan="2" align="left"><span class="button">18.</span> HOSPITALIZATION DATES RELATED TO CURRENT
+                SERVICES
+              </th>
+            </tr>
+            <tr>
+              <%
+                 if patient_info
+                     @hospitalization_from_month =(patient_info.hospitalization_from_date).try(:strftime,"%m")
+                     @hospitalization_from_date  =(patient_info.hospitalization_from_date).try(:strftime,"%d")
+                     @hospitalization_from_year =(patient_info.hospitalization_from_date).try(:strftime,"%Y")
+
+                     @hospitalization_to_month =(patient_info.hospitalization_to_date).try(:strftime,"%m")
+                     @hospitalization_to_date  =(patient_info.hospitalization_to_date).try(:strftime,"%d")
+                     @hospitalization_to_year =(patient_info.hospitalization_to_date).try(:strftime,"%Y")
+                 end
+              %>
+
+              <td colspan="2" height="70">
+                <div align="center">
+                  <%= text_field :cms15001, :hospitalization_from_month, :id =>'service_from_month', :class=>"black_text", :style=>"width:20px", :maxlength=>'2', :onFocus=>"setXYScroll(550)", :value =>@hospitalization_from_month, :tabindex=>"66" %>
+                  /
+                  <%= text_field :cms15001, :hospitalization_from_date, :id =>'service_from_date', :class=>"black_text", :style=>"width:20px", :maxlength=>'2', :onFocus=>"setXYScroll(550)", :value =>@hospitalization_from_date, :tabindex=>"66" %>
+                  /
+                  <%= text_field :cms15001, :hospitalization_from_year, :id =>'service_from_year', :class=>"black_text", :size=>"4", :size=>"4", :maxlength=>'4', :onFocus=>"setXYScroll(550)", :onblur=>"isValidDate(service_from_month,service_from_date,service_from_year)", :value =>@hospitalization_from_year, :tabindex=>"66" %>
+                  <br>
+                  <strong>To</strong><br>
+                  <%= text_field :cms15001, :hospitalization_to_month, :id =>'service_to_month', :class=>"black_text", :style=>"width:20px", :maxlength=>'2', :onFocus=>"setXYScroll(550)", :value =>@hospitalization_to_month, :tabindex=>"66" %>
+                  /
+                  <%= text_field :cms15001, :hospitalization_to_date, :id =>'service_to_date', :class=>"black_text", :style=>"width:20px", :maxlength=>'2', :onFocus=>"setXYScroll(550)", :value =>@hospitalization_to_date, :tabindex=>"66" %>
+                  /
+                  <%= text_field :cms15001, :hospitalization_to_year, :id =>'service_to_year', :class=>"black_text", :size=>"4", :maxlength=>'4', :onFocus=>"setXYScroll(550)", :onblur=>"compareDates_service(); isValidDate(service_to_month,service_to_date,service_to_year)", :value =>@hospitalization_to_year, :tabindex=>"66" %>
+                </div>
+              </td>
+            </tr>
+            <tr>
+              <th align="left" width="47%"><span class="button">20.</span> OUTSIDE LAB?</th>
+              <th align="left" width="53%"> $ CHARGES</th>
+            </tr>
+            <tr>
+              <%
+                 if patient_info
+                     if patient_info.outside_lab=='Yes'
+                         @outside_lab_y = true
+                     else
+                         if patient_info.outside_lab=='No'
+                             @outside_lab_n = true
+                         else
+                             @outside_lab_y = false
+                             @outside_lab_n = false
+                         end
+                     end
+                 end
+              %>
+              <td>
+                <table width="100%" border="0" cellpadding="0" cellspacing="0">
+                  <tr>
+                    <td>Yes
+                      <%= radio_button(:cms1500, :outside_lab, 'Yes', :onFocus=>"setXYScroll(590)", :checked=> @outside_lab_y, :disabled =>true) %></td>
+                    <td>No
+                      <%= radio_button(:cms1500, :outside_lab, 'No', :onFocus=>"setXYScroll(590)", :checked=> @outside_lab_n, :disabled =>true) %></td>
+                    <td> None
+                      <%= radio_button(:cms1500, :outside_lab, 'None', :onFocus=>"setXYScroll(590)", :disabled =>true) %></td>
+                  </tr>
+                </table>
+              </td>
+              <td><%= text_field :cms1500, :outside_lab_charge, :id=>'lab_charge', :class=>"black_text #{patient_info.style('outside_lab_charge')}", :size=>"4", :coordinates => (patient_info.coordinates("outside_lab_charge") unless patient_info.nil?),  :style=>"text-align : right", :onFocus=>"setXYScroll(590)", :disabled =>true %></td>
+            </tr>
+            <tr>
+              <th colspan="2" align="left"><span class="button">22.</span> MEDICAID RESUBMISSION</th>
+            </tr>
+            <tr>
+              <td>CODE</td>
+              <td>ORIGINAL REF. NO.</td>
+            </tr>
+            <tr>
+              <td><%= text_field :cms1500, :medicaid_resubmission_code, :id =>'medi_code', :class=>"black_text #{patient_info.style('medicaid_resubmission_code')}", :coordinates => (patient_info.coordinates("medicaid_resubmission_code") unless patient_info.nil?),  :size=>"14", :onFocus=>"setXYScroll(630)", :maxlength=>'12', :value =>(patient_info.medicaid_resubmission_code unless patient_info.nil?) %></td>
+              <td><%= text_field :cms1500, :medicaid_resubmission_ref_number, :id =>'original_ref_number', :class=>"black_text #{patient_info.style('medicaid_resubmission_ref_number')}", :coordinates => (patient_info.coordinates("medicaid_resubmission_ref_number") unless patient_info.nil?),  :size=>"14", :onFocus=>"setXYScroll(630)", :maxlength=>'18', :value =>(patient_info.medicaid_resubmission_ref_number unless patient_info.nil?) %></td>
+            </tr>
+
+            <tr>
+              <th colspan="2" align="left">23. PRIOR AUTHORIZATION NUMBER</th>
+            </tr>
+            <tr>
+              <td colspan="2" align="left"><%= text_field :cms1500, :prior_authorization_number, :id =>'prior_auth_number', :class=>"black_text #{patient_info.style('prior_authorization_number')}", :coordinates => (patient_info.coordinates("prior_authorization_number") unless patient_info.nil?), :maxlength=>'29', :size=>"40", :onFocus=>"setXYScroll(665)", :value =>(patient_info.prior_authorization_number unless patient_info.nil?), :tabindex=>"71" %></td>
+            </tr>
+
+            </tbody>
+          </table>
+        </td>
+        </tr>
+        <tr>
+        <td colspan="2" align="left" valign="top">
+
+
+        <table width="850px" border="0" cellpadding="0" cellspacing="0" width="100%" id="myTable">
+        <tr>
+
+          <th colspan="2" align="left"><span class="button">24</span> A. DATE(S) OF SERVICE</th>
+          <th rowspan="2" width="59">B.<br/>
+            PLACE OF<br>
+            SERVICE
+          </th>
+          <th rowspan="2" width="34">C.<br/>
+            EMG
+          </th>
+          <th colspan="2">D.PROCEDURES, SERVICES, OR SUPPLIES</th>
+          <th rowspan="2">E.<br/>
+            DIAGNOSIS<br>
+            POINTER
+          </th>
+          <th rowspan="2" width="59">F.<br/>
+            $ CHARGES
+          </th>
+          <th rowspan="2" width="34">G.<br/>
+            DAYS<br/>
+            OR<br/>
+            UNITS
+          </th>
+          <th rowspan="2" width="38">H.<br/>
+            EPSDT<br/>
+            Family<br/>
+            Plan
+          </th>
+          <th rowspan="2" width="37">I.<br>
+            ID.<br>
+            QUAL.
+          </th>
+          <th rowspan="2" width="96">J.<br>
+            RENDERING<br>
+            PROVIDER ID. #
+          </th>
+          <th rowspan="2">&nbsp;</th>
+        </tr>
+        <tr>
+          <th width="85">From</th>
+          <th width="88">To</th>
+          <th>CPT/HCPCS</th>
+          <th>MODIFIER</th>
+          <% j=0 %>
+          <% @l=[] %>
+          <%#puts "bbbbbbbbbbbbbbb"%>
+          <%#puts @lineinfo.length %>
+          <% data_row_count = @lineinfo.length %>
+
+        </tr>
+        <tr>
+          <% scroll_pos = 700 %>
+          <% for line in @lineinfo %>
+              <% j=j+1 %>
+              <% @l << line.id %>
+
+            <tr>
+              <td>
+              </td>
+              <% for i in 1 .. 9 %>
+                  <td>
+                    -
+                  </td>
+
+
+              <% end %>
+              <% scroll_pos = 700+ (j-1)*40 %>
+              <td>
+                <% if line.epsdt.blank? %>
+                    <%= text_field 'lineinformation', 'epsdt11'+j.to_s, :size => 6, :id=>"epsdt_familycharge_id1", :onFocus=>"setXYScroll(#{scroll_pos})", :style=>'width:18px', :class=>"black_text  #{line.style('epsdt')}", :coordinates => (line.coordinates("epsdt") unless line.nil?),   :maxlength=>'2', :value =>'', :tabindex=>"71" %>
+                <% else %>
+                    <%= text_field 'lineinformation', 'epsdt11'+j.to_s, :size => 6, :id=>"epsdt_familycharge_id1", :onFocus=>"setXYScroll(#{scroll_pos})", :style=>'width:18px', :class=>"black_text #{line.style('epsdt')}", :coordinates => (line.coordinates("epsdt") unless line.nil?),  :maxlength=>'2', :value =>(line.epsdt unless line.nil?), :tabindex=>"71" %></td>
+                <% end %>
+                <td>
+                  <% if line.qual_id.blank? %>
+                      <%= text_field 'lineinformation', 'qual_id11'+j.to_s, :size => 6, :id=>"id_qua1", :onFocus=>"setXYScroll(#{scroll_pos})", :style=>'width:18px', :class=>"black_text #{line.style('qual_id')}",  :coordinates => (line.coordinates("qual_id") unless line.nil?), :maxlength=>'2', :value =>'', :tabindex=>"71" %>
+                  <% else %>
+                      <%= text_field 'lineinformation', 'qual_id11'+j.to_s, :size => 6, :id=>"id_qua1", :onFocus=>"setXYScroll(#{scroll_pos})", :style=>'width:18px', :class=>"black_text #{line.style('qual_id')}",  :coordinates => (line.coordinates("qual_id") unless line.nil?), :maxlength=>'2', :value =>(line.qual_id unless line.nil?), :tabindex=>"71" %></td>
+                  <% end %>
+                  <td>
+                    <% if line.rendering_provider_id.blank? %>
+                        <%= text_field 'lineinformation', 'rendering_provider_id11'+j.to_s, :size => 10, :id=>'rendering_provider1', :onFocus=>"setXYScroll(#{scroll_pos})", :style=>'width:70px', :class=>"black_text #{line.style('rendering_provider_id')}", :coordinates => (line.coordinates("rendering_provider_id") unless line.nil?),  :maxlength=>'11', :value =>(line.rendering_provider_id unless line.nil?), :tabindex=>"71" %>
+                    <% else %>
+
+                        <%= text_field 'lineinformation', 'rendering_provider_id11'+j.to_s, :size => 10, :id=>'rendering_provider1', :onFocus=>"setXYScroll(#{scroll_pos})", :style=>'width:70px', :class=>"black_text #{line.style('rendering_provider_id')}", :coordinates => (line.coordinates("rendering_provider_id") unless line.nil?),  :maxlength=>'11', :value =>(line.rendering_provider_id unless line.nil?), :tabindex=>"71" %></td>
+                    <% end %>
+
+
+
+                    </tr>
+            <tr>
+              <td bgcolor="#ECE9D8">
+                <%= text_field 'lineinformation', 'dateofservice_from'+j.to_s, :id=>'dateofservicefrom', :size => 6, :onFocus=>"setXYScroll(#{scroll_pos})", :class=>"black_text #{line.style('service_from_date')} from", :coordinates => (line.coordinates("service_from_date") unless line.nil?),  :maxlength=>'10', :value =>(line.service_from_date.to_date.try(:strftime,"%m/%d/%Y") unless line.service_from_date.nil?), :tabindex=>"71", :onchange=>"addSlashToDate('dateofservicefrom')" %></td>
+
+              <td bgcolor="#ECE9D8">
+                <% if line.service_to_date.blank? %>
+                    <%= text_field 'lineinformation', 'dateofservice_to'+j.to_s, :id=>'dateofserviceto', :size => 6, :onFocus=>"setXYScroll(#{scroll_pos})", :class=>"black_text #{line.style('service_from_date')} to", :coordinates => (line.coordinates("service_from_date") unless line.nil?),  :maxlength=>'10', :value =>'', :tabindex=>"71", :onchange=>"addSlashToDate('dateofserviceto')" %>
+                <% else %>
+                    <%= text_field 'lineinformation', 'dateofservice_to'+j.to_s, :id=>'dateofserviceto', :size => 6, :onFocus=>"setXYScroll(#{scroll_pos})", :class=>"black_text #{line.style('service_to_date')} to", :coordinates => (line.coordinates("service_to_date") unless line.nil?),  :maxlength=>'10', :value =>(line.service_to_date.to_date.try(:strftime,"%m/%d/%Y") unless line.service_to_date.nil?), :tabindex=>"71", :onchange=>"addSlashToDate('dateofserviceto')" %></td>
+                <% end %>
+
+                <td bgcolor="#ECE9D8">
+                  <%= text_field 'lineinformation', 'placeof_service'+j.to_s, :id=>'placeofservice'+j.to_s, :size => 6, :maxlength=>'2', :onFocus=>"setXYScroll(#{scroll_pos})", :style=>'width:18px', :class=>"black_text #{line.style('service_place')} placeofservice", :coordinates => (line.coordinates("service_place") unless line.nil?),  :maxlength=>'2', :value =>(line.service_place unless line.nil?), :tabindex=>"71" %></td>
+
+
+                <td bgcolor="#ECE9D8">
+                  <% if line.emg.blank? %>
+                      <%= text_field 'lineinformation', 'emg'+j.to_s, :id=>'emgz', :size => 6, :maxlength=>'1', :style=>'width:18px', :class=>"black_text #{line.style('emg')} emgz", :maxlength=>'2', :value =>'', :coordinates => (line.coordinates("emg") unless line.nil?), :onFocus=>"setXYScroll(#{scroll_pos})", :tabindex=>"71" %>
+                  <% else %>
+                      <%= text_field 'lineinformation', 'emg'+j.to_s, :id=>'emgz', :size => 6, :maxlength=>'1', :style=>'width:18px', :class=>"black_text #{line.style('emg')} emgz", :maxlength=>'2', :coordinates => (line.coordinates("emg") unless line.nil?), :value => (line.emg unless line.nil?), :onFocus=>"setXYScroll(#{scroll_pos})", :tabindex=>"71" %>
+                  <% end %>
+                </td>
+                <td bgcolor="#ECE9D8">
+                  <%= text_field 'lineinformation', 'cpthcpcs'+j.to_s, :id => 'cpthcpcd_id'+j.to_s, :size => 6, :maxlength=>'5', :style=>'width:40px', :class=>"black_text #{line.style('cpt_hcpcts')} cpthcpcs", :coordinates => (line.coordinates("cpt_hcpcts") unless line.nil?), :value =>(line.cpt_hcpcts unless line.nil?), :tabindex=>"71", :onFocus=>"setXYScroll(#{scroll_pos})" %></td>
+
+                <td bgcolor="#ECE9D8">
+                  <% if line.modifier1.blank? %>
+                      <%= text_field 'lineinformation', 'modifier'+j.to_s, :id => 'modifier_id1'+j.to_s, :maxlength=>'2', :size=>1, :onFocus=>"setXYScroll(#{scroll_pos})", :style=>'width:18px', :coordinates => (line.coordinates("modifier1") unless line.nil?), :class=>"black_text #{line.style('modifier1')} modifier1", :value=>'', :tabindex=>"71" %>
+                  <% else %>
+                      <%= text_field 'lineinformation', 'modifier'+j.to_s, :id => 'modifier_id1'+j.to_s, :maxlength=>'2', :size=>1, :onFocus=>"setXYScroll(#{scroll_pos})", :style=>'width:18px', :coordinates => (line.coordinates("modifier1") unless line.nil?),  :class=>"black_text #{line.style('modifier1')} modifier1", :value=> (line.modifier1 unless line.nil?), :tabindex=>"71" %>
+                  <% end %>
+
+                  <% if line.modifier2.blank? %>
+                      <%= text_field 'lineinformation', 'modifier2'+j.to_s, :id => 'modifier_id2', :maxlength=>'2', :size=>1, :onFocus=>"setXYScroll(#{scroll_pos})", :style=>'width:18px', :coordinates => (line.coordinates("modifier2") unless line.nil?),  :class=>"black_text #{line.style('modifier2')} modifier2", :value=>'', :tabindex=>"71" %>
+                  <% else %>
+                      <%= text_field 'lineinformation', 'modifier2'+j.to_s, :id => 'modifier_id2', :maxlength=>'2', :size=>1, :onFocus=>"setXYScroll(#{scroll_pos})", :style=>'width:18px', :coordinates => (line.coordinates("modifier2") unless line.nil?),  :class=>"black_text #{line.style('modifier2')} modifier2", :value=> (line.modifier2 unless line.nil?), :tabindex=>"71" %>
+                  <% end %>
+
+                  <% if line.modifier3.blank? %>
+                      <%= text_field 'lineinformation', 'modifier3'+j.to_s, :id => 'modifier_id3', :maxlength=>'2', :size=>1, :onFocus=>"setXYScroll(#{scroll_pos})", :style=>'width:18px', :coordinates => (line.coordinates("modifier3") unless line.nil?), :class=>"black_text #{line.style('modifier3')}", :value=>'', :tabindex=>"71" %>
+                  <% else %>
+                      <%= text_field 'lineinformation', 'modifier3'+j.to_s, :id => 'modifier_id3', :maxlength=>'2', :size=>1, :onFocus=>"setXYScroll(#{scroll_pos})", :style=>'width:18px', :coordinates => (line.coordinates("modifier3") unless line.nil?), :class=>"black_text #{line.style('modifier3')}", :value=>(line.modifier3 unless line.nil?), :tabindex=>"71" %>
+                  <% end %>
+
+                  <% if line.modifier4.blank? %>
+                      <%= text_field 'lineinformation', 'modifier4'+j.to_s, :id => 'modifier_id4', :maxlength=>'2', :size=>1, :onFocus=>"setXYScroll(#{scroll_pos})", :style=>'width:18px', :coordinates => (line.coordinates("modifier4") unless line.nil?), :class=>"black_text #{line.style('modifier4')}", :value=>'', :tabindex=>"71" %>
+                  <% else %>
+                      <%= text_field 'lineinformation', 'modifier4'+j.to_s, :id => 'modifier_id4', :maxlength=>'2', :size=>1, :onFocus=>"setXYScroll(#{scroll_pos})", :style=>'width:18px', :coordinates => (line.coordinates("modifier4") unless line.nil?), :class=>"black_text #{line.style('modifier4')}", :value=>(line.modifier4 unless line.nil?), :tabindex=>"71" %>
+                  <% end %>
+
+                </td>
+
+
+                <td bgcolor="#ECE9D8"><%= text_field 'lineinformation', 'diagnosis_pointer'+j.to_s, :id => 'diagnosis_pointer_id', :maxlength=>'4', :size=>6, :onFocus=>"setXYScroll(#{scroll_pos})", :style=>'width:40px', :coordinates => (line.coordinates("diagnosis_pointer") unless line.nil?), :class=>"black_text #{line.style('diagnosis_pointer')} diagnosis_pointer", :value=>(line.diagnosis_pointer unless line.nil?), :tabindex=>"71" %></td>
+
+                <td bgcolor="#ECE9D8"><%= text_field 'lineinformation', 'charges'+j.to_s, :id =>j, :maxlength=>'10', :size=>6, :onFocus=>"setXYScroll(#{scroll_pos})", :style=>'width:18px', :style=>"text-align:right;", :coordinates => (line.coordinates("charges") unless line.nil?), :class=>"black_text #{line.style('charges')} charges", :value=>(line.charges unless line.nil?), :tabindex=>"71" %></td>
+
+
+                <td bgcolor="#ECE9D8">
+                  <% if line.days_units.blank? %>
+                      <%= text_field 'lineinformation', 'days_or_units'+j.to_s, :id => 'days_or_units_id', :size => 6, :maxlength=>6, :style=>"width:22px", :class=>"black_text #{line.style('days_units')} days_units", :coordinates => (line.coordinates("days_units") unless line.nil?), :onFocus=>"setXYScroll(#{scroll_pos})", :value =>'', :tabindex=>"71" %>
+                  <% else %>
+                      <%= text_field 'lineinformation', 'days_or_units'+j.to_s, :id => 'days_or_units_id', :size => 6, :maxlength=>6, :style=>"width:22px", :class=>"black_text #{line.style('days_units')} days_units", :coordinates => (line.coordinates("days_units") unless line.nil?), :onFocus=>"setXYScroll(#{scroll_pos})", :value =>(line.days_units unless line.nil?), :tabindex=>"71" %>
+                  <% end %>
+                </td>
+                <td bgcolor="#ECE9D8">
+                  <% if line.minutes.blank? %>
+                      <%= text_field 'lineinformation', 'minutes'+j.to_s, :id => 'minutes_id', :size => 6, :maxlength=>3, :style=>"width:22px", :class=>"black_text #{line.style('minutes')} minutes", :coordinates => (line.coordinates("minutes") unless line.nil?), :onFocus=>"setXYScroll(#{scroll_pos})", :value =>'', :tabindex=>"71" %>
+                  <% else %>
+                      <%= text_field 'lineinformation', 'minutes'+j.to_s, :id => 'minutes_id', :size => 6, :maxlength=>3, :style=>"width:22px", :class=>"black_text #{line.style('minutes')} minutes", :coordinates => (line.coordinates("minutes") unless line.nil?), :onFocus=>"setXYScroll(#{scroll_pos})", :value =>(line.minutes unless line.nil?), :tabindex=>"71" %>
+                  <% end %>
+                </td>
+                <td bgcolor="#ECE9D8">
+                  <% if line.family_plan.blank? %>
+                      <%= text_field 'lineinformation', 'epsdt_familycharge'+j.to_s, :id => 'epsdt_familycharge_id', :size => 6, :maxlength=>2, :style=>"width:18px", :class=>"black_text #{line.style('family_plan')}", :coordinates => (line.coordinates("family_plan") unless line.nil?), :onFocus=>"setXYScroll(#{scroll_pos})", :value=>'', :tabindex=>"71" %>
+                  <% else %>
+                      <%= text_field 'lineinformation', 'epsdt_familycharge'+j.to_s, :id => 'epsdt_familycharge_id', :size => 6, :maxlength=>2, :style=>"width:18px", :class=>"black_text #{line.style('family_plan')}", :coordinates => (line.coordinates("family_plan") unless line.nil?), :onFocus=>"setXYScroll(#{scroll_pos})", :value=>(line.family_plan unless line.nil?), :tabindex=>"71" %>
+                  <% end %>
+                </td>
+
+                <td bgcolor="#ECE9D8">
+                  NPI
+                </td>
+                <td bgcolor="#ECE9D8">
+                  <% if line.rendering_provider_qualifier_npi_id.blank? %>
+                      <%= text_field 'lineinformation', 'rendering_provider_id2'+j.to_s, :id => 'rendering_provider_id2_id', :size => 10, :width=>"width:70px", :maxlength=>11, :class=>"black_text #{line.style('rendering_provider_qualifier_npi_id')} rendering_provider", :coordinates => (line.coordinates("rendering_provider_qualifier_npi_id") unless line.nil?),  :onFocus=>"setXYScroll(#{scroll_pos})", :value=>'', :tabindex=>"71" %>
+                  <% else %>
+                      <%= text_field 'lineinformation', 'rendering_provider_id2'+j.to_s, :id => 'rendering_provider_id2_id', :size => 10, :width=>"width:70px", :maxlength=>11, :class=>"black_text #{line.style('rendering_provider_qualifier_npi_id')} rendering_provider", :coordinates => (line.coordinates("rendering_provider_qualifier_npi_id") unless line.nil?),  :onFocus=>"setXYScroll(#{scroll_pos})", :value=>(line.rendering_provider_qualifier_npi_id unless line.nil?), :tabindex=>"71" %>
+                  <% end %>
+                </td>
+
+
+                </tr>
+        <% end %>
+
+
+        <% for k in data_row_count+1..40 %>
+
+            <tr>
+              <td>
+              </td>
+              <% for i in 1 .. 9 %>
+                  <td>
+                    -
+                  </td>
+
+
+              <% end %>
+
+              <td>
+                <%= text_field 'lineinformation', 'epsdt11'+k.to_s, :size => 6, :id=>"epsdt_familycharge_id1", :onFocus=>"setXYScroll(#{scroll_pos})", :style=>'width:18px', :class=>("black_text #{line.style('epsdt')}" if line), :coordinates => (line.coordinates("epsdt") unless line.nil?), :maxlength=>'2', :value =>'', :tabindex=>"71" %>
+              </td>
+              <td>
+                <%= text_field 'lineinformation', 'qual_id11'+k.to_s, :size => 6, :id=>"id_qua1", :onFocus=>"setXYScroll(#{scroll_pos})", :style=>'width:18px', :class=>("black_text #{line.style('qual_id')}" if line), :coordinates => (line.coordinates("qual_id") unless line.nil?), :maxlength=>'2', :value => '', :tabindex=>"71" %>
+              </td>
+
+              <td>
+                <%= text_field 'lineinformation', 'rendering_provider_id11'+k.to_s, :size => 6, :id=>'rendering_provider1', :onFocus=>"setXYScroll(#{scroll_pos})", :style=>'width:70px', :class=>("black_text #{line.style('rendering_provider_id')}" if line), :coordinates => (line.coordinates("rendering_provider_id") unless line.nil?), :maxlength=>'11', :value => '', :tabindex=>"71" %>
+              </td>
+
+            </tr>
+            <tr>
+              <td bgcolor="#ECE9D8">
+                <%= text_field 'lineinformation', 'dateofservice_from'+k.to_s, :id=>'dateofservicefrom', :size => 6, :onFocus=>"setXYScroll(#{scroll_pos})", :class=>(
+                if line;
+                    "black_text #{line.style('service_from_date')} from";
+                else
+                    ; "from";
+                end;), :maxlength=>'10', :value =>'', :tabindex=>"71", :coordinates => (line.coordinates("service_from_date") unless line.nil?), :onchange=>"addSlashToDate('dateofservicefrom')" %></td>
+
+              <td bgcolor="#ECE9D8">
+                <%= text_field 'lineinformation', 'dateofservice_to'+k.to_s, :id=>'dateofserviceto', :size => 6, :onFocus=>"setXYScroll(#{scroll_pos})", :class=>(
+                if line;
+                    "black_text #{line.style('service_to_date')} to";
+                else
+                    ; "to";
+                end;), :maxlength=>'10', :value =>'', :tabindex=>"71",  :coordinates => (line.coordinates("service_to_date") unless line.nil?), :onchange=>"addSlashToDate('dateofserviceto')" %>
+              </td>
+
+              <td bgcolor="#ECE9D8">
+                <%= text_field 'lineinformation', 'placeof_service'+k.to_s, :id=>'placeofservice'+k.to_s, :size => 6, :maxlength=>'2', :onFocus=>"setXYScroll(#{scroll_pos})", :style=>'width:18px', :class=>(
+                if line;
+                    "black_text #{line.style('service_place')} placeofservice";
+                else
+                    ; "placeofservice";
+                end;),  :coordinates => (line.coordinates("service_place") unless line.nil?), :maxlength=>'2', :value =>'', :tabindex=>"71" %>
+              </td>
+              <td bgcolor="#ECE9D8">
+                <%= text_field 'lineinformation', 'emg'+k.to_s, :id=>'emgz', :size => 6, :maxlength=>'1', :style=>'width:18px', :class=>(
+                if line;
+                    "black_text #{line.style('emg')} emgz";
+                else
+                    ; "emgz";
+                end;), :maxlength=>'2', :value =>'',  :coordinates => (line.coordinates("emg") unless line.nil?), :onFocus=>"setXYScroll(#{scroll_pos})", :tabindex=>"71" %>
+              </td>
+              <td bgcolor="#ECE9D8">
+                <%= text_field 'lineinformation', 'cpthcpcs'+k.to_s, :id => 'cpthcpcd_id'+k.to_s, :size => 6, :maxlength=>'5', :style=>'width:40px', :class=>(
+                if line;
+                    "black_text #{line.style('cpt_hcpcts')} cpthcpcs";
+                else
+                    ; "cpthcpcs";
+                end;), :onFocus=>"setXYScroll(#{scroll_pos})",  :coordinates => (line.coordinates("cpt_hcpcts") unless line.nil?), :value =>'', :tabindex=>"71" %>
+              </td>
+
+              <td bgcolor="#ECE9D8">
+                <%= text_field 'lineinformation', 'modifier'+k.to_s, :id => 'modifier_id1_'+k.to_s, :maxlength=>'2', :size=>1, :onBlur => "validate_modifier('modifier_id1_#{k.to_s}')", :onFocus=>"setXYScroll(#{scroll_pos})", :style=>'width:18px', :class=>(
+                if line;
+                    "black_text #{line.style('modifier1')} modifier1";
+                else
+                    ; "modifier1";
+                end;), :value=>'',  :coordinates => (line.coordinates("modifier1") unless line.nil?), :tabindex=>"71" %>
+                <%= text_field 'lineinformation', 'modifier2'+k.to_s, :id => 'modifier_id2_'+k.to_s, :maxlength=>'2', :size=>1, :onBlur => "validate_modifier('modifier_id2_#{k.to_s}')", :onFocus=>"setXYScroll(#{scroll_pos})", :style=>'width:18px', :class=>(
+                if line;
+                    "black_text #{line.style('modifier2')} modifier2";
+                else
+                    ; "modifier2";
+                end;), :value=>'',  :coordinates => (line.coordinates("modifier2") unless line.nil?), :tabindex=>"71" %>
+                <%= text_field 'lineinformation', 'modifier3'+k.to_s, :id => 'modifier_id3_'+k.to_s, :maxlength=>'2', :size=>1, :onBlur => "validate_modifier('modifier_id3_#{k.to_s}')", :onFocus=>"setXYScroll(#{scroll_pos})", :coordinates => (line.coordinates("modifier3") unless line.nil?), :style=>'width:18px', :class=>("black_text #{line.style('modifier3')}" if line), :value=>'', :tabindex=>"71" %>
+                <%= text_field 'lineinformation', 'modifier4'+k.to_s, :id => 'modifier_id4_'+k.to_s, :maxlength=>'2', :size=>1, :onBlur => "validate_modifier('modifier_id4_#{k.to_s}')", :onFocus=>"setXYScroll(#{scroll_pos})", :coordinates => (line.coordinates("modifier4") unless line.nil?), :style=>'width:18px', :class=>("black_text #{line.style('modifier4')}" if line), :value=>'', :tabindex=>"71" %>
+              </td>
+
+
+              <td bgcolor="#ECE9D8"><%= text_field 'lineinformation', 'diagnosis_pointer'+k.to_s, :id => 'diagnosis_pointer_id', :maxlength=>'4', :size=>6, :onFocus=>"setXYScroll(#{scroll_pos})", :style=>'width:40px', :class=>(
+              if line;
+                  "black_text #{line.style('diagnosis_pointer')} diagnosis_pointer";
+              else
+                  ; "diagnosis_pointer";
+              end;), :coordinates => (line.coordinates("diagnosis_pointer") unless line.nil?),:tabindex=>"71" %></td>
+
+              <td bgcolor="#ECE9D8"><%= text_field 'lineinformation', 'charges'+k.to_s, :id => k, :maxlength=>'10', :size=>6, :onFocus=>"setXYScroll(#{scroll_pos})", :style=>'width:18px', :style=>"text-align:right;", :class=>(
+              if line;
+                  "black_text #{line.style('charges')} charges";
+              else
+                  ; "charges";
+              end;), :coordinates => (line.coordinates("charges") unless line.nil?), :tabindex=>"71" %></td>
+
+
+              <td bgcolor="#ECE9D8">
+                <%= text_field 'lineinformation', 'days_or_units'+k.to_s, :id => 'days_or_units_id', :size => 6, :maxlength=>6, :style=>"width:22px", :class=>(
+                if line;
+                    "black_text #{line.style('days_units')} days_units";
+                else
+                    ; "days_units";
+                end;), :coordinates => (line.coordinates("days_units") unless line.nil?), :onFocus=>"setXYScroll(#{scroll_pos})", :tabindex=>"71" %>
+
+              </td>
+              <td bgcolor="#ECE9D8">
+                <%= text_field 'lineinformation', 'minutes'+k.to_s, :id => 'minutes', :size => 6, :maxlength=>3, :style=>"width:22px", :class=>(
+                if line;
+                    "black_text #{line.style('minutes')} minutes";
+                else
+                    ; "minutes";
+                end;), :coordinates => (line.coordinates("minutes") unless line.nil?), :onFocus=>"setXYScroll(#{scroll_pos})", :tabindex=>"71" %>
+
+              </td>
+              <td bgcolor="#ECE9D8">
+                <%= text_field 'lineinformation', 'epsdt_familycharge'+k.to_s, :id => 'epsdt_familycharge_id', :size => 6, :maxlength=>2, :style=>"width:18px",  :coordinates => (line.coordinates("service_from_date") unless line.nil?), :class=>("black_text #{line.style('service_from_date')}" if line), :onFocus=>"setXYScroll(#{scroll_pos})", :value=>'', :tabindex=>"71" %>
+              </td>
+              <td bgcolor="#ECE9D8">
+                NPI
+              </td>
+              <td bgcolor="#ECE9D8">
+                <%= text_field 'lineinformation', 'rendering_provider_id2'+k.to_s, :id => 'rendering_provider_id2_id', :size => 10, :width=>"width:70px", :maxlength=>11, :class=>(
+                if line;
+                    "black_text #{line.style('rendering_provider_id')} rendering_provider";
+                else
+                    ; "rendering_provider";
+                end;),  :coordinates => (line.coordinates("rendering_provider_id") unless line.nil?), :onFocus=>"setXYScroll(#{scroll_pos})", :value=>'', :tabindex=>"71" %>
+              </td>
+            </tr>
+        <% end %>
+        </tbody>   </table>
+        </td>
+        </tr>
+        <tr>
+        <td align="left" valign="top">
+          <table width="601">
+            <tbody>
+            <tr>
+              <th align="left" width="204"><span class="button">25.</span> FEDERAL TAX I.D. NUMBER</th>
+              <th align="left" width="32">SSN</th>
+              <th align="left" width="32">EIN</th>
+              <th align="left" width="164"><span class="button">26.</span> PATIENT'S ACCOUNT NO.</th>
+              <th align="left" width="147"><span class="button">27.</span> ACCEPT ASSIGNMENT?</th>
+            </tr>
+            <tr>
+              <%
+                 if patient_info
+                     if patient_info.federal_tax_id_type=='SSN'
+                         @id_type_ssn = true
+                     else
+                         @id_type_ein = true
+                     end
+
+                     if patient_info.accept_assignment=='Yes'
+                         @accept_assignment_y = true
+                     else
+                         @accept_assignment_n = true
+                     end
+                 end
+              %>
+
+              <td align="right"><%= text_field :cms1500, :federal_tax_id, :id =>'federal_tx_id', :class=>"black_text #{patient_info.style('federal_tax_id')}", :coordinates => (patient_info.coordinates("federal_tax_id") unless patient_info.nil?), :size=>"20", :onFocus=>"setXYScroll(950)", :accesskey =>'f', :class=>"black_text", :maxlength=>'15', :value =>(patient_info.federal_tax_id unless patient_info.nil?), :tabindex=>"87" %>              &nbsp;&nbsp;</td>
+              <td align="right"><%= radio_button(:cms1500, :federal_tax_id_type, 'SSN', :checked=>true, :onFocus=>"setXYScroll(950)", :checked=> @id_type_ssn, :tabindex=>"88") %></td>
+              <td align="right"><%= radio_button(:cms1500, :federal_tax_id_type, 'EIN', :onFocus=>"setXYScroll(950)", :checked=>@id_type_ein, :tabindex=>"88") %></td>
+              <td align="right" width="164"><%= text_field :cms1500, :patient_account_number, :id =>'patient_account_info', :class=>"black_text #{patient_info.style('patient_account_number')}", :coordinates => (patient_info.coordinates("patient_account_number") unless patient_info.nil?), :size=>"15", :onFocus=>"setXYScroll(950)", :onkeypress => "enlargeTextfieldSize('patient_account_info',15)", :onblur => "resetTextfieldSize('patient_account_info',15);", :value =>(patient_info.patient_account_number unless patient_info.nil?), :maxlength=>'50', :tabindex=>"89" %></td>
+              <td align="right" width="147">
+
+                <table width="100%" border="0" cellpadding="0" cellspacing="0">
+                  <tr>
+                    <td>Yes
+                      <%= radio_button(:cms1500, :accept_assignment, 'Yes', :checked=>true, :onFocus=>"setXYScroll(950)", :tabindex=>"90") %></td>
+                    <td>No
+                      <%= radio_button(:cms1500, :accept_assignment, 'No', :onFocus=>"setXYScroll(950)", :tabindex=>"90") %></td>
+                  </tr>
+                </table>
+              </td>
+            </tr>
+            <tr>
+              <td colspan="3" rowspan="2" align="left" valign="top">
+                <table width="100%">
+                  <tbody>
+                  <tr>
+                    <th align="left"><span class="button">31.</span> SIGNATURE OF PHYSICIAN OR SUPPLIER<br>
+                      INCLUDING DEGREES OR CREDENTIALS<br>
+                      (I certify that the statements on the reverse<br>
+                      apply to this bill and are made a part thereof.)
+                    </th>
+                  </tr>
+                  <tr>
+                    <%
+                       if patient_info
+                           if patient_info.physician_signature_on_file=='Yes'
+                               @phy_sign_file_y = true
+                           else
+                               @phy_sign_file_n = true
+                           end
+                           @physician_sign_month =(patient_info.physician_sign_date).try(:strftime,"%m")
+                           @physician_sign_day =(patient_info.physician_sign_date).try(:strftime,"%d")
+                           @physician_sign_year =(patient_info.physician_sign_date).try(:strftime,"%Y")
+                       end
+                    %>
+
+                    <td>
+                      <table width="100%" border="0" cellpadding="0" cellspacing="0">
+                        <tr>
+                          <td>Yes
+                            <%= radio_button(:cms1500, :physician_signature_on_file, 'Yes', :checked=>true, :onFocus=>"setXYScroll(950)", :tabindex=>"93") %></td>
+                          <td>No
+                            <%= radio_button(:cms1500, :physician_signature_on_file, 'No', :onFocus=>"setXYScroll(950)", :tabindex=>"93") %></td>
+                        </tr>
+                      </table>
+                    </td>
+                  </tr>
+                  </tbody>
+                </table> <%= radio_button(:radio_choicephyname, :attribute, 'Yes', :checked=>true, :onkeyup=>"fieldenablephyl()", :onFocus=>"setXYScroll(950)", :tabindex=>"94") %>
+                Physician name:<span class="small"><b><br>[First Name] [Middle Intial] [Last Name] [Suffix]</b></span>
+
+                <%= text_field :cms1500, :physician_first_name, :id =>'phy_first_name', :size => 11, :onFocus=>"setXYScroll(950)",
+                               :onkeypress => "enlargeTextfieldSize('phy_first_name',11)",
+                               :onblur => "resetTextfieldSize('phy_first_name',11);",
+                               :class=>"black_text #{patient_info.style('physician_first_name')}",
+                               :coordinates => (patient_info.coordinates("physician_first_name") unless patient_info.nil?),
+                               :value =>(patient_info.physician_first_name unless patient_info.nil?), :tabindex=>"94" %>&nbsp;
+                <%= text_field :cms1500, :physician_middle_initial, :id => 'phy_initial', :style => "width:20px", :coordinates => (patient_info.coordinates("physician_middle_initial") unless patient_info.nil?), :size => 2, :onFocus=>"setXYScroll(950)", :class => "black_text #{patient_info.style('physician_middle_initial')}", :value => (patient_info.physician_middle_initial unless patient_info.nil?), :maxlength => '1', :tabindex=>"94" %>
+                <%= text_field :cms1500, :physician_last_name, :id=>'phy_last_name', :size => 11, :onFocus=>"setXYScroll(950)",
+                               :onkeypress => "enlargeTextfieldSize('phy_last_name',11)",
+                               :onblur => "resetTextfieldSize('phy_last_name',11);",
+                               :coordinates => (patient_info.coordinates("physician_last_name") unless line.nil?),
+                               :value => (patient_info.physician_last_name unless patient_info.nil?),
+                               :class=>"black_text #{patient_info.style('physician_last_name')}", :tabindex=>"94" %>
+                <%= text_field :cms1500, :physician_suffix, :id => 'phy_suffix', :size => 4, :coordinates => (patient_info.coordinates("physician_suffix") unless patient_info.nil?),  :onFocus => "setXYScroll(950)", :class=>"black_text #{patient_info.style('physician_suffix')}", :maxlength=>'3', :value => (patient_info.physician_suffix unless patient_info.nil?), :tabindex=>"94" %>&nbsp;
+                <br><br>
+                <%= radio_button(:radio_choicephyname, :attribute, 'Yes', :onkeyup=>'fieldphyorg()', :onFocus=>"setXYScroll(950)", :tabindex=>"94") %>
+                Organisation Name :<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <%= text_field :cms1500, :physician_organisation_name, :id=>"phy_orgnname", :size =>30, :onFocus=>"setXYScroll(950)",
+                               :onkeypress => "enlargeTextfieldSize('phy_orgnname',11)",
+                               :coordinates => (patient_info.coordinates("physician_organisation_name") unless patient_info.nil?),
+                               :onblur => "resetTextfieldSize('phy_orgnname',11);",
+                               :value =>(patient_info.physician_organisation_name unless patient_info.nil?), :tabindex=>"94" %>
+                <br>Date:<br><%= text_field :cms15001, :physician_month, :id=>'phy_month', :class=>"black_text #{patient_info.style('physician_month')}",  :coordinates => (patient_info.coordinates("physician_month") unless patient_info.nil?), :style=>"width:20px", :maxlength=>'2', :onFocus=>"setXYScroll(950)", :value =>@physician_sign_month, :tabindex=>"94", :disabled => true %>
+                /
+                <%= text_field :cms15001, :physician_date, :id =>'phy_date', :class=>"black_text #{patient_info.style('physician_date')}",  :coordinates => (patient_info.coordinates("physician_date") unless patient_info.nil?), :style=>"width:20px", :maxlength=>'2', :onFocus=>"setXYScroll(950)", :value =>@physician_sign_day, :tabindex=>"94", :disabled => true %>
+                /
+                <%= text_field :cms15001, :physician_year, :id=>'phy_year', :class=>"black_text #{patient_info.style('physician_year')}",  :coordinates => (patient_info.coordinates("physician_year") unless patient_info.nil?), :size=>"2", :maxlength=>'4', :onFocus=>"setXYScroll(950)", :value =>@physician_sign_year, :tabindex=>"94", :disabled => true %>
+              </td>
+            </tr>
+            <tr>
+              <td colspan="2" align="right" valign="top">
+                <table width="100%">
+                  <tr>
+                    <th colspan="2" align="left"><span class="button">32.</span> SERVICE FACILITY LOCATION INFORMATION
+                    </th>
+                  </tr>
+                  <tr>
+                    <td colspan="2">&nbsp;Organisation Name:&nbsp;&nbsp;
+                      <%= text_field_with_auto_complete :cms1500, :service_facility_name, :size =>30, :class=>"black_text #{patient_info.style('service_facility_name')}",
+                                                        :onkeypress => "enlargeTextfieldSize('cms1500_service_facility_name',30)",
+                                                        :coordinates => (patient_info.coordinates("service_facility_name") unless patient_info.nil?),
+                                                        :onblur => "resetTextfieldSize('cms1500_service_facility_name',30); servicefacilityInformations()",
+                                                        :onFocus=>"setXYScroll(950)", :value =>(patient_info.service_facility_name unless patient_info.nil?),
+                                                        :maxlength=>'35', :tabindex=>"95" %></td>
+                  </tr>
+                  <tr>
+                    <td colspan="2">Address:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                      <%= text_field :cms1500, :service_facility_address, :size => 30,
+                                     :onkeypress => "enlargeTextfieldSize('cms1500_service_facility_address',30)",
+                                     :onblur => "resetTextfieldSize('cms1500_service_facility_address',30);",
+                                     :coordinates => (patient_info.coordinates("service_facility_address") unless patient_info.nil?),
+                                     :class=>"black_text #{patient_info.style('service_facility_address')}", :onFocus=>"setXYScroll(950)",
+                                     :value =>(patient_info.service_facility_address unless patient_info.nil?), :tabindex=>"96" %></td>
+                  </tr>
+                  <tr>
+                    <td colspan="2">City:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                      &nbsp;&nbsp;&nbsp;
+                      <%= text_field :cms1500, :service_facility_city, :size => 10, :class=>"black_text #{patient_info.style('service_facility_city')}",
+                                     :onkeypress => "enlargeTextfieldSize('cms1500_service_facility_city',10)",
+                                     :onblur => "resetTextfieldSize('cms1500_service_facility_city',10);",
+                                     :coordinates => (patient_info.coordinates("service_facility_city") unless patient_info.nil?),
+                                     :onFocus=>"setXYScroll(950)", :value =>(patient_info.service_facility_city unless patient_info.nil?), :tabindex=>"97" %></td>
+                  </tr>
+                  <tr>
+                    <td colspan="2">State:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                      &nbsp;
+                      <%= select_tag 'service_facility_state', options_for_select(@state, patient_info.service_facility_state), :onFocus=>"setXYScroll(950)", :tabindex=>"98" %>
+                      &nbsp;&nbsp;&nbsp;</td>
+                  </tr>
+                  <tr>
+                    <td colspan="2">Zipcode:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+
+                      <%= text_field :cms1500, :service_facility_zipcode, :class=>"black_text #{patient_info.style('service_facility_zipcode')}", :coordinates => (patient_info.coordinates("service_facility_zipcode") unless patient_info.nil?), :size => 10, :maxlength=>'10', :onFocus=>"setXYScroll(950)", :value =>(patient_info.service_facility_zipcode unless patient_info.nil?), :tabindex=>"99" %></td>
+                  </tr>
+                  <tr>
+                    <td width="50%">&nbsp;&nbsp;a.
+                      <%= text_field :cms1500, :service_facility_npi_id, :class=>"black_text #{patient_info.style('service_facility_npi_id')}", :coordinates => (patient_info.coordinates("service_facility_npi_id") unless patient_info.nil?), :size=>"15", :onFocus=>"setXYScroll(950)", :onBlur => "npivalidation()", :maxlength=>'10', :value => (patient_info.service_facility_npi_id unless patient_info.nil?), :tabindex=>"100" %></td>
+                    <td width="50%">b.
+                      <%= text_field :cms1500, :service_facility_non_npi_id, :class=>"black_text #{patient_info.style('service_facility_non_npi_id')}", :coordinates => (patient_info.coordinates("service_facility_non_npi_id") unless patient_info.nil?), :size=>"15", :onFocus=>"setXYScroll(950)", :maxlength=>'14', :value =>(patient_info.service_facility_non_npi_id unless patient_info.nil?), :tabindex=>"101" %></td>
+                  </tr>
+                </table>
+
+
+              </td>
+            </tr>
+            </tbody>
+          </table>
+        </td>
+        <td align="left" valign="top">
+          <table width="100%">
+
+            <tbody>
+            <tr>
+              <th align="left" width="36%"><span class="button">28.</span><br>
+                TOTAL CHARGE
+              </th>
+              <th align="left" width="34%"><span class="button">29.</span> <br>
+                AMOUNT PAID
+              </th>
+              <th align="left" width="30%"><span class="button">30.</span> <br>
+                BALANCE DUE
+              </th>
+            </tr>
+            <tr>
+
+              <td><%= text_field :cms1500, :total_charge, :style=>"text-align: right", :size=>'10', :coordinates => (patient_info.coordinates("total_charge") unless patient_info.nil?), :value=>(patient_info.total_charge unless patient_info.nil?), :onFocus=>"setXYScroll(950);tot_charge()", :class=>"black_text #{patient_info.style('total_charge')}", :maxlength=>'11', :tabindex=>"91" %></td>
+              <td><%= text_field :cms1500, :amount_paid, :size=>'10', :style=>"text-align: right", :coordinates => (patient_info.coordinates("amount_paid") unless patient_info.nil?), :value=>(patient_info.amount_paid unless patient_info.nil?), :class=>"black_text #{patient_info.style('amount_paid')}", :maxlength=>'15', :onfocus=>'add()', :onchange=>'add()', :tabindex=>"92" %></td>
+              <td><%= text_field :cms1500, :balance_due, :size=>'10', :style=>"text-align: right", :coordinates => (patient_info.coordinates("balance_due") unless patient_info.nil?),  :value=>'', :onFocus=>"setXYScroll(950)", :value =>(patient_info.balance_due unless patient_info.nil?), :class=>"black_text #{patient_info.style('balance_due')}", :maxlength=>'15' %></td>
+            </tr>
+            <tr>
+              <th colspan="3" align="left"><span class="button">33.</span> BILLING PROVIDER INFO &amp; PH</th>
+            </tr>
+            <tr>
+
+
+              <td colspan="3"><%= radio_button(:radio_choice4343, :attribute, 'physic_name', :onkeyup=>"fieldenable()", :onFocus=>"setXYScroll(950)", :tabindex=>"102") %>
+                Physician Name </br><span class="small">[Last Name] [Suffix] [First Name] [Middle Intial]</span><br>
+                <%= text_field_with_auto_complete :cms1500, :billing_provider_last_name, :size => 6, :onFocus=>"setXYScroll(950)",
+                                                  :onkeypress => "enlargeTextfieldSize('cms1500_billing_provider_last_name',6)",
+                                                  :onblur => "resetTextfieldSize('cms1500_billing_provider_last_name',6); providerInformations()",
+                                                  :coordinates => (patient_info.coordinates("billing_provider_last_name") unless patient_info.nil?),
+                                                  :value=>(patient_info.billing_provider_last_name unless patient_info.nil?), :class=>"black_text #{patient_info.style('billing_provider_last_name')}", :maxlength=>'28', :tabindex=>"104" %>
+                <%= text_field :cms1500, :billing_provider_suffix, :size => 2, :onFocus => "setXYScroll(950)", :coordinates => (patient_info.coordinates("billing_provider_suffix") unless patient_info.nil?), :value => (patient_info.billing_provider_suffix unless patient_info.nil?), :class => "black_text #{patient_info.style('billing_provider_suffix')}", :maxlength => '3', :tabindex => "105" %>
+                <%= text_field :cms1500, :billing_provider_first_name, :size => 6, :onFocus=>"setXYScroll(950)",
+                               :onkeypress => "enlargeTextfieldSize('cms1500_billing_provider_first_name',6)",
+                               :onblur => "resetTextfieldSize('cms1500_billing_provider_first_name',6);",
+                               :coordinates => (patient_info.coordinates("billing_provider_first_name") unless patient_info.nil?),
+                               :value=>(patient_info.billing_provider_first_name unless patient_info.nil?), :class=>"black_text #{patient_info.style('billing_provider_first_name')}", :maxlength=>'28', :tabindex=>"106" %>
+                <%= text_field :cms1500, :billing_provider_middle_initial, :size => 1, :onFocus => "setXYScroll(950)", :coordinates => (patient_info.coordinates("billing_provider_middle_initial") unless patient_info.nil?), :value => (patient_info.billing_provider_middle_initial unless patient_info.nil?), :class => "black_text #{patient_info.style('billing_provider_middle_initial')}", :maxlength => '1', :tabindex => "107" %>
+              </td>
+            </tr>
+            <tr>
+              <td colspan="3"><%= radio_button(:radio_choice4343, :attribute, 'org_name', :onkeyup=>"fielddisable()", :checked=>true, :onFocus=>"setXYScroll(950)", :tabindex=>"103") %>
+                Organisation Name<br>
+                <%= text_field_with_auto_complete :cms1500, :billing_provider_name, :size =>30, :onFocus=>"setXYScroll(950)",
+                                                  :onkeypress => "enlargeTextfieldSize('cms1500_billing_provider_name',30)",
+                                                  :onblur => "resetTextfieldSize('cms1500_billing_provider_name',30);",
+                                                  :coordinates => (patient_info.coordinates("billing_provider_name") unless patient_info.nil?),
+                                                  :onblur=>"providerOrganizationInformations()", :value=>(patient_info.billing_provider_name unless patient_info.nil?),
+                                                  :class=>"black_text #{patient_info.style('billing_provider_name')}", :maxlength=>'35', :tabindex=>"103" %>
+              </td>
+            </tr>
+            <tr>
+              <td colspan="3">Address:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <%= text_field :cms1500, :billing_provider_address, :size =>30, :onFocus=>"setXYScroll(950)",
+                               :onkeypress => "enlargeTextfieldSize('cms1500_billing_provider_address',30)",
+                               :onblur => "resetTextfieldSize('cms1500_billing_provider_address',30);",
+                               :coordinates => (patient_info.coordinates("billing_provider_address") unless patient_info.nil?),
+                               :value=>(patient_info.billing_provider_address unless patient_info.nil?),
+                               :class=>"black_text #{patient_info.style('billing_provider_address')}", :tabindex=>"109" %></td>
+              </td>
+            </tr>
+            <tr>
+              <td colspan="3">City:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <%= text_field :cms1500, :billing_provider_city, :size => 10, :onFocus=>"setXYScroll(950)",
+                               :onkeypress => "enlargeTextfieldSize('cms1500_billing_provider_city',30)",
+                               :onblur => "resetTextfieldSize('cms1500_billing_provider_city',30);",
+                               :coordinates => (patient_info.coordinates("billing_provider_city") unless patient_info.nil?),
+                               :value=>(patient_info.billing_provider_city unless patient_info.nil?),
+                               :class=>"black_text #{patient_info.style('billing_provider_city')}", :tabindex=>"110" %>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
+            </tr>
+            <tr>
+              <td colspan="3">State:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+
+                <%= select_tag 'billing_prv_state', options_for_select(@state, patient_info.billing_provider_state), :onFocus=>"setXYScroll(950)", :tabindex=>"111" %></td>
+            </tr>
+            <tr>
+              <td colspan="3">Zipcode:&nbsp&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+
+                <%= text_field :cms1500, :billing_provider_zipcode, :coordinates => (patient_info.coordinates("billing_provider_zipcode") unless patient_info.nil?), :size => 10, :onFocus=>"setXYScroll(950)", :value=> (patient_info.billing_provider_zipcode unless patient_info.nil?), :class=>"black_text #{patient_info.style('billing_provider_zipcode')}", :tabindex=>"112" %></td>
+            </tr>
+            <tr>
+              <td colspan="3">Phone No:&nbsp&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <%= text_field :cms1500, :billing_provider_phone, :disabled => true, :size => 10, :coordinates => (patient_info.coordinates("billing_provider_phone") unless patient_info.nil?), :onFocus=>"setXYScroll(950)", :value=>(patient_info.billing_provider_phone unless patient_info.nil?), :class=>"black_text #{patient_info.style('billing_provider_phone')}", :tabindex=>"113" %></td>
+            </tr>
+            <tr>
+              <td colspan="3">&nbsp;&nbsp;a.
+                <%= text_field :cms1500, :billing_provider_npi_id, :id=>'bill_a', :size => 10, :coordinates => (patient_info.coordinates("billing_provider_npi_id") unless patient_info.nil?), :onFocus=>"setXYScroll(950)", :onBlur => "npivalidation()", :class=>"black_text #{patient_info.style('billing_provider_npi_id')}", :maxlength=>'10', :value =>(patient_info.billing_provider_npi_id unless patient_info.nil?), :tabindex=>"114" %>
+                &nbsp;&nbsp;b.
+                <%= text_field :cms1500, :billing_provider_non_npi_id, :id=>'bill_b', :size => 10, :coordinates => (patient_info.coordinates("billing_provider_non_npi_id") unless patient_info.nil?), :onFocus=>"setXYScroll(950)", :class=>"black_text #{patient_info.style('billing_provider_non_npi_id')}", :maxlength=>'17', :value=>(patient_info.billing_provider_non_npi_id unless patient_info.nil?), :tabindex=>"115" %></td>
+
+
+            </tbody>
+          </table>
+        </td>
+        </tr>
+        </tbody></table>
+        <br/>
+        </div>
+        <br/>
+
+        <div style="float:left;">
+          <table width="950" border="0" cellspacing="0" cellpadding="0">
+            <tr>
+              <%= hidden_field 'job1', 'countr', :id=>"s", :size => 3 %>
+              <td width="60"> <%= submit_tag "Save", :class => 'button', :name => "option1", :onclick => 'return formValidator_admin();javascript:alert("Are You Sure to save");', :tabindex=>"119", :id=>"save" %> </td>
+              <td width="75">
+              <%  if(params[:issave]) %>
+               <%=submit_tag "Complete", :class => 'button', :name => "option1", :confirm => 'Are you sure to continue?', :tabindex=>"116", :id=>"complete" %>
+                <%  end %>
+                </td>
+              <td width="75"> <%= link_to '<button class="button">Stop Allocate</button>'.html_safe, {:controller => 'processor', :action => 'stop_allocate'}, {:popup => [true, 'height=400,width=400']} %></td>
+              <td width="60"> <%= submit_tag "Mark as Incomplete", :class => 'button', :name => "option1", :onclick=>'return isCountinue()', :tabindex=>"118" %> </td>
+                <td><%= link_to 'Completed claims view' ,{:controller => 'datacaptures',:action => 'claimqa',:batchid => params[:batch_type],:job => @jobid,:view => 'completed_claim'},{:class =>"submit_link",:popup => true} %> </td>
+              <td align="center" valign="middle">Comments<textarea name="proc_comments" id="proc_comments" cols="50" rows="1" class="black_text" align="absmiddle" tabindex="117"></textarea>
+              </td>
+              <td style="background-color:#FFEDA6" width="400"><b><span id="cpt_code_description"></span></b></td>
+            </tr>
+          </table>
+    <% end %>
+          <% end %>
+    </div>
+    <!--Space for main form End -->
+
+    </div>
+
+</body>

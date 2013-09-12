@@ -1,0 +1,27 @@
+<h1>Listing sqa_job_settings</h1>
+
+<table>
+  <tr>
+  <% for column in SqaJobSetting.content_columns %>
+    <th><%= column.human_name %></th>
+  <% end %>
+  </tr>
+  
+<% for sqa_job_setting in @sqa_job_settings %>
+  <tr>
+  <% for column in SqaJobSetting.content_columns %>
+    <td><%=h sqa_job_setting.send(column.name) %></td>
+  <% end %>
+    <td><%= link_to 'Show', :action => 'show', :id => sqa_job_setting %></td>
+    <td><%= link_to 'Edit', :action => 'edit', :id => sqa_job_setting %></td>
+    <td><%= link_to 'Destroy', { :action => 'destroy', :id => sqa_job_setting }, :confirm => 'Are you sure?', :method => :post %></td>
+  </tr>
+<% end %>
+</table>
+
+<%= link_to 'Previous page', { :page => @sqa_job_setting_pages.current.previous } if @sqa_job_setting_pages.current.previous %>
+<%= link_to 'Next page', { :page => @sqa_job_setting_pages.current.next } if @sqa_job_setting_pages.current.next %> 
+
+<br />
+
+

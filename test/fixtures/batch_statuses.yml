@@ -1,0 +1,37 @@
+# == Schema Information
+# Schema version: 69
+#
+# Table name: batch_statuses
+#
+#  id   :integer(11)   not null, primary key
+#  name :string(255)   
+#
+
+# == Schema Information
+# Schema version: 65
+#
+# Table name: batch_statuses
+#
+#  id   :integer(11)   not null, primary key
+#  name :string(255)   
+#
+
+bs1:
+  id:            1
+  name:         'New'
+  
+bs2:
+  id:            2
+  name:         'Processing'
+
+bs3:
+  id:            3
+  name:         'Complete'
+  
+bs4:
+  id:            4
+  name:         'HLSC Rejected'
+  
+bs5:
+  id:            5
+  name:         'HLSC Verified'

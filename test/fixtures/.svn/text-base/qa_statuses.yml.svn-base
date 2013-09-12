@@ -1,0 +1,33 @@
+# == Schema Information
+# Schema version: 69
+#
+# Table name: qa_statuses
+#
+#  id   :integer(11)   not null, primary key
+#  name :string(255)   
+#
+
+# == Schema Information
+# Schema version: 65
+#
+# Table name: qa_statuses
+#
+#  id   :integer(11)   not null, primary key
+#  name :string(255)   
+#
+
+qs1:
+  id:            1
+  name:         'New'
+  
+qs2:
+  id:            2
+  name:         'QA Allocated'
+
+qs3:
+  id:            3
+  name:         'QA Complete'
+  
+qs4:
+  id:            4
+  name:         'QA Rejected'

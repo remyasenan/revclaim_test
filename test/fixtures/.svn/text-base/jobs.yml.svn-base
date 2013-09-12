@@ -1,0 +1,150 @@
+# == Schema Information
+# Schema version: 69
+#
+# Table name: jobs
+#
+#  id                    :integer(11)   not null, primary key
+#  batch_id              :integer(11)
+#  check_number          :string(255)
+#  tiff_number           :string(255)
+#  count                 :integer(11)
+#  processor_status      :string(255)
+#  processor_id          :integer(11)
+#  processor_flag_time   :datetime
+#  processor_target_time :datetime
+#  qa_flag_time          :datetime
+#  qa_target_time        :datetime
+#  qa_id                 :integer(11)
+#  payer_id              :integer(11)
+#  estimated_eob         :integer(11)
+#  adjusted_eob          :integer(11)
+#  image_count           :integer(11)
+#  comment               :string(255)
+#  job_status            :string(255)   default(New)
+#  qa_status             :string(255)   default(New)
+#  updated_by            :integer(11)
+#  updated_at            :datetime
+#  created_by            :integer(11)
+#  created_at            :datetime
+#
+
+job1:
+  id:               1
+  batch_id:         1
+  processor_id:     4
+  tiff_number:      20080403678
+  qa_id:            5
+  count:            3
+  estimated_eob:    20
+  job_status:       "Complete"
+
+job2:
+  id:               2
+  batch_id:         1
+  processor_id:     4
+  tiff_number:      20080403679
+  qa_id:            5
+  count:            3
+  estimated_eob:    20
+  job_status:       "837Ready"
+job3:
+  id:               3
+  processor_id:     4
+  tiff_number:      20080403680
+  qa_id:            5
+
+job4:
+  id:               4
+  processor_id:     4
+  qa_id:            5
+  tiff_number:      20080403681
+
+job5:
+  id:               5
+  processor_id:     4
+  qa_id:            5
+
+job6:
+  id:               6
+  batch_id:         1
+  processor_id:     4
+  qa_id:            5
+  qa_status:        "QA Complete"
+  job_status:       "New"
+  estimated_eob:    20
+  tiff_number:      20080403684
+  payer_id:         1
+
+job7:
+  id:               7
+  batch_id:         1
+  processor_id:     4
+  qa_id:            5
+  qa_status:        "QA Rejected"
+  estimated_eob:    20
+  payer_id:         1
+  tiff_number:      20080403685
+
+job8:
+  id:               8
+  batch_id:         1
+  processor_id:     4
+  job_status:       "New"
+  estimated_eob:    20
+  payer_id:         1
+  tiff_number:      20080403688
+job9:
+  id:               9
+  batch_id:         1
+  processor_id:     4
+  qa_id:            5
+  qa_status:        "QA Complete"
+  processor_status: "Processor Complete"
+  job_status:       "New"
+  estimated_eob:    20
+  payer_id:         1
+  tiff_number:      200804036989
+
+job10:
+  id:               10
+  batch_id:         1
+  processor_id:     4
+  qa_id:            5
+  qa_status:        "QA Rejected"
+  estimated_eob:    20
+  check_number:     1
+  count:            10
+  payer_id:         1
+
+job11:
+  id:               11
+  batch_id:         20
+  processor_id:     4
+  qa_id:            5
+  qa_status:        "QA Complete"
+  job_status:       "New"
+  estimated_eob:    10
+  payer_id:         2
+  tiff_number:      200804036809
+  
+job12:
+  id:               12
+  batch_id:         20
+  processor_id:     4
+  qa_id:            5
+  qa_status:        "QA Complete"
+  job_status:       "New"
+  estimated_eob:    15
+  payer_id:         2
+  tiff_number:      2008040368178
+  
+job13:
+  id:               13
+  batch_id:         20
+  processor_id:     4
+  qa_id:            5
+  qa_status:        "QA Complete"
+  job_status:       "New"
+  tiff_number:      20080403685
+  estimated_eob:    20
+  payer_id:         2

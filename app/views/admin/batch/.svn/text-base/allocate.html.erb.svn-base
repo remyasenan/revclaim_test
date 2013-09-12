@@ -1,0 +1,129 @@
+<script  type="text/javascript" >
+  function getval(k)
+  {
+    //alert ("You are going to Split the Batch")
+    td = document.getElementById('test')
+ 
+    //if(td.checked==false)
+    // alert(document.getElementById('test').value)
+    document.getElementById('s').value =k
+  
+    // td.checked==true
+  }
+  function decideval()
+  {
+  
+    var agree=confirm("Are you sure to delete the batch?");
+    if (agree==true)
+      return true;
+    else
+      return false;
+  }
+ 
+ 
+</script>
+
+<div id="login_main">
+  <h1>Batch Allocation</h1>
+  <%= will_paginate @batches%>
+  <div class="light_info">
+    <%= form_tag '',:method => :get do %>
+      <%= select_tag 'criteria', optionize('Batch ID', 'Date', 'Facility', 'Status') %>
+      <%= select_tag 'compare', optionize('=','>', '<') %>
+      <%= text_field_tag 'to_find', nil,  :size => '10' %>
+      <%= submit_tag 'Filter', :class => 'button' %>
+    <% end %>
+    <%= set_focus 'to_find' %>
+  </div>
+
+  <%= legend_start %>
+  <table style="width:100%"><td class="black_text" style="width:900px">
+      <%= legend "color" => "white", "text" => "New" %>
+      <%= legend "color" => "blue", "text" => "Processing" %>
+      <%= legend "color" => "palered", "text" => "QA Rejected" %>
+      <%= legend "color" => "red", "text" => "ANS Rejected" %>
+    </td>  </table>
+  <%= legend_end %>
+
+  <div class="right"><%= link_to 'Batch List', :action => 'allocate' %>  </div>
+
+
+  <% unless @batches.empty? %>
+
+
+    <table class="sortable" id="batch_allocate">
+      <tr>
+        <th> BatchID </th>
+        <th> Batch Date </th>
+        <th> Facility</th>
+        <th> Estimated Claims</th>
+        <th> Completed Claims</th>
+        <th> Arrival Time (EST) </th>
+        <th> Target Time (EST)</th>
+        <th> Completion Time (EST) </th>
+        <th> Expected Completion Time (EST)</th>
+        <th> Status</th>
+        <th> Comment </th>
+        <th> &nbsp;  </th>
+        <th> Auto Allocation Status  </th>
+      </tr>
+
+      <% for batch in @batches %>
+        <% if batch.status == 'ANS Rejected'
+          cls = 'red'
+        elsif batch.status == 'Processing'
+          flag = 0
+          flag = 1 if Job.find(:all, :conditions => ["batch_id = ? and job_status = 'QA Rejected'",batch.id]).size > 0
+          if flag == 1
+            cls = 'palered'
+          else
+            cls = 'blue'
+          end
+        else
+          cls = 'white'
+        end
+      %>
+        <tr>
+          <td class="<%= cls %>" align='right'><%= batch.batchid %> </td>
+          <td class="<%= cls %>" align='right'><%= format_date(batch.date) unless batch.date.nil? %> </td>
+          <td class="<%= cls %>"><%= batch.facility %> </td>
+          <td class="<%= cls %>" align='right'><%= batch.estimated_eobs %></td>
+          <td class="<%= cls %>" align='right' ><%= batch.get_completed_claims(batch) %></td>
+          <td class="<%= cls %>" nowrap align='right'><%= format_datetime(batch.arrival_time) %> </td>
+          <td class="<%= cls %>" nowrap align='right'><%= format_datetime(batch.target_time) %> </td>
+          <td class="<%= cls %>" >&nbsp;<%= format_datetime(batch.completion_time) unless batch.completion_time.nil? %> </td>
+          <td class="<%= cls %>" nowrap align='right'>
+            <% if (batch.tat.nil? or batch.tat.expected_time.nil?) %> N/A <% else %><%= format_datetime(batch.tat.expected_time) unless batch.tat.nil? or batch.tat.expected_time.nil? %> <br/><%= link_to 'Edit', :action => 'comments', :id => batch %><% end %>
+            <% form_tag :action => 'compute_etc', :id => batch.id, :page => params[:page] do %>
+            <% end %>
+          </td>
+          <td class="<%= cls %>">
+
+            <%= batch.status %>
+
+          </td>
+
+          <td class="<%= cls %>" nowrap><textarea readonly="true" class="black_text"> <%= batch.comment %></textarea></td>
+
+          <td class="<%= cls %>"><%= link_to 'Job Allocation',:controller => 'job', :action => 'allocate', :id => batch %></td>
+
+          <td class="<%= cls %>"> <%if batch.auto_allocation_status == 'DEACTIVATE' %><%= link_to 'Add', :controller => 'job', :action => 'add_auto_allocation', :id => batch, :page => params[:page] %> <% else %> <%= link_to 'Remove', :controller => 'job', :action => 'remove_auto_allocation', :id => batch, :page => params[:page] %> <% end %>  </td>
+          <td class="<%= cls %>"><input type="checkbox" id="test" onclick='getval(<%=batch.id%>)'> </td>
+
+        <% end %>
+      </tr>
+
+
+    </table>
+  <%else%>
+    <h4>No batches found. Create a Batch through <%= link_to 'Batch Administration', :action => 'index' %>.</h4>
+  <% end %>
+
+  <%= will_paginate @batches%>
+  
+  <%= form_tag :controller => "/admin/batch/delete_batches", :action => "destroy", :id => @batches_to_delete,:method => "delete" do %>
+    <%= hidden_field 'job1', 'countr',:id=>"s" ,:size => 3  %>
+    <%= submit_tag "Delete Batch", :class => 'button', :name => "option1",:onclick=>"decideval()" %>
+  <%end%>
+</div>
+

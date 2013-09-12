@@ -1,0 +1,189 @@
+ISA*00*          *00*          *ZZ*412345678      *ZZ*481009834      *<%= Time.now().strftime("%y%m%d") %>*<%= Time.now().strftime("%H%M") %>*U*00401*<%= sprintf("%09d",id_837)%>*0*P*:~
+GS*HC*412345678*481009834*<%= Time.now().strftime("%Y%m%d")%>*<%= Time.now().strftime("%H%M") %>*2831*X*004010X096A1~<% @cms1500s.each_with_index do |ub04, i| %> <% @cmsservicelines =ub04.ub04_serviceline_informations %>
+ST*837*<%= sprintf("%04d", offset + i + 1)%>~<%count=1%> <%sl_number=i+1%>
+BHT*0019*00*<%= ub04.job.tiff_number.strip rescue nil%>*<%= Time.now().strftime("%Y%m%d")%>*<%= Time.now().strftime("%H%M") %>*CH~<% count=count+1%>
+REF*87*004010X098A1~<% count=count+1%>
+NM1*41*2*REVENUEMED*****46*412345678~<% count=count+1%>
+PER*IC*Joe Wu*EM*pcn@revenuemed.com~<% count=count+1%>
+NM1*40*2*PCN*****46*481009834~<% count=count+1%>
+HL*1**20*1~<% count=count+1%>
+NM1*85*2<% if !ub04.billing_provider_last_name.blank? or !ub04.billing_provider_first_name.blank? %><% if !ub04.billing_provider_last_name.blank? or !ub04.billing_provider_npi.blank? or !ub04.billing_provider_tin_or_ein.blank?%>*<%if !ub04.billing_provider_last_name.blank?%><%= ub04.billing_provider_last_name.strip.slice(0,35) rescue nil%><%end%><%end%><% if !ub04.billing_provider_first_name.blank? or !ub04.billing_provider_npi.blank? or !ub04.billing_provider_tin_or_ein.blank?%>*<% if !ub04.billing_provider_first_name.blank?%><%= ub04.billing_provider_first_name.strip.slice(0,25) rescue nil%><%end%><%end%><%if !ub04.billing_provider_npi.blank? or !ub04.billing_provider_tin_or_ein.blank?%><%if !ub04.billing_provider_npi.blank?%>****XX*<%= ub04.billing_provider_npi.to_s.strip rescue nil%><%else%><%if !ub04.billing_provider_tin_or_ein.blank?%>*24*<%= ub04.billing_provider_tin_or_ein.strip rescue nil%><%end%><%end%><%end%>~<%else%>*<%= ub04.billing_provider_name.strip.slice(0,35) rescue nil%><%if !ub04.billing_provider_npi.blank? or !ub04.billing_provider_tin_or_ein.blank?%><%if !ub04.billing_provider_npi.blank?%>*****XX*<%= ub04.billing_provider_npi.to_s.strip rescue nil%><%else%><%if !ub04.billing_provider_tin_or_ein.blank?%>*****24*<%= ub04.billing_provider_tin_or_ein.strip rescue nil%><%end%><%end%><%end%>~<%end%><% count=count+1%>
+<%if !ub04.billing_provider_address1.blank? or !ub04.billing_provider_first_name.blank?%>
+<%if !ub04.billing_provider_address1.blank?%>N3*<%= ub04.billing_provider_address1.strip rescue nil%><%if !ub04.billing_provider_address2.blank? %>*<%= ub04.billing_provider_address2.strip rescue nil%><%end%>~<% count=count+1%><%end%>
+N4*<%if !ub04.billing_provider_city.blank? %><%= ub04.billing_provider_city.strip rescue nil%><%else%>DEFAULT CITY<%end%>*<%if !ub04.billing_provider_state.blank? and !ub04.billing_provider_city.blank? and !ub04.billing_provider_state.blank? and ub04.billing_provider_state!="--"%><%= ub04.billing_provider_state.strip rescue nil%><%else%>XX<%end%>*<%if !ub04.billing_provider_zipcode.blank? and !ub04.billing_provider_city.blank? %><%= ub04.billing_provider_zipcode.strip rescue nil%><%else%>99999<%end%>~<% count=count+1%>
+<%end%>
+<%if !ub04.billing_provider_tin_or_ein.blank? %>REF*EI*<%=  ub04.billing_provider_tin_or_ein.strip rescue nil%>~<% count=count+1%><%end%>
+<%rendering_provider_prefix=2%>
+<%if  !ub04.rendering_provider_last_name.blank?  or !ub04.rendering_provider_address1.blank? %><%#This is a hack as we don't recognize the correct 'end' of the 'if' statement to remove. So giving the '1 == 1' condition after discussing with the team and Suresh%>NM1*87*<%=rendering_provider_prefix%><% if !ub04.rendering_provider_last_name.blank? %>*<%= ub04.rendering_provider_last_name.strip.slice(0,35) rescue nil%><%end%><% if ub04.rendering_providerid != '00-0000000'  %><% if !ub04.rendering_providerid.blank? %>*****24*<%= ub04.rendering_providerid rescue nil%><%end%><%end%>~<% count=count+1%>
+<%if !ub04.rendering_provider_address1.blank? %>
+<%if !ub04.rendering_provider_address1.blank? %>N3*<%= ub04.rendering_provider_address1.strip rescue nil%><%if !ub04.rendering_provider_address2.blank? %>*<%= ub04.rendering_provider_address2.strip rescue nil%><% end %>~<% count=count+1%><%end%>
+N4*<%if !ub04.rendering_provider_city.blank? %><%= ub04.rendering_provider_city.strip rescue nil%><%else%>DEFAULT CITY<%end%>*<%if !ub04.rendering_provider_state.blank? and !ub04.rendering_provider_city.blank? and !ub04.rendering_provider_state.blank? and ub04.rendering_provider_state!="--"%><%= ub04.rendering_provider_state.strip rescue nil%><%else%>XX<%end%>*<%if !ub04.rendering_provider_zipcode.blank? and !ub04.rendering_provider_city.blank? %><%= ub04.rendering_provider_zipcode.strip rescue nil%><%else%>99999<%end%>~<% count=count+1%>
+<%end%>
+<% if !ub04.rendering_provider_last_name.blank? %><%if !ub04.billing_providerid1.blank? %>REF*EI*<%= ub04.billing_providerid1.strip rescue nil%>~<% count=count+1%><%end%><%end%><%end%>
+HL*2*1*22*<%if !ub04.ub04payers.first.blank?%><%if !ub04.ub04payers.first.patient_relationship.blank? %><%if ub04.ub04payers.first.patient_relationship== '18' %>0<%else%>1<%end%><%end%><%end%>~<% count=count+1%>
+<%if !ub04.ub04payers.first.blank?%>SBR*P*<%if !ub04.ub04payers.first.patient_relationship.blank?%><%if ub04.ub04payers.first.patient_relationship== '18' %><%= ub04.ub04payers.first.patient_relationship %><%end%><%end%><%if !ub04.ub04payers.first.group_no.blank?%>*<%= ub04.ub04payers.first.group_no %><%end%><%if !ub04.ub04payers.first.group_name.blank?%>*<%= ub04.ub04payers.first.group_name %><%end%>~<% count=count+1%><%end%>
+<%if !ub04.ub04payers.first.blank?%><%if !ub04.ub04payers.first.insured_last_name.blank? or !ub04.ub04payers.first.insured_first_name.blank? or !ub04.ub04payers.first.insured_id.blank? %>NM1*IL*1*<%if !ub04.ub04payers.first.insured_last_name.blank? %><%= ub04.ub04payers.first.insured_last_name.strip.slice(0,35) rescue nil%><%else%>NOT PROVIDED<%end%>*<%if !ub04.ub04payers.first.insured_first_name.blank? %><%= ub04.ub04payers.first.insured_first_name.strip.slice(0,25) rescue nil%><%else%>NOT PROVIDED<%end%>*<%if !ub04.ub04payers.first.insured_middle_initial.blank? %><%= ub04.ub04payers.first.insured_middle_initial.strip %><%end%><%if !ub04.ub04payers.first.insured_id.blank? %>**<%end%><%if !ub04.ub04payers.first.insured_id.blank? %>*MI*<%= ub04.ub04payers.first.insured_id.strip rescue nil%><%end%>~<% count=count+1%><%end%><%end%>
+<%if !ub04.subscriber_address1.blank?%>N3*<%= ub04.subscriber_address1.strip rescue nil%><%if !ub04.subscriber_address2.blank?%>*<%= ub04.subscriber_address2.strip rescue nil%><%end%>~<% count=count+1%><%end%>
+N4*<%if !ub04.subscriber_city.blank? %><%= ub04.subscriber_city.strip rescue nil%><%else%>DEFAULT CITY<%end%>*<%if !ub04.subscriber_state.blank? and !ub04.subscriber_city.blank? and !ub04.subscriber_state.blank? and ub04.subscriber_state!="--"%><%= ub04.subscriber_state.strip rescue nil%><%else%>XX<%end%>*<%if !ub04.subscriber_zipcode.blank? and !ub04.subscriber_city.blank? %><%= ub04.subscriber_zipcode.strip rescue nil%><%else%>99999<%end%>~<% count=count+1%>
+DMG*D8*<% if !ub04.patient_dob.blank? %><%=ub04.patient_dob.to_s.strip.slice(0,10).split("-").join%><%end%>*<%=ub04.patient_gender%>~<% count=count+1%>
+<%if !ub04.ub04payers.first.blank?%><%if !ub04.ub04payers.first.name.blank?%>NM1*PR*2*<%= ub04.ub04payers.first.name.strip.slice(0,35) rescue nil%><% if !ub04.ub04payers.first.health_planid.blank? %>*****PI*<%= ub04.ub04payers.first.health_planid.strip rescue nil%><%end%>~<% count=count+1%><%end%><%end%>
+<%if !ub04.ub04payers.first.blank?%><%if !ub04.ub04payers.first.patient_relationship.blank? %>
+<%if ub04.ub04payers.first.patient_relationship != '18' %>
+HL*3*2*23*0~<% count = count + 1%>
+<%if !ub04.ub04payers.first.blank?%><%if !ub04.ub04payers.first.patient_relationship.blank? %>
+PAT*<%= ub04.ub04payers.first.patient_relationship %>~<%count = count + 1 %>
+<%end%><%end%>
+
+<%if !ub04.ub04payers.first.blank?%><%if !ub04.patient_first_name.blank? or !ub04.patient_last_name.blank?%>
+NM1*QC*1<%if !ub04.patient_last_name.blank? %>*<%if !ub04.patient_last_name.blank?%><%= ub04.patient_last_name.strip.slice(0,35) rescue nil%><%end%><%end%><%if !ub04.patient_first_name.blank? %>*<%if !ub04.patient_first_name.blank?%><%= ub04.patient_first_name.strip.slice(0,25) rescue nil%><%end%><%end%><% if !ub04.patientid.blank? %>****MI*<%= ub04.patientid.strip rescue nil%><%end%>~<%count = count + 1%><%end%><%end%>
+<%if !ub04.patient_address1.blank?%>N3*<%= ub04.patient_address1.strip rescue nil%>~<%count = count + 1%>
+N4*<%if !ub04.patient_city.blank? %><%= ub04.patient_city.strip rescue nil%><%else%>DEFAULT CITY<%end%>*<%if !ub04.patient_state.blank? and !ub04.patient_city.blank? and ub04.patient_state!="--"%><%= ub04.patient_state.strip rescue nil%><%else%>XX<%end%>*<%if !ub04.patient_zipcode.blank? and !ub04.patient_city.blank?%><%= ub04.patient_zipcode.strip rescue nil%><%else%>99999<%end%>~<% count=count+1%>
+<%end%>
+<%if !ub04.patient_dob.blank? or !ub04.patient_gender.blank?%>DMG*D8*<%if !ub04.patient_dob.blank?%><%=ub04.patient_dob.strftime("%Y%m%d").to_s.strip rescue nil%><%end%><%if !ub04.patient_gender.blank?%>*<%=ub04.patient_gender.strip rescue nil%><%end%>~<%count=count+1%><%end%>
+
+<%if !ub04.ub04payers.first.blank?%><%if !ub04.ub04payers.first.group_no.blank?%>REF*IG*<%= ub04.ub04payers.first.group_no rescue nil%>~<%count = count + 1%><%end%><%end%>
+<%end%>
+<%end%>
+<%end%>
+<% total_charge = ""%><% if !ub04.total_charges.blank? %><% total_charge = ub04.total_charges.to_s %> <% total_decimal=total_charge.split(".") %> <% if total_decimal[1]== "00" or total_decimal[1]== "0" %> <% total_charge=total_decimal[0]%> <% end%><%end%>
+
+<% if !ub04.patient_account_number.blank? or !ub04.total_charges.blank? or (!@cmsservicelines[0].service_place.blank? if @cmsservicelines[0]) %>CLM*<% if !ub04.patient_account_number.blank?%><%= ub04.patient_account_number.strip rescue nil%><%end%>*<%if total_charge%><%= total_charge.strip rescue nil%><%end%>***<%if !ub04.patient_bill_type.blank?%><%= ub04.patient_bill_type.gsub!(/^#{0}+/,'').slice(0,2) rescue nil%>:A:<%= ub04.patient_bill_type.slice(2,1) rescue nil%><%end%>*Y*A*<%if !ub04.ub04payers.first.blank?%><%if !ub04.ub04payers.first.assign_benefits.blank?%><%= ub04.ub04payers.first.assign_benefits rescue nil%><%end%>*<%if !ub04.ub04payers.first.release_info.blank?%><%= ub04.ub04payers.first.release_info rescue nil%><%end%>~<% count=count+1%><%end%><%end%>
+<% if !ub04.discharge_hour.blank? %>DTP*096*TM*<%= ub04.discharge_hour+"00" rescue nil%>~<% count=count+1%><% end %>
+
+<% if !ub04.statement_cover_from.blank? %>DTP*434*RD8*<%= ub04.statement_cover_from.to_s.strip.slice(0,10).split("-").join rescue nil%><% if !ub04.statement_cover_to.blank? %>-<%= ub04.statement_cover_to.to_s.strip.slice(0,10).split("-").join rescue nil%><%end%>~ <% count=count+1%><% end %>
+<% if !ub04.admission_date.blank? %>DTP*435*DT*<%= ub04.admission_date.to_s.strip.slice(0,10).split("-").join rescue nil%><% if !ub04.admission_hour.blank? %><%= ub04.admission_hour.to_s.strip.slice(0,10).split("-").join rescue nil%>00<%end%>~<% count=count+1%><% end %>
+<% if !ub04.admission_type.blank? or !ub04.admission_source.blank? or !ub04.patient_status_code.blank? %>CL1*<% if !ub04.admission_type.blank?%><%= ub04.admission_type %><%end%><% if !ub04.admission_source.blank? or !ub04.patient_status_code.blank? %>*<% if !ub04.admission_source.blank?%><%= ub04.admission_source %><%end%><% if !ub04.patient_status_code.blank?%>*<%= ub04.patient_status_code %><%end%><%end%>~<% count=count+1%><%end%>
+<%if ub04.total_non_covered_charges.to_i > 0 %>AMT*A8*<%= ub04.total_non_covered_charges%>~<%count=count+1%><%end%>
+<%ub04.ub04payers.each do |ub04payers| %><%if !ub04payers.blank?%><%if ub04payers.prior_payments.to_i > 0 %>AMT*C4*<%= ub04payers.prior_payments%>~<%count=count+1%><%end%><%end%><%end%>
+<%ub04.ub04payers.each do |ub04payers| %>
+<%if !ub04payers.blank? %><%if ub04payers.est_amounts.to_i > 0 %>AMT*C5*<%= ub04payers.est_amounts%>~<%count=count+1%><%end%>
+<%end%><%end%>
+REF*D9*<%= ub04.job.tiff_number.strip rescue nil%>~<%count=count+1%>
+<%ub04.ub04payers.each do |ub04payers| %><%if !ub04payers.blank? %>
+<% if !ub04payers.treatment_authorisation.blank? %><%= "REF*G1*"+ub04payers.treatment_authorisation.strip rescue nil%>~<% count=count+1%><%end%><%end%><%end%>
+<% if !ub04.patient_med_rec_number.blank? %>REF*EA*<%= ub04.patient_med_rec_number.strip rescue nil%>~<% count=count+1%><%end%>
+<% if !ub04.claim_message.blank? %>NTE*ADD*<%= ub04.claim_message.strip rescue nil%>~<% count=count+1%><%end%>
+
+<% ub04_injury_1=""%><%ub04_injury_2=""%><% ub04_injury_3="" %><% ub04_injury_4="" %>
+<%if !ub04.principal_diag.blank? %><%ub04_injury_1= ":"+ub04.principal_diag %> <% end %>
+<%if !ub04.admit_diag.blank? %><%ub04_injury_1a= ":"+ub04.admit_diag %> <% end %>
+<%if !ub04.other_diag1.blank? %><% ub04_injury_2= "*BF:"+ub04.other_diag1 %><% end %>
+<%if !ub04.other_diag2.blank?%><% ub04_injury_3= "*BF:"+ub04.other_diag2 %><%end%>
+<%if !ub04.other_diag3.blank?%><% ub04_injury_4= "*BF:"+ub04.other_diag3 %><%end%>
+<%if !ub04.other_diag4.blank?%><% ub04_injury_5= "*BF:"+ub04.other_diag4 %><%end%>
+<%if !ub04.other_diag5.blank?%><% ub04_injury_6= "*BF:"+ub04.other_diag5 %><%end%>
+<%if !ub04.other_diag6.blank?%><% ub04_injury_7= "*BF:"+ub04.other_diag6 %><%end%>
+<%if !ub04.other_diag7.blank?%><% ub04_injury_8= "*BF:"+ub04.other_diag7 %><%end%>
+<%if !ub04.other_diag8.blank?%><% ub04_injury_9= "*BF:"+ub04.other_diag8 %><%end%>
+<%if !ub04.other_diag9.blank?%><% ub04_injury_10= "*BF:"+ub04.other_diag9 %><%end%>
+<%if !ub04.other_diag10.blank?%><% ub04_injury_11= "*BF:"+ub04.other_diag10 %><%end%>
+<%if !ub04.other_diag11.blank?%><% ub04_injury_12= "*BF:"+ub04.other_diag11 %><%end%>
+<%if !ub04.other_diag12.blank?%><% ub04_injury_13= "*BF:"+ub04.other_diag12 %><%end%>
+<%if !ub04.other_diag13.blank?%><% ub04_injury_14= "*BF:"+ub04.other_diag13 %><%end%>
+<%if !ub04.other_diag14.blank?%><% ub04_injury_15= "*BF:"+ub04.other_diag14 %><%end%>
+<%if !ub04.other_diag15.blank?%><% ub04_injury_16= "*BF:"+ub04.other_diag15 %><%end%>
+<%if !ub04.other_diag16.blank?%><% ub04_injury_17= "*BF:"+ub04.other_diag16 %><%end%>
+<%if !ub04.other_diag17.blank?%><% ub04_injury_18= "*BF:"+ub04.other_diag17 %><%end%>
+
+<%if !ub04.patient_reason_visit_code1.blank?%><% ub04_patientreasonvisitcode1= "*ZZ:"+ub04.patient_reason_visit_code1 %><%end%>
+<%if !ub04.patient_reason_visit_code2.blank?%><% ub04_patientreasonvisitcode2= "*ZZ:"+ub04.patient_reason_visit_code2 %><%end%>
+<%if !ub04.patient_reason_visit_code3.blank?%><% ub04_patientreasonvisitcode3= "*ZZ:"+ub04.patient_reason_visit_code3 %><%end%>
+<%if !ub04.eci_code1.blank?%><% ub04_eci_code1= "*BN:"+ub04.eci_code1 %><%end%>
+<%if !ub04.eci_code2.blank?%><% ub04_eci_code2= "*BN:"+ub04.eci_code2 %><%end%>
+<%if !ub04.eci_code3.blank?%><% ub04_eci_code3= "*BN:"+ub04.eci_code3 %><%end%>
+<%if !ub04_injury_1.blank? or !ub04_injury_1a.blank?%><%if !ub04_injury_1.blank?%>HI*BK<%= ub04_injury_1.strip rescue nil%><%end%><%if !ub04_injury_1a.blank?%>*BJ<%= ub04_injury_1a.strip rescue nil%><%end%><%if !ub04_patientreasonvisitcode1.blank?%><%=ub04_patientreasonvisitcode1.strip rescue nil%><%end%><%if !ub04_patientreasonvisitcode2.blank?%><%=ub04_patientreasonvisitcode2.strip rescue nil%><%end%><%if !ub04_patientreasonvisitcode3.blank?%><%=ub04_patientreasonvisitcode3.strip rescue nil%><%end%><%if !ub04_eci_code1.blank?%><%=ub04_eci_code1.strip rescue nil%><%end%><%if !ub04_eci_code2.blank?%><%=ub04_eci_code2.strip rescue nil%><%end%><%if !ub04_eci_code3.blank?%><%=ub04_eci_code3.strip rescue nil%><%end%>~<% count=count+1%><%end%>
+<%if !ub04.pps_code.blank?%>HI*DR:<%= ub04.pps_code.gsub(/^#{0}+/,'') %>~<% count=count+1%><%end%>
+<%if !ub04_injury_2.blank? or !ub04_injury_3.blank? or !ub04_injury_4.blank? or !ub04_injury_5.blank? or !ub04_injury_6.blank? or !ub04_injury_7.blank? or !ub04_injury_8.blank? or !ub04_injury_9.blank? or !ub04_injury_10.blank? or !ub04_injury_11.blank? or !ub04_injury_12.blank? or !ub04_injury_13.blank? or !ub04_injury_14.blank? or !ub04_injury_15.blank? or !ub04_injury_16.blank? or !ub04_injury_17.blank? or !ub04_injury_18.blank?%>
+HI<%=ub04_injury_2.strip rescue nil%><%if !ub04_injury_3.blank?%><%= ub04_injury_3.strip rescue nil%><%end%><%if !ub04_injury_4.blank?%><%= ub04_injury_4.strip rescue nil%><%end%><%if !ub04_injury_5.blank?%><%= ub04_injury_5.strip rescue nil%><%end%><%if !ub04_injury_6.blank?%><%= ub04_injury_6.strip rescue nil%><%end%><%if !ub04_injury_7.blank?%><%= ub04_injury_7.strip rescue nil%><%end%><%if !ub04_injury_8.blank?%><%= ub04_injury_8.strip rescue nil%><%end%><%if !ub04_injury_9.blank?%><%= ub04_injury_9.strip rescue nil%><%end%><%if !ub04_injury_10.blank?%><%= ub04_injury_10.strip rescue nil%><%end%><%if !ub04_injury_11.blank?%><%= ub04_injury_11.strip rescue nil%><%end%><%if !ub04_injury_12.blank?%><%= ub04_injury_12.strip rescue nil%><%end%><%if !ub04_injury_13.blank?%><%= ub04_injury_13.strip rescue nil%><%end%><%if !ub04_injury_14.blank?%><%= ub04_injury_14.strip rescue nil%><%end%><%if !ub04_injury_15.blank?%><%= ub04_injury_15.strip rescue nil%><%end%><%if !ub04_injury_16.blank?%><%= ub04_injury_16.strip rescue nil%><%end%><%if !ub04_injury_17.blank?%><%= ub04_injury_17.strip rescue nil%><%end%><%if !ub04_injury_18.blank?%><%= ub04_injury_18.strip rescue nil%><%end%>~<% count=count+1%>
+<%end%>
+<%if !ub04.principal_proc_code.blank? or !ub04.principal_proc_date.blank? %><%if !ub04.principal_proc_code.blank? %>HI*BR:<%=ub04.principal_proc_code%><%end%><%if !ub04.principal_proc_date.blank? %>:D8:<%=ub04.principal_proc_date.to_s.strip.slice(0,10).split("-").join %><%end%>~<% count=count+1%><%end%>
+
+<%if !ub04.other_proc_code1.blank?%><% ub04_otherproccode_1= "*BQ:"+ub04.other_proc_code1 %><%end%>
+<%if !ub04.other_proc_date1.blank?%><% ub04_otherprocdate_1= ":D8:#{ub04.other_proc_date1.to_s.strip.slice(0,10).split('-').join}"%><%end%>
+<%if !ub04.other_proc_code2.blank?%><% ub04_otherproccode_2= "*BQ:"+ub04.other_proc_code2 %><%end%>
+<%if !ub04.other_proc_date2.blank?%><% ub04_otherprocdate_2= ":D8:#{ub04.other_proc_date2.to_s.strip.slice(0,10).split('-').join}"%><%end%>
+<%if !ub04.other_proc_code3.blank?%><% ub04_otherproccode_3= "*BQ:"+ub04.other_proc_code3 %><%end%>
+<%if !ub04.other_proc_date3.blank?%><% ub04_otherprocdate_3= ":D8:#{ub04.other_proc_date3.to_s.strip.slice(0,10).split('-').join}"%><%end%>
+<%if !ub04.other_proc_code4.blank?%><% ub04_otherproccode_4= "*BQ:"+ub04.other_proc_code4 %><%end%>
+<%if !ub04.other_proc_date4.blank?%><% ub04_otherprocdate_4= ":D8:#{ub04.other_proc_date4.to_s.strip.slice(0,10).split('-').join}"%><%end%>
+<%if !ub04.other_proc_code5.blank?%><% ub04_otherproccode_5= "*BQ:"+ub04.other_proc_code5 %><%end%>
+<%if !ub04.other_proc_date5.blank?%><% ub04_otherprocdate_5= ":D8:#{ub04.other_proc_date5.to_s.strip.slice(0,10).split('-').join}"%><%end%>
+<%if !ub04.other_proc_code1.blank? or !ub04.other_proc_date1.blank? or !ub04.other_proc_code2.blank? or !ub04.other_proc_date2.blank? or !ub04.other_proc_code3.blank? or !ub04.other_proc_date3.blank? or !ub04.other_proc_code4.blank? or !ub04.other_proc_date4.blank? or !ub04.other_proc_code5.blank? or !ub04.other_proc_date5.blank?%>
+HI<%if !ub04_otherproccode_1.blank? or !ub04.other_proc_date1.blank?%><%=ub04_otherproccode_1.strip rescue nil%><%if !ub04_otherprocdate_1.blank?%><%=ub04_otherprocdate_1.strip rescue nil%><%end%><%end%><%if !ub04_otherproccode_2.blank?%><%=ub04_otherproccode_2.strip rescue nil%><%if !ub04_otherprocdate_2.blank?%><%=ub04_otherprocdate_2.strip rescue nil%><%end%><%end%><%if !ub04_otherproccode_3.blank?%><%=ub04_otherproccode_3.strip rescue nil%><%if !ub04_otherprocdate_3.blank?%><%=ub04_otherprocdate_3.strip rescue nil%><%end%><%end%><%if !ub04_otherproccode_4.blank?%><%=ub04_otherproccode_4.strip rescue nil%><%if !ub04_otherprocdate_4.blank?%><%=ub04_otherprocdate_4.strip rescue nil%><%end%><%end%><%if !ub04_otherproccode_5.blank?%><%=ub04_otherproccode_5.strip rescue nil%><%if !ub04_otherprocdate_5.blank?%><%=ub04_otherprocdate_5.strip rescue nil%><%end%><%end%>~<% count=count+1%>
+<%end%>
+
+<%ub04.occurence_spans.each do |occurence_spans| %><%if !occurence_spans.blank?%><% if !occurence_spans.from_date1.blank? || !occurence_spans.through_date1.blank? || !occurence_spans.code1.blank? || !occurence_spans.from_date2.blank? || !occurence_spans.through_date2.blank? || !occurence_spans.code2.blank? %><%if !occurence_spans.code1.blank?%><% ub04_occ_code1= "*BI:"+occurence_spans.code1 %><%end%>
+<%if !occurence_spans.from_date1.blank? or !occurence_spans.through_date1.blank?%><% ub04_occ_fromdate_1= ":RD8:#{occurence_spans.from_date1.to_s.strip.slice(0,10).split('-').join}" "-#{occurence_spans.through_date1.to_s.strip.slice(0,10).split('-').join}"%><%end%>
+<%if !occurence_spans.code2.blank?%><% ub04_occ_code2= "*BI:"+occurence_spans.code2 %><%end%>
+<%if !occurence_spans.from_date2.blank? or !occurence_spans.through_date2.blank?%><%if !occurence_spans.from_date2.blank? or !occurence_spans.through_date2.blank?%><% ub04_occ_fromdate_2= ":RD8:#{occurence_spans.from_date2.to_s.strip.slice(0,10).split('-').join}" "-#{occurence_spans.through_date2.to_s.strip.slice(0,10).split('-').join}"%><%end%><%end%>
+<%if !occurence_spans.code1.blank? or !occurence_spans.from_date1.blank? or !occurence_spans.through_date1.blank?%>HI<%=ub04_occ_code1.strip rescue nil%><%if !occurence_spans.from_date1.blank? or !occurence_spans.through_date1.blank?%><%=ub04_occ_fromdate_1.strip rescue nil%><%end%><%end%><%if !occurence_spans.code2.blank? or !occurence_spans.from_date2.blank? or !occurence_spans.through_date2.blank?%><%=ub04_occ_code2.strip rescue nil%><%if !occurence_spans.from_date2.blank? or !occurence_spans.through_date2.blank?%><%=ub04_occ_fromdate_2.strip rescue nil%><%end%><%end%>~<% count=count+1%>
+<%end%><%end%><%end%>
+
+  <%ub04.occurences.each do |occurences| %><%if !occurences.blank?%><% if !occurences.code1.blank? || !occurences.date1.blank? || !occurences.code2.blank? || !occurences.date2.blank? || !occurences.code3.blank? || !occurences.date3.blank? || !occurences.code4.blank? || !occurences.date4.blank? %><%if !occurences.code1.blank?%><% ub04_occr_code1= "*BH:"+occurences.code1 %><%end%>
+<%if !occurences.date1.blank?%><% ub04_occr_date1= ":D8:#{occurences.date1.to_s.strip.slice(0,10).split('-').join}"%><%end%>
+<%if !occurences.code2.blank?%><% ub04_occr_code2= "*BH:"+occurences.code2 %><%end%>
+<%if !occurences.date2.blank?%><% ub04_occr_date2= ":D8:#{occurences.date2.to_s.strip.slice(0,10).split('-').join}"%><%end%>
+<%if !occurences.code3.blank?%><% ub04_occr_code3= "*BH:"+occurences.code3 %><%end%>
+<%if !occurences.date3.blank?%><% ub04_occr_date3= ":D8:#{occurences.date3.to_s.strip.slice(0,10).split('-').join}"%><%end%>
+<%if !occurences.code4.blank?%><% ub04_occr_code4= "*BH:"+occurences.code4 %><%end%>
+<%if !occurences.date4.blank?%><% ub04_occr_date4= ":D8:#{occurences.date4.to_s.strip.slice(0,10).split('-').join}"%><%end%>
+<%if !occurences.code1.blank? or !occurences.date1.blank?%>HI<%=ub04_occr_code1.strip rescue nil%><%if !occurences.date1.blank?%><%=ub04_occr_date1.strip rescue nil%><%end%><%end%><%if !occurences.code2.blank? or !occurences.date2.blank?%><%=ub04_occr_code2.strip rescue nil%><%if !occurences.date2.blank?%><%=ub04_occr_date2.strip rescue nil%><%end%><%end%><%if !occurences.code3.blank? or !occurences.date3.blank?%><%=ub04_occr_code3.strip rescue nil%><%if !occurences.date3.blank?%><%=ub04_occr_date3.strip rescue nil%><%end%><%end%><%if !occurences.code4.blank? or !occurences.date4.blank?%><%=ub04_occr_code4.strip rescue nil%><%if !occurences.date4.blank?%><%=ub04_occr_date4.strip rescue nil%><%end%><%end%>~<% count=count+1%>
+<%end%><%end%><%end%>
+
+<%ub04.value_codes.each do |value_codes| %><%if !value_codes.blank?%><% if !value_codes.amount1.blank? || !value_codes.code1.blank? || !value_codes.amount2.blank? || !value_codes.code2.blank? || !value_codes.amount3.blank? || !value_codes.code3.blank?%><%if !value_codes.code1.blank?%><% ub04_val_code1= "*BE:"+value_codes.code1 %><%end%>
+<%if !value_codes.amount1.blank?%><% ub04_val_amount1= ":::#{value_codes.amount1.to_s.strip.slice(0,10).split('-').join}"%><%end%>
+<%if !value_codes.code2.blank?%><% ub04_val_code2= "*BE:"+value_codes.code2 %><%end%>
+<%if !value_codes.amount2.blank?%><% ub04_val_amount2= ":::#{value_codes.amount2.to_s.strip.slice(0,10).split('-').join}"%><%end%>
+<%if !value_codes.code3.blank?%><% ub04_val_code3= "*BE:"+value_codes.code3 %><%end%>
+<%if !value_codes.amount3.blank?%><% ub04_val_amount3= ":::#{value_codes.amount3.to_s.strip.slice(0,10).split('-').join}"%><%end%>
+<%if !value_codes.code1.blank? or !value_codes.amount1.blank?%>HI<%=ub04_val_code1.strip rescue nil%><%if !value_codes.amount1.blank?%><%=ub04_val_amount1.strip rescue nil%><%end%><%end%><%if !value_codes.code2.blank? or !value_codes.amount2.blank?%><%=ub04_val_code2.strip rescue nil%><%if !value_codes.amount2.blank?%><%=ub04_val_amount2.strip rescue nil%><%end%><%end%><%if !value_codes.code3.blank? or !value_codes.amount3.blank?%><%=ub04_val_code3.strip rescue nil%><%if !value_codes.amount3.blank?%><%=ub04_val_amount3.strip rescue nil%><%end%><%end%>~<% count=count+1%>
+<%end%><%end%><%end%>
+
+
+<%if !ub04.condition_code1.blank?%><% ub04_cond_code1= "*BG:"+ub04.condition_code1 %><%end%>
+<%if !ub04.condition_code2.blank?%><% ub04_cond_code2= "*BG:"+ub04.condition_code2 %><%end%>
+<%if !ub04.condition_code3.blank?%><% ub04_cond_code3= "*BG:"+ub04.condition_code3 %><%end%>
+<%if !ub04.condition_code4.blank?%><% ub04_cond_code4= "*BG:"+ub04.condition_code4 %><%end%>
+<%if !ub04.condition_code5.blank?%><% ub04_cond_code5= "*BG:"+ub04.condition_code5 %><%end%>
+<%if !ub04.condition_code6.blank?%><% ub04_cond_code6= "*BG:"+ub04.condition_code6 %><%end%>
+<%if !ub04.condition_code7.blank?%><% ub04_cond_code7= "*BG:"+ub04.condition_code7 %><%end%>
+<%if !ub04.condition_code8.blank?%><% ub04_cond_code8= "*BG:"+ub04.condition_code8 %><%end%>
+<%if !ub04.condition_code9.blank?%><% ub04_cond_code9= "*BG:"+ub04.condition_code9 %><%end%>
+<%if !ub04.condition_code10.blank?%><% ub04_cond_code1= "*BG:"+ub04.condition_code10 %><%end%>
+<%if !ub04.condition_code11.blank?%><% ub04_cond_code1= "*BG:"+ub04.condition_code11 %><%end%>
+<%if !ub04.condition_code1.blank? or !ub04.condition_code2.blank? or !ub04.condition_code3.blank? or !ub04.condition_code4.blank? or !ub04.condition_code5.blank? or !ub04.condition_code6.blank? or !ub04.condition_code7.blank? or !ub04.condition_code8.blank? or !ub04.condition_code9.blank? or !ub04.condition_code10.blank? or !ub04.condition_code11.blank? %>
+<%if !ub04.condition_code1.blank?%>HI<%=ub04_cond_code1.strip rescue nil%><%end%><%if !ub04.condition_code2.blank?%><%=ub04_cond_code2.strip rescue nil%><%end%><%if !ub04.condition_code3.blank?%><%=ub04_cond_code3.strip rescue nil%><%end%><%if !ub04.condition_code4.blank?%><%=ub04_cond_code4.strip rescue nil%><%end%><%if !ub04.condition_code5.blank?%><%=ub04_cond_code5.strip rescue nil%><%end%><%if !ub04.condition_code6.blank?%><%=ub04_cond_code6.strip rescue nil%><%end%><%if !ub04.condition_code7.blank?%><%=ub04_cond_code7.strip rescue nil%><%end%><%if !ub04.condition_code8.blank?%><%=ub04_cond_code8.strip rescue nil%><%end%><%if !ub04.condition_code9.blank?%><%=ub04_cond_code9.strip rescue nil%><%end%><%if !ub04.condition_code10.blank?%><%=ub04_cond_code10.strip rescue nil%><%end%><%if !ub04.condition_code11.blank?%><%=ub04_cond_code11.strip rescue nil%><%end%>~<% count=count+1%><%end%>
+
+<% if !ub04.attending_provider_last_name.blank? or !ub04.attending_provider_first_name.blank? %>NM1*71*1*<% if !ub04.attending_provider_last_name.blank? %><%= ub04.attending_provider_last_name.strip.slice(0,35) rescue nil%><%else%>NOT PROVIDED<%end%>*<% if !ub04.attending_provider_first_name.blank? %><%= ub04.attending_provider_first_name.strip.slice(0,35) rescue nil%><%else%>NOT PROVIDED<%end%>*<%= ub04.attending_provider_first_name.strip.split(' ')[1] rescue nil%>**<%if !ub04.attending_npi.blank?%>*XX*<%= ub04.attending_npi.to_s.strip rescue nil%><%end%>~<% count=count+1%><%end%>
+<% if !ub04.attending_qual.blank? or !ub04.attendingid.blank? %>REF*<% if !ub04.attending_qual.blank? %><%= ub04.attending_qual rescue nil%>*<%else%>G2*<%end%><% if !ub04.attendingid.blank? %><%= ub04.attendingid rescue nil%><%end%>~<% count=count+1%><%end%>
+<% if !ub04.operating_provider_last_name.blank? or !ub04.operating_provider_first_name.blank? %>NM1*72*1*<% if !ub04.operating_provider_last_name.blank? %><%= ub04.operating_provider_last_name.strip.slice(0,35) rescue nil%><%else%>NOT PROVIDED<%end%>*<% if !ub04.operating_provider_first_name.blank? %><%= ub04.operating_provider_first_name.strip.slice(0,35) rescue nil%><%else%>NOT PROVIDED<%end%>*<%= ub04.operating_provider_first_name.strip.split(' ')[1] rescue nil%>**<%if !ub04.operating_npi.blank?%>*XX*<%= ub04.operating_npi.to_s.strip rescue nil%><%end%>~<% count=count+1%><%end%>
+<% if !ub04.operating_qual.blank? or !ub04.operatingid.blank? %>REF*<% if !ub04.operating_qual.blank? %><%= ub04.operating_qual rescue nil%>*<%else%>G2*<%end%><% if !ub04.operatingid.blank? %><%= ub04.operatingid rescue nil%><%end%>~<% count=count+1%><%end%>
+<% if !ub04.other_provider_last_name1.blank? or !ub04.other_provider_first_name1.blank? %>NM1*73*1*<% if !ub04.other_provider_last_name1.blank? %><%= ub04.other_provider_last_name1.strip.slice(0,35) rescue nil%><%else%>NOT PROVIDED<%end%>*<% if !ub04.other_provider_first_name1.blank? %><%= ub04.other_provider_first_name1.strip.slice(0,35) rescue nil%><%else%>NOT PROVIDED<%end%>*<%= ub04.other_provider_first_name1.strip.split(' ')[1] rescue nil%>**<%if !ub04.other_npi1.blank?%>*XX*<%= ub04.other_npi1.to_s.strip rescue nil%><%end%>~<% count=count+1%><%end%>
+<%if !ub04.other_qual1.blank? or !ub04.otherid1.blank?%>REF*<% if !ub04.other_qual1.blank? %><%= ub04.other_qual1 rescue nil%>*<%else%>G2*<%end%><% if !ub04.otherid1.blank? %><%= ub04.otherid1 rescue nil%><%end%>~<% count=count+1%><%end%>
+
+<%size =ub04.ub04payers.size%>
+<%if size >= 2%><%ub04.ub04payers[1..size].each do |ub04payers| %>SBR*S*<%if !ub04payers.blank?%><%if !ub04payers.patient_relationship.blank?%><%if ub04payers.patient_relationship== '18' %><%= ub04payers.patient_relationship %><%end%><%end%><%if !ub04payers.group_no.blank?%>*<%= ub04payers.group_no %><%end%><%if !ub04payers.group_name.blank?%>*<%= ub04payers.group_name %><%end%>~<% count=count+1%><%end%>
+<%if !ub04payers.blank?%><%if !ub04payers.insured_last_name.blank? or !ub04payers.insured_first_name.blank? or !ub04payers.insured_id.blank? %>NM1*IL*1*<%if !ub04payers.insured_last_name.blank? %><%= ub04payers.insured_last_name.strip.slice(0,35) rescue nil%><%else%>NOT PROVIDED<%end%>*<%if !ub04payers.insured_first_name.blank? %><%= ub04payers.insured_first_name.strip.slice(0,25) rescue nil%><%else%>NOT PROVIDED<%end%>*<%if !ub04payers.insured_middle_initial.blank? %><%= ub04payers.insured_middle_initial.strip %><%end%><%if !ub04payers.insured_id.blank? %>**<%end%><%if !ub04payers.insured_id.blank? %>*MI*<%= ub04payers.insured_id.strip rescue nil%><%end%>~<% count=count+1%><%end%><%end%>
+<%if !ub04payers.blank?%><%if !ub04payers.name.blank?%>NM1*PR*2*<%=ub04payers.name.strip.slice(0,35) rescue nil%><% if !ub04payers.health_planid.blank? %>*****PI*<%=ub04payers.health_planid.strip rescue nil%><%end%>~<% count=count+1%><%end%><%end%>
+<%if !ub04payers.group_no.blank?%>REF*IG*<%= ub04payers.group_no rescue nil%>~<%count = count + 1%><%end%><%end%>
+<%end%>
+
+<% if @cmsservicelines %> <%k1=0%><% for j in 0 .. @cmsservicelines.length-1%><%cms_service_days_units=""%>
+<% if !@cmsservicelines[j].hipps_codes.blank? %>  <% hipps_codes=":"+@cmsservicelines[j].hipps_codes%> <%end%>
+<%if !@cmsservicelines[j].charges.blank? %> <% charges=":"+@cmsservicelines[j].charges.to_s%> <%end%>
+<%if !@cmsservicelines[j].service_units.blank?%> <% service_units=":"+@cmsservicelines[j].service_units.to_s%> <%end%>
+<%if !@cmsservicelines[j].rates.blank? %> <% rates=":"+@cmsservicelines[j].rates.to_s%> <%end%>
+<%if !@cmsservicelines[j].modifier.blank? %> <% modifier=":" + @cmsservicelines[j].modifier.to_s %><% end %>
+<% if !@cmsservicelines[j].non_covered_charges.blank? %> <% non_covered_charges=@cmsservicelines[j].non_covered_charges%> <%end%>
+<% if !@cmsservicelines[j].rev_code.blank? %> <% rev_code=@cmsservicelines[j].rev_code%> <%end%>
+<%if !@cmsservicelines[j].charges.blank?%><% total_service_line_charge = @cmsservicelines[j].charges.to_s %> <% total_service_line_decimal=total_service_line_charge.split(".") %> <% if total_service_line_decimal[1]== "00" or total_service_line_decimal[1]== "0" %> <% total_service_line_charge=total_service_line_decimal[0]%> <% end%><%end%>
+<%if !@cmsservicelines[j].rev_code.blank?or !@cmsservicelines[j].service_units.blank? or !@cmsservicelines[j].charges.blank? %>
+LX*<%=j+1%>~<%count=count+1%>
+SV2*<% if !@cmsservicelines[j].rev_code.blank? %><%= @cmsservicelines[j].rev_code.strip rescue nil%><%end%>*<%if !@cmsservicelines[j].hcpcs.blank?%>HC:<%= @cmsservicelines[j].hcpcs.strip rescue nil%><%if !@cmsservicelines[j].modifier.blank? %>:<%= @cmsservicelines[j].modifier.strip rescue nil %><% end %><%if !@cmsservicelines[j].modifier2.blank? %>:<%= @cmsservicelines[j].modifier2.strip rescue nil %><% end %><%if !@cmsservicelines[j].modifier3.blank? %>:<%= @cmsservicelines[j].modifier3.strip rescue nil %><% end %><%if !@cmsservicelines[j].modifier4.blank? %>:<%= @cmsservicelines[j].modifier4.strip rescue nil %><% end %><%end%>*<%if !@cmsservicelines[j].charges.blank?%><%= sprintf("%#.2f",@cmsservicelines[j].charges) rescue nil%><%end%>*UN*<%if !@cmsservicelines[j].service_units.blank?%><%= @cmsservicelines[j].service_units.to_s.strip rescue nil%><%end%>~<%count=count+1%>
+<% if !@cmsservicelines[j].service_date.blank? %>DTP*472*D8<% if @cmsservicelines[j].service_date.to_s!="" %>*<% if @cmsservicelines[j].service_date.strftime("%Y%m%d").to_s!="" %><%= @cmsservicelines[j].service_date.strftime("%Y%m%d").to_s.strip rescue nil%><%end%><%end%>~<%count=count+1%><%end%>
+<%end%>
+<%end%>
+<% end %>
+SE*<%= count+1%>*<%= sprintf("%04d",offset + i + 1) %>~<% end %>
+GE*<%= @cms1500s.length %>*2831~
+IEA*1*<%= sprintf("%09d",id_837)%>~

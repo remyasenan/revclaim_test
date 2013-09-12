@@ -1,0 +1,56 @@
+<div id="login_main">
+  <h1>Editing user</h1>
+  <%= errors_for(@remittor) %>
+  <%= form_for :remittor,:url =>:admin_remittor,:method => 'put', :id => @remittor, :page => @page, :pass => @password do %>
+    <table>
+      <tr>
+        <td style="width: 278px"><label for="user_name">Name</label></td><td><%= text_field 'remittor', 'name',:class => 'black_text' %></td>
+      </tr>
+      <tr>
+        <td><label for="user_userid">User ID</label></td><td><%= text_field 'remittor', 'login',:class => 'black_text' %></td>
+      </tr>
+      <tr>
+        <td><label for="user_email">Email</label></td><td><%= text_field 'remittor', 'email',:class => 'black_text' %></td>
+      </tr>
+      <tr>
+        <td><label for="user_password">Password</label></td><td><%= password_field 'remittor', 'password',:class => 'black_text' %></td>
+      </tr>
+      <tr>
+        <td><label for="user_password_confirmation">Confirm Password</label></td><td><%= password_field 'remittor', 'password_confirmation',:class => 'black_text' %></td>
+      </tr>
+
+      <tr>
+        <td><label for="user_shift">Shift</label></td><td><%= select_tag 'shift', options_for_select(@shifts, @selected),:class => 'black_text' %></td>
+      </tr>
+      <tr>
+        <td><label for="user_role">Role</label></td><td><%o = 0
+          unless @roles.blank?
+            @roles.each do |role| %>
+              <%o = o+1%>
+
+              | <%=role%><label for="o<%= o %>"><input id="o<%= o %>" name="role[id][]" type="checkbox" value= "<%=role%>"  onclick="choose_facility(id)";
+                                                       <%= "checked" if !@role_array.nil? &&  @role_array.include?(role) %>  >
+              </label>
+            <% end %>
+          <% end %>
+        </td>
+      </tr>
+
+
+      <tr>
+        <td><label for="user_accuracy"> Accuracy %</label></td><td><%= text_field 'user', 'field_accuracy',:class => 'black_text' %></td>
+      </tr>
+      <tr>
+        <td><label for="user_total_eobs">Total Claims</label></td><td><%= text_field 'user', 'total_eobs',:class => 'black_text' %></td>
+      </tr>
+      <tr>
+        <td><label for="user_rejected_eobs">Rejected Claims</label></td><td><%= text_field 'user', 'rejected_eobs',:class => 'black_text' %></td>
+      </tr>
+    </table>
+    <%= set_focus 'user_name' %>
+    <%= submit_tag 'Edit', :class => 'button' %>
+  <% end %>
+
+  <br/>
+  <%= link_to image_tag("arrow_undo.png", :alt => "Back"), :action => 'list', :page => @page %>
+</div>

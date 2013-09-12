@@ -1,0 +1,56 @@
+<div id="login_main">
+<h1>Payer Groups Administration</h1>
+<%= link_to 'New Payergroup', :action => :new %>
+<% unless @shifts.blank? %>
+
+  <div class="light_info">
+    <% form_tag :action => 'list' do %>
+      <%= select_tag 'criteria', optionize('PayerGroupName')%>
+      <%= select_tag 'compare', optionize('=')%>
+      <%= text_field_tag 'to_find', nil, :size => '10' %>
+      <%= submit_tag 'Filter', :class => 'button' %>
+    <% end%>
+    <%= set_focus 'to_find' %>
+  </div>
+  <% form_tag :action => 'payergroupmanage', :id => @payers_to_delete do %>
+    <% pagination = create_pagination(@payergroup_pages,'payergroup',params[:page]) %>
+    <%= pagination %>
+    <table>
+      <tr>
+  
+      <th>Group Name</th>
+      <th>TL Allocation Status</th>
+      <th><input type="checkbox" name="all" onClick="checkAll(document.forms[1].toggle,this)"></th>
+  
+      <tr>
+      <% for shift in @shifts %>
+        <tr>
+          <% shift.id%>
+          <td><%= shift.payergroupname%></td>
+          <% if TeamLeaderQueue.find_by_payer_group_id(shift.id).blank?%>
+            <td> New </td>
+          <% else %>
+            <%  user1= TeamLeaderQueue.find_by_payer_group_id(shift.id).tlusername %>
+            <%user=User.find_by_id(user1).name%>
+            <td><%="TL allocated    | " +user  %> </td>
+          <%end%>
+          <td><%= check_box :payers_to_delete, shift.id, :id => 'toggle' %></td>
+          <td><%= link_to image_tag('report_edit.png', :alt => 'Edit',:border=>"0"), :action => 'edit', :id => shift %></td>
+          <td></td>
+          <td><%= link_to image_tag('delete.png', :alt => 'Delete',:border=>"0"), {:action => 'dest', :id => shift}, :confirm => "Deleting #{shift.payergroupname} Payergroup. Are you sure?" %></td>
+          <td></td>
+        </tr>
+      <% end %>
+    </table>
+    <%= pagination %>
+    <br/>
+    <%= submit_tag "Manage Payer", :class => 'button', :name => "option1" %>
+
+    <%= submit_tag "Allocate TL", :class => 'button', :name => "option1" %>
+    <%= submit_tag "Deallocate TL", :class => 'button', :name => "option1" %>
+
+  <% end %>
+<%else%>
+  <h4> No Payer Group found. </h4>
+<% end %>
+</div>

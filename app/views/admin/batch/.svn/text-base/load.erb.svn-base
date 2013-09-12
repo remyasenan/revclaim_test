@@ -1,0 +1,26 @@
+<div id="login_main">
+  <div style="width:100%">
+    <div id="innercontent">
+      <div style="min-height:450px;width:100%; margin-left:20px; margin-top:20px;">
+        <%= form_tag({:action => 'loadFile',:method => "post"}, :multipart=> true) do %>
+  <%#= form_tag({:action => 'loadFile'}, :multipart => true) do %>
+          <div><h1>Batch Upload</h1></div>
+          <p>
+            <label for="facilities_names">
+              Select a  Facility:
+            </label>
+            <%= select(:facility, :id, ["Select"].concat(@facilities)) %>
+          </p>
+          <p>
+            <label for="zip_file" style="vertical-align:text-top">
+              Select a zip file
+            </label>
+            <%= file_field 'upload', 'file', 'accept' => 'application/zip'%>
+          </p>
+          <%= submit_tag "Upload"%>
+        <%end %>
+
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,209 @@
+<% unless @user.nil? %>
+
+  <div id="main_title">
+    <div id="title_container">                </div>
+    <div id="userbox" >
+
+      <div class="t"><div class="b"><div class="l"><div class="r"><div class="bl"><div class="br"><div class="tl">
+                    <div class="tr"><div id='eob'>
+                        Logged in as<strong class="black_text"> <%= @user.login %></strong> (<%= @rol[0].name%>)<br/>
+                        <%if @rol[0].name != 'Supervisor' and @rol[0].name != 'HLSC' and @rol[0].name != 'admin' %>
+                          <%#= link_to("View Claim Count",
+                            :update => 'eob',
+                            :remote => true,
+                            :loaded => "new Effect.BlindDown('eob')",
+                            :url => { :action => :eob_count }) %>
+                         <%= link_to("View Claim Count",{
+                            :controller => "sessions",
+                            :action => :eob_count,
+                           :method => :get},:remote => true) %>
+
+                        <br/>
+                        <% end %>
+
+                      <%= link_to "Change Password", :action => "change_password" %></div>
+                    </div></div></div></div></div></div></div></div>
+    </div>
+
+  </div>
+
+  <div style="width:900px">
+    <div id="innercontent" >
+      <% case @rol[0].name
+
+      when 'Supervisor', 'admin' %>
+
+        <p><strong class="sub_title" >Supervisor Tasks</strong><br/></p>
+
+        <div class="roundcont">
+          <div class="roundtop"><span class="sec_title">Administration</span></div>
+          <ul  class="bullet_links">
+            
+            <li> <%= link_to 'User Administration', :controller => 'admin/remittors',:action =>"list" %> </li>
+            <li> <%= link_to 'Client Administration', :controller => 'admin/client',:action =>"index" %> </li>
+            <li> <%= link_to 'Facility Administration', :controller => 'admin/facility',:action =>"index" %> </li>
+           
+
+          </ul>
+
+          <div class="roundbottom">
+            <img src="/assets/bl.gif" alt=""
+                 width="10" height="9" class="corner"
+                 style="display: none;" />						</div>
+        </div>
+        <div class="roundcont1">
+          <div class="roundtop"><span class="sec_title">Batch</span>	</div>
+          <ul class="bullet_links">
+
+            <li> <%= link_to 'Batch Allocation', :controller => 'admin/batch', :action => 'allocate' %> </li>
+            <li> <%= link_to 'Batch Loading', :controller => 'admin/batch', :action => 'load' %> </li>
+
+          </ul>
+          <div class="roundbottom">
+            <img src="/assets/bl.gif" alt=""
+                 width="10" height="9" class="corner"
+                 style="display: none;" />	  </div>
+
+
+          <div class="ans">	</div>
+          <ul class="bullet_links">
+            <li> <%= link_to 'Completed Batches ',:controller => 'hlsc', :action => 'batch_status' %> </li>
+            <li> <%= link_to 'Allocated Batches ', :controller => 'hlsc', :action => 'unprocessed_batches' %> </li>
+            <li> <%= link_to 'Incomplete Batches', :controller => 'admin/batch',:action=>"batchlist" %> </li>
+            <li> <%= link_to '837 & XML Ready Batches', :controller => 'admin/batch',:action=>"output_batch" %> </li>
+            <li> <%= link_to 'Archived Batches', :controller => 'admin/batch',:action=>"archive_batch" %> </li>
+
+          </ul>
+          <div class="roundbottom">
+            <img src="/assets/bl.gif" alt=""
+                 width="10" height="9" class="corner"
+                 style="display: none;" />	  </div>
+
+        </div>
+
+
+        <div class="roundcont2">
+          <div class="roundtop"><span class="sec_title">Reports</span>	</div>
+          <ul class="bullet_links">
+            <li> <%= link_to 'Processor Report', :controller => 'admin/remittors', :action => 'joblist' %> </li>
+             <li> <%= link_to 'View Online Processors', :controller => 'admin/remittors', :action => 'list_processor_occupancy' %> </li>
+            <li> <%= link_to 'Download Output', :controller => 'admin/download_output', :action => 'index' %> </li>
+          </ul>
+          <div class="roundbottom">
+            <img src="/assets/bl.gif" alt=""
+                 width="10" height="9" class="corner"
+                 style="display: none;" />	  </div>
+        </div>
+
+
+
+
+      <% when 'Processor', 'TL'%>
+        <div id="inner_content" >
+          <div class="roundcont2">
+            <div class="roundtop"><span class="sec_title">Task</span>	</div>
+            <ul class="bullet_links">
+                
+              <li> <%= link_to 'Uploaded Documents', :controller => 'admin/document', :action => 'add_view_docs' %></li>
+              <li> <%= link_to 'View Payers information', :controller => 'admin/payer', :action => 'list' %> </li>
+              <% if @rol[0].name == 'TL'%>
+                <li> <%= link_to 'View Members', :controller => 'admin/user', :action => 'list_members' %> </li>
+                <li> <%= link_to 'Incomplete Batches ', :controller => 'hlsc', :action => 'unprocessed_batches' %> </li>
+              <% end %>
+            </ul>
+
+            <% if @rol[0].name == 'TL'%>
+              <h3><span class="sec_title"> &nbsp; &nbsp; TL Jobs</span></h3>
+            <% elsif @rol[0].name == 'Processor'%>
+              <h3> <span class="sec_title"> &nbsp; &nbsp; Processor Jobs </span></h3>
+            <% end %>
+            <ul  class="bullet_links">
+              <% if  @rol[0].name == 'TL'%>
+              <li> <%= link_to 'Payer Group Allocation ', :controller => 'admin/payergroup', :action => 'tlworkque',:id=>@user.id %></li>
+                <% end %>
+                <% if  @rol[0].name ==  'Processor'%>
+                <li> <%= link_to 'My Tasks', :controller => 'processor',:action=> 'my_job', :allocation_status => "1" %> </li>
+              <% end %>
+
+            </ul>
+
+            <div class="roundbottom">
+              <img src="/assets/bl.gif" alt=""
+                   width="10" height="9" class="corner"
+                   style="display: none;" />	  </div>
+          </div>
+
+        </div>
+
+
+
+
+      <% when 'Super QA'%>
+
+        <div id="inner_content" >
+          <div class="roundcont2">
+            <div class="roundtop"><span class="sec_title">Super QA Jobs</span>	</div>
+            <ul class="bullet_links">
+              <li> <%= link_to 'My Tasks', :controller => 'sqa/my_job' %> </li>
+            </ul>
+
+            <div class="roundbottom">
+              <img src="/assets/bl.gif" alt=""
+                   width="10" height="9" class="corner"
+                   style="display: none;" />	  </div>
+          </div>
+
+        </div>
+
+
+
+      <% when 'QA'%>
+        <div id="inner_content" >
+          <div class="roundcont2">
+            <div class="roundtop"><span class="sec_title">QA </span>	</div>
+            <ul class="bullet_links">
+              <li> <%= link_to 'Uploaded Documents', :controller => 'admin/document', :action => 'add_view_docs' %> </li>
+              <li> <%= link_to 'View Online Processors', :controller => 'admin/remittors', :action => 'list_processor_occupancy' %> </li>
+              <li> <%= link_to 'View Payers information', :controller => 'admin/payer', :action => 'list' %> </li>
+
+            </ul>
+
+            <h3> <span class="sec_title"> &nbsp; &nbsp; QA Jobs </span></h3>
+            <ul class="bullet_links">
+              <li> <%= link_to 'My Tasks', :controller => 'qa/my_job' %> </li>
+            </ul>
+            <div class="roundbottom">
+              <img src="/assets/bl.gif" alt=""
+                   width="10" height="9" class="corner"
+                   style="display: none;" />	  </div>
+          </div>
+
+        </div>
+
+      <% when 'HLSC' %>
+        <div id="inner_content" >
+          <div class="roundcont2">
+            <div class="roundtop"><span class="sec_title">HLSC Task  </span>	</div>
+            <ul class="bullet_links">
+               <li> <%= link_to 'View Online Processors', :controller => 'admin/remittors', :action => 'list_processor_occupancy' %> </li>
+              <li> <%= link_to 'Completed Batches ',:controller => 'hlsc', :action => 'batch_status' %> </li>
+              <li> <%= link_to 'Incomplete Batches ', :controller => 'hlsc', :action => 'unprocessed_batches' %> </li>
+              <li> <%= link_to 'Completed Batches Report ', :controller => 'hlsc', :action => 'completed_batches_report' %> </li>
+              <li> <%= link_to 'Completed Jobs ',:controller => 'hlsc', :action => 'batchlist' %> </li>
+            </ul>
+            <div class="roundbottom">
+              <img src="/assets/bl.gif" alt=""
+                   width="10" height="9" class="corner"
+                   style="display: none;" />	  </div>
+          </div>
+        </div>
+      <% else %>
+        <div class="info">
+          Invalid User Role. Should never happen, file a bug report.
+        </div>
+      <% end %>
+
+    <% end %>
+
+  </div>
+</div>

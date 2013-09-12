@@ -1,0 +1,10 @@
+<h1>Edit Settings</h1>
+<%= error_messages_for 'sqa_job_setting' %>
+
+<% form_tag :action => 'update_settings', :id => @sqa_job_setting do %>
+<table>
+  <tr><th>Per Page</th><td><%= text_field 'sqa_job_setting' %></td></tr>
+  
+</table>
+<%= submit_tag 'Update', :class => 'button' %>
+<% end %>

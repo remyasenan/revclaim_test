@@ -1,0 +1,18 @@
+<h1>Listing cpt_codes</h1>
+
+<table>
+  <tr>
+  </tr>
+
+<% for cpt_code in @cpt_codes %>
+  <tr>
+    <td><%= link_to 'Show', cpt_code %></td>
+    <td><%= link_to 'Edit', edit_cpt_code_path(cpt_code) %></td>
+    <td><%= link_to 'Destroy', cpt_code, :confirm => 'Are you sure?', :method => :delete %></td>
+  </tr>
+<% end %>
+</table>
+
+<br />
+
+<%= link_to 'New cpt_code', new_cpt_code_path %>

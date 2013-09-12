@@ -1,0 +1,78 @@
+<h1>Listing payers</h1>
+
+<% if @user.role == 'Processor' %>		
+	<div class="light_info">
+		<%= link_to 'New payer', :action => 'new'  %>
+  </div>
+<% end %>
+
+
+<% if @payers.size > 0 %>
+<div class="light_info">
+  <% form_tag :action => 'listpayer' do %>
+    <%= select_tag 'criteria', optionize('Payer Id','Gateway', 'Payer', 'Address-1','Address-2','Address-3','Address-4') %> 
+    <%= select_tag 'compare', optionize('=','>=', '<=')%>
+    <%= text_field_tag 'to_find', nil, :size => '10' %>
+    <%= submit_tag 'Filter', :class => 'button' %>
+  <% end  %>
+  <%= set_focus 'to_find' %>
+</div>
+<% end %>
+
+<% unless @payers.empty? %>
+  
+ <% form_tag :action => 'addtolist', :id => @payers_to_delete,:id1=>@t do %>
+ <% pagination = create_pagination(@payer_pages,'payergroup',params[:page]) %>
+ <%= pagination %>
+<table>
+  <tr>
+		<!-- <th>Date Added</th>
+		<th>Initials</th>
+		<th>From</th> -->
+		
+		<th>Gateway</th>
+		<th>Payer ID</th>
+		<th>Payer</th>
+		
+		<th>GR Name</th>
+		
+		<th>Address One</th>
+		<th>Address Two</th>
+		<th>Address Three</th>
+		<th>Address Four</th>
+		<% if @user.role == 'Supervisor' or @user.role == 'Admin'%>
+		<th><input type="checkbox" name="all" onClick="checkAll(document.forms[1].toggle,this)"></th></tr>
+		<% end %>
+	<!--	<th>Phone</th> -->
+<% for payer in @payers %>
+  <tr>
+		
+		<td><%= payer.gateway %></td>
+		<td><%= payer.payid %></td>
+		<td><%= payer.payer %></td>
+		<td><%= payer.gr_name %></td>
+		<td><%= payer.pay_address_one %></td>
+		<td><%= payer.pay_address_two %></td>
+		<td><%= payer.pay_address_three %></td>
+		<td><%= payer.pay_address_four%></td>
+<% if @user.role == 'Supervisor' or @user.role == 'Admin'%>		
+    <td><%= check_box :payers_to_delete, payer.id, :id => 'toggle' %> </td>
+   
+<% end %>
+  </tr>
+<% end %>
+</table>
+
+ <%= pagination %>
+
+ <br/>
+<% if @user.role == 'Supervisor' or @user.role == 'Admin'%>		
+  <%= submit_tag 'Add to Payer Group', :class => 'button' if @payers.size > 0 %>
+<% end %>
+	 <% end %>	
+<% else %>
+
+  <h4> No Payers found. Click 'New Payer' to create one. </h4>
+<% end %>
+
+

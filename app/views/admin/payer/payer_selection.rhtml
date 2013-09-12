@@ -1,0 +1,46 @@
+<h1>Listing payers</h1>
+
+<% if @payers.size > 0 %>
+<div class="light_info">
+  <% form_tag :action => 'payer_selection' do %>
+    <%= select_tag 'criteria', optionize('Gateway', 'Payer Id', 'Payer', 'Address-1','Address-2','Address-3','Address-4') %> 
+    <%= select_tag 'compare', optionize('=','>=', '<=')%>
+    <%= text_field_tag 'to_find', nil, :size => '10' %>
+    <%= submit_tag 'Filter', :class => 'button' %>
+  <% end %>
+</div>
+<% end %>
+
+<% unless @payers.empty? %>
+ <% pagination = create_pagination(@payer_pages,'payer',params[:page]) %>
+ <%= pagination %>
+<table>
+  <tr>
+    <th>Select</th>
+		<th>Gateway</th>
+		<th>Payer ID</th>
+		<th>Payer</th>
+		<th>GR Name</th>
+		<th>Address One</th>
+		<th>Address Two</th>
+		<th>Address Three</th>
+		<th>Address Four</th>
+<% for payer in @payers %>
+  <tr>
+    <td><%= link_to 'Select', :action => 'assign_payer', :id => payer, :job => @job %></td>
+		<td><%= payer.gateway %></td>
+		<td><%= payer.payid %></td>
+		<td><%= payer.payer %></td>
+		<td><%= payer.gr_name %></td>
+		<td><%= payer.pay_address_one %></td>
+		<td><%= payer.pay_address_two %></td>
+		<td><%= payer.pay_address_three %></td>
+		<td><%= payer.pay_address_four%></td>
+  </tr>
+<% end %>
+</table>
+ <%= pagination %>
+ <br/>
+<% else %>
+  <h4> No Payers found.</h4>
+<% end %>

@@ -1,0 +1,57 @@
+# == Schema Information
+# Schema version: 69
+#
+# Table name: facilities
+#
+#  id        :integer(11)   not null, primary key
+#  name      :string(255)   
+#  client_id :integer(11)   
+#  sitecode  :string(255)   
+#
+
+# == Schema Information
+# Schema version: 65
+#
+# Table name: facilities
+#
+#  id        :integer(11)   not null, primary key
+#  name      :string(255)   
+#  client_id :integer(11)   
+#  sitecode  :string(255)   
+#
+
+facility1:
+    id:             1
+    name:           "Apria - Carolinas"
+    client_id:      1
+    sitecode:       00811
+
+facility2:
+    id:             2
+    name:           "Apria - Home Medical"
+    client_id:      1
+    sitecode:       00823
+    
+facility3:
+    id:             3
+    name:           "Apria - Minster"
+    client_id:      1
+    sitecode:       00807
+    
+facility4:
+    id:             4
+    name:           "Apria - Plains"
+    client_id:      1
+    sitecode:       00802
+
+facility5:
+    id:             5
+    name:           "Triad-Facility"
+    client_id:      3
+    sitecode:       00802
+
+facility890:
+    id: 6
+    name: "TBD"
+    client_id: 3
+    sitecode: "890"

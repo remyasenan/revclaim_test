@@ -1,0 +1,31 @@
+# == Schema Information
+# Schema version: 69
+#
+# Table name: payers
+#
+#  id                :integer(11)   not null, primary key
+#  date_added        :date          
+#  initials          :string(255)   
+#  from              :string(255)   
+#  gateway           :string(255)   
+#  payid             :string(255)   
+#  payer             :string(255)   
+#  gr_name           :string(255)   
+#  pay_address_one   :text          
+#  pay_address_two   :text          
+#  pay_address_three :text          
+#  pay_address_four  :text          
+#  phone             :string(255)   
+#
+
+first:
+  id:         1
+  gateway:    'gateway1'
+  payid:      '1'
+  payer:      'anand'
+  
+another:
+  id:         2
+  gateway:    'gateway2'
+  payid:      '2'
+  payer:      'karu'

@@ -1,0 +1,66 @@
+<head>
+  <%#= javascript_include_tag "sorttable"%>
+</head>
+<div id="login_main">
+  <% job = Job.find(@jobs[0].to_i) %>
+  <h1>Select Processor</h1>
+
+  <% unless @users.empty? %>
+    <table class="sortable" id="job_processor">
+      <tr>
+        <% if @site_settings.show_userid == true %>
+          <th>User Name</th>
+          <th>User ID</th>
+        <% end %>
+        <th>Shift</th>
+        <th>Remark</th>
+        <th>Accuracy(%)</th>
+        <th>Jobs Allocated</th>
+        <th>Rating (T/P/C | Others)</th>
+        <% if not @payer.nil? %>
+          <th>Experience with <%= @payer.payer %></th>
+        <% end %>
+        
+      </tr>
+    
+      <%  @users.each do |user| %>
+        <tr>
+          <% if @site_settings.show_userid == true %>
+            <td>
+              <% unless user.nil? %>
+                  <%= user.name %>
+              <% else %>
+                None
+              <% end %>
+            </td>
+            <td><%= user.login %></td>
+          <% end %>
+          <td><%= user.shift.name %></td>
+          <td>&nbsp;<%= user.remark %></td>
+          <td><%= format_percentage(user.field_accuracy) %> | <%= format_percentage(user.eob_accuracy) %></td>
+          <td align='right'>  <%= user.allocated_jobs_proc.size %></td>
+          <td align='center'><%= user.processing_rate_triad %> | <%= user.processing_rate_others %></td>
+          <% if not @payer.nil? %>
+            <td><% experience = UserPayerJobHistory.find_by_payer_id_and_user_id(@payer.id,user.id) %>
+              <% if experience.nil? %>0<% else %><%= experience.job_count %><% end %>
+            </td>
+          <% end %>
+    
+          
+          <td><%= link_to 'Allocate Processor', :action => 'assign', :jobs => @jobs,:user => user, :page => params[:page], :back_page => params[:back_page], :payer => params[:payer], :from => params[:from] %></td>
+        </tr>
+      <% end %>
+    </table>
+  <% else  %>
+    <h4> No Processor created/online.</h4>
+  <% end %>
+
+<%  if params[:from] == 'payer' %>
+           <%= link_to image_tag("arrow_undo.png", :alt => "Back",:border=>"0"), :action => 'allocate_payer_jobs' ,:back_page=>params[:back_page], :payer => params[:payer] %>
+<% elsif params[:from] == 'user' %>
+           <%= link_to image_tag("arrow_undo.png", :alt => "Back",:border=>"0"), :action => 'user_jobs', :back_page=>params[:back_page], :user => params[:jobs_of_user] %>
+<% else %>
+
+           <%= link_to image_tag("arrow_undo.png", :alt => "Back"),:page => params[:page],:controller => '/admin/batch', :action => 'allocate' %>
+<% end %>
+</div>

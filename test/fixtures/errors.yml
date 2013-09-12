@@ -1,0 +1,17 @@
+# == Schema Information
+# Schema version: 65
+#
+# Table name: errors
+#
+#  id                :integer(11)   not null, primary key
+#  processor_id      :integer(11)   
+#  qa_id             :integer(11)   
+#  job_id            :integer(11)   
+#  time_of_rejection :datetime      
+#
+
+# Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
+first:
+  id: 1
+another:
+  id: 2

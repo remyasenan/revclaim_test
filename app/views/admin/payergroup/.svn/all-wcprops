@@ -1,0 +1,65 @@
+K 25
+svn:wc:ra_dav:version-url
+V 66
+/revenuemed/revclaim/!svn/ver/879/trunk/app/views/admin/payergroup
+END
+edit.html.erb
+K 25
+svn:wc:ra_dav:version-url
+V 80
+/revenuemed/revclaim/!svn/ver/879/trunk/app/views/admin/payergroup/edit.html.erb
+END
+jobfind.rhtml
+K 25
+svn:wc:ra_dav:version-url
+V 80
+/revenuemed/revclaim/!svn/ver/879/trunk/app/views/admin/payergroup/jobfind.rhtml
+END
+addtl.html.erb
+K 25
+svn:wc:ra_dav:version-url
+V 81
+/revenuemed/revclaim/!svn/ver/879/trunk/app/views/admin/payergroup/addtl.html.erb
+END
+tlworkque.rhtml
+K 25
+svn:wc:ra_dav:version-url
+V 82
+/revenuemed/revclaim/!svn/ver/879/trunk/app/views/admin/payergroup/tlworkque.rhtml
+END
+new.html.erb
+K 25
+svn:wc:ra_dav:version-url
+V 79
+/revenuemed/revclaim/!svn/ver/879/trunk/app/views/admin/payergroup/new.html.erb
+END
+list.html.erb
+K 25
+svn:wc:ra_dav:version-url
+V 80
+/revenuemed/revclaim/!svn/ver/879/trunk/app/views/admin/payergroup/list.html.erb
+END
+viewpayer.html.erb
+K 25
+svn:wc:ra_dav:version-url
+V 85
+/revenuemed/revclaim/!svn/ver/879/trunk/app/views/admin/payergroup/viewpayer.html.erb
+END
+listpayer.html.erb
+K 25
+svn:wc:ra_dav:version-url
+V 85
+/revenuemed/revclaim/!svn/ver/879/trunk/app/views/admin/payergroup/listpayer.html.erb
+END
+_form.rhtml
+K 25
+svn:wc:ra_dav:version-url
+V 78
+/revenuemed/revclaim/!svn/ver/879/trunk/app/views/admin/payergroup/_form.rhtml
+END
+show.html.erb
+K 25
+svn:wc:ra_dav:version-url
+V 80
+/revenuemed/revclaim/!svn/ver/879/trunk/app/views/admin/payergroup/show.html.erb
+END

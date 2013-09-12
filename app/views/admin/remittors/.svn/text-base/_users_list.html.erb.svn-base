@@ -1,0 +1,71 @@
+<%= form_tag :controller => "/admin/remittors/delete_users", :action => "destroy", :id => @remittors_to_delete,:method => "delete" do %>
+  <%= will_paginate @remittors%>
+  <table>
+    <tr>
+      <th style="width: 173px">Name</th>
+      <th style="width: 155px">Userid</th>
+      <th style="width: 91px">Role</th>
+      <th style="width: 67px">Status</th>
+      <th style="width: 56px">Shift</th>
+      <th style="width: 87px">Accuracy(%) </th>
+      <th >&nbsp; </th>
+      <% if @user.has_role?(:admin) ||@user.has_role?(:Supervisor)%>
+        <th style="width: 20px"><input type="checkbox" name="all" onClick="checkAll(document.forms[1].toggle,this)"/></th>
+      <% end %>
+      <th style="width: 26px"> &nbsp;</th>
+    </tr>
+
+    <%if @remittors!=nil%>
+    <% for remittor in @remittors %>
+
+      <tr>
+
+        <td><%= remittor.name %></td>
+        <td><%= remittor.login %></td>
+        <td><%remittor.roles.each do|role|%>
+              <%= role.name %>
+            <%end%>
+        </td>
+        <td><%= remittor.status %></td>
+        <td><%= remittor.shift.name %> </td>
+        <td align=center><%= format_percentage(remittor.field_accuracy) %> | <%= format_percentage(remittor.eob_accuracy) %></td>
+        <td>&nbsp;</td>
+        <% if @user.has_role?(:admin)||@user.has_role?(:Supervisor)%>
+          <td><%= check_box :users_to_delete, remittor.id, :id => 'toggle' %></td>
+          <td><%= link_to image_tag("report_edit.png", :alt => "Edit",:border=>"0"), :action => 'edit', :id => remittor,:page => params[:page] %></td>
+        <% end %>
+      </tr>
+      <% end %>
+        <% end %>
+
+    <%if @roles!=nil%>
+    
+    <% for roles in @roles %>
+
+      <tr>
+
+        <td><%= remittor.name %></td>
+        <td><%= remittor.login %></td>
+        <td><%= remittor.roles %></td>
+        <td><%= remittor.status %></td>
+        <td><%= remittor.id %> </td>
+
+        <td align=center><%= format_percentage(remittor.field_accuracy) %> | <%= format_percentage(remittor.eob_accuracy) %></td>
+
+        <td>&nbsp;</td>
+        <% if current_remittor.has_role?(:admin)||current_remittor.has_role?(:Supervisor)%>
+          <td><%= check_box :users_to_delete, remittor.id, :id => 'toggle' %></td>
+          <td><%= link_to image_tag("report_edit.png", :alt => "Edit",:border=>"0"), :action => 'edit', :id => remittor,:page => params[:page] %></td>
+        <% end %>
+      </tr>
+      <% end %>
+    <% end %>
+  </table>
+
+  <br/>
+    
+  <%= submit_tag 'Delete', :class => 'button' %>
+  <br/> <br/>
+  <%= will_paginate @remittors%>
+ 
+<% end %>

@@ -1,0 +1,88 @@
+
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+
+<style type="text/css">
+
+
+
+</style>
+
+<script type="text/javascript">
+
+var dragobject={
+z: 0, x: 0, y: 0, offsetx : null, offsety : null, targetobj : null, dragapproved : 0,
+initialize:function(){
+document.onmousedown=this.drag
+document.onmouseup=function(){this.dragapproved=0}
+},
+drag:function(e){
+var evtobj=window.event? window.event : e
+this.targetobj=window.event? event.srcElement : e.target
+if (this.targetobj.className=="drag"){
+this.dragapproved=1
+if (isNaN(parseInt(this.targetobj.style.left))){this.targetobj.style.left=0}
+if (isNaN(parseInt(this.targetobj.style.top))){this.targetobj.style.top=0}
+this.offsetx=parseInt(this.targetobj.style.left)
+this.offsety=parseInt(this.targetobj.style.top)
+this.x=evtobj.clientX
+this.y=evtobj.clientY
+if (evtobj.preventDefault)
+evtobj.preventDefault()
+document.onmousemove=dragobject.moveit
+}
+},
+moveit:function(e){
+var evtobj=window.event? window.event : e
+if (this.dragapproved==1){
+this.targetobj.style.left=this.offsetx+evtobj.clientX-this.x+"px"
+this.targetobj.style.top=this.offsety+evtobj.clientY-this.y+"px"
+return false
+}
+}
+}
+
+dragobject.initialize()
+
+</script>
+
+<link href="fonts.css" rel="stylesheet" type="text/css" />
+<style type="text/css">
+<!--
+.drag{
+	position:absolute;
+	left:15px;
+	top:22px;
+	width: 800px;
+	height: 1029px;
+	z-index:201;
+	background-image:url(transparent_300_120.gif);
+	
+}
+-->
+</style>
+</head>
+
+
+<body>
+
+
+
+        <table>
+          <tr>
+            <td>
+			<!--<img src="transparent_300_120.gif"  class="drag" align="right">-->
+			<img src="" width="800" height="1029"  border="0" class="drag" id="2">
+			<div class="drag" style="width: 800px; height: 1029px; border: 1px solid black;color: white; font-size: 120%">
+			
+			<div id="Layer1"></div>
+			</div>
+                   
+                </td>
+          </tr>
+        </table>
+
+
+
+</body>
+</html>

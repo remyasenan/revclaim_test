@@ -1,0 +1,34 @@
+<%= errors_for(@payer) %>
+
+<!--[form:payer]-->
+<table>
+	<tr>
+		<th><label for="payer_gateway">Gateway</label><span class="alert"> *</span></th><td><%= text_field 'payer', 'gateway', :size => 35,:class => 'black_text' %></td>
+	</tr>
+	<tr>
+		<th><label for="payer_payid">Payer ID</label><span class="alert"> *</span></th><td><%= text_field 'payer', 'payid', :size => 35,:class => 'black_text' %></td>
+	</tr>
+	<tr>
+		<th><label for="payer_payer">Payer</label><span class="alert"> *</span></th><td><%= text_field 'payer', 'payer', :size => 35,:class => 'black_text' %></td>
+	</tr>
+	<tr>
+		<th><label for="payer_gr_name">Gr Name</label></th><td><%= text_field 'payer', 'gr_name', :size => 35,:disabled=>"disabled",:class => 'black_text'%></td>
+	</tr>
+	<tr>
+		<th><label for="payer_pay_address_one">Address one</label></th><td><%= text_area 'payer', 'pay_address_one', "cols" => 35, "rows" => 3, :class => 'black_text'%></td>
+	</tr>
+	<tr>
+		<th><label for="payer_pay_address_two">Address two</label></th><td><%= text_area 'payer', 'pay_address_two',  "cols" => 35, "rows" => 3, :class => 'black_text'%></td>
+	</tr>
+	<tr>
+		<th><label for="payer_pay_address_three">Address three</label></th><td><%= text_area 'payer', 'pay_address_three', "cols" => 35, "rows" => 3, :class => 'black_text'%></td>
+	</tr>
+	<tr>
+		<th><label for="payer_pay_address_four">Address four</label></th><td><%= text_area 'payer', 'pay_address_four', "cols" => 35, "rows" => 3, :class => 'black_text'%>
+		</td>
+	</tr>
+</table>
+  <%= set_focus 'payer_gateway' %>
+
+<!--[eoform:payer]-->
+

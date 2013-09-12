@@ -1,0 +1,8 @@
+<ul>
+
+  <% @provider_names.each do |provider_name| %>
+    <li>
+      <%=provider_name %>
+    </li>
+  <% end %>
+</ul>

@@ -1,0 +1,11 @@
+<div id="login_main">
+<h1>Editing user</h1>
+
+<% form_tag :action => 'update', :id => @user, :page => @page, :pass => @password do %>
+  <%= render :partial => 'form' %>
+	<%= submit_tag 'Edit', :class => 'button' %>
+<% end %>
+
+<br/> 
+<%= link_to image_tag("arrow_undo.png", :alt => "Back"), :action => 'list', :page => @page %> 
+</div>

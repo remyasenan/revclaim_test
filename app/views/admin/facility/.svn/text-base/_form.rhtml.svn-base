@@ -1,0 +1,18 @@
+<%= error_messages_for 'facility' %>
+
+<!--[form:facility]-->
+<table>
+  <tr>
+    <th>Name</th>
+    <th>Code</th>
+    <th>Client</th>
+  </tr>
+  <tr>
+    <td><%= text_field 'facility', 'name' %></td>
+    <td><%= text_field 'facility', 'sitecode' %></td>
+    <td><%= select 'form', 'client', @clients %></td>
+  </tr>
+</table>
+<%= set_focus 'facility_name' %>
+<!--[eoform:facility]-->
+

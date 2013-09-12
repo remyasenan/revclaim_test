@@ -1,0 +1,51 @@
+<SecureEDI_UBCLAIM_XML>
+<BatchID><%=@batch.batchid.split('_')[0]%><%=@batch.batchid.split('_')[2]%></BatchID>
+<BatchDate><%=@batch.date.to_datetime.strftime("%Y%m%d") if @batch.date%></BatchDate>
+<BatchReceivedDate><%=@batch.arrival_time.to_s.split(':')[0].split(' ')[0].to_datetime.strftime("%Y%m%d") if @batch.arrival_time.to_s.split(':')[0].split(' ')[0] %></BatchReceivedDate>
+<BatchFileName><%=@batch.batchid.split('_')[0]%><%=@batch.batchid.split('_')[2]%></BatchFileName>
+<%@batch.jobs.each do |job|%>
+  <%job.ub04_claim_informations.each do |ubo4_claim|%>
+<ClaimData>
+  <PaperClaimID><%=job.tiff_number%></PaperClaimID>
+  <PaperClaimDate><%=@batch.date.to_datetime.strftime("%Y%m%d") if !@batch.date.nil? %></PaperClaimDate>
+
+          <ServiceLines>
+      <% count = 0 %>
+      <%ubo4_claim.ub04_serviceline_informations.each do |sline|%>
+
+      <% count += 1 %>
+      <count> <%= count %> </count>
+        <ServiceLine>
+          <% unless  sline.rev_code.blank? or sline.rev_code.nil?%>
+            <RevCode><%=sline.rev_code%></RevCode>
+          <%end%>
+          <% unless  sline.hcpcs.blank? or sline.hcpcs.nil?%>
+            <HCPCS><%=sline.hcpcs%></HCPCS>
+          <%end%>
+          <% unless  sline.service_date.blank? or sline.service_date.nil?%>
+            <ServiceDate><%=sline.service_date.to_datetime.strftime("%Y%m%d") %></ServiceDate>
+          <%end%>
+          <% unless  sline.service_units.blank? or sline.service_units.nil?%>
+            <ServiceUnits><%=sline.service_units%></ServiceUnits>
+          <%end%>
+          <% unless  sline.charges.blank? or sline.charges.nil?%>
+            <Charge><%="%.2f" % sline.charges%></Charge>
+          <%end%>
+          <% unless  sline.non_covered_charges.blank? or sline.non_covered_charges.nil?%>
+            <NonCovCharge><%="%.2f" % sline.non_covered_charges%></NonCovCharge>
+          <%end%>
+        </ServiceLine>
+      <%end%>
+    </ServiceLines>
+   
+    <% unless  ubo4_claim.total_charges.blank? or ubo4_claim.total_charges.nil?%>
+      <TotalCharges><%="%.2f" % ubo4_claim.total_charges%></TotalCharges>
+    <%end%>
+    <% unless  ubo4_claim.total_non_covered_charges.blank? or ubo4_claim.total_non_covered_charges.nil?%>
+      <TotalNonCoveredCharges><%="%.2f" % ubo4_claim.total_non_covered_charges%></TotalNonCoveredCharges>
+    <%end%>
+   
+  </ClaimData>
+<% end %>
+<%end%>
+</SecureEDI_UBCLAIM_XML>

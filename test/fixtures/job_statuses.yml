@@ -1,0 +1,41 @@
+# == Schema Information
+# Schema version: 69
+#
+# Table name: job_statuses
+#
+#  id   :integer(11)   not null, primary key
+#  name :string(255)   
+#
+
+# == Schema Information
+# Schema version: 65
+#
+# Table name: job_statuses
+#
+#  id   :integer(11)   not null, primary key
+#  name :string(255)   
+#
+
+js1:
+  id:            1
+  name:         'New'
+  
+js2:
+  id:            2
+  name:         'Processing'
+
+js3:
+  id:            3
+  name:         'Complete'
+  
+js4:
+  id:            4
+  name:         'HLSC Rejected'
+  
+js5:
+  id:            5
+  name:         'HLSC Verified'
+  
+js6:
+  id:            6
+  name:         'QA Verified'

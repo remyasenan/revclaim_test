@@ -1,0 +1,15 @@
+<%= error_messages_for 'sampling_rate' %>
+
+<!--[form:sampling_rate]-->
+<table>
+  <tr>
+    <th>Slab</th>
+    <td><%= text_field 'sampling_rate', 'slab', :readonly => 'true' %></td>
+  </tr>
+  <tr>
+      <th>Value</th>
+      <td><%= text_field 'sampling_rate', 'value'  %></td>
+  </tr>
+</table>
+<%= set_focus 'sampling_rate_value' %>
+<!--[eoform:sampling_rate]-->

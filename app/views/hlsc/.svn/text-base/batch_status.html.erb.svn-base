@@ -1,0 +1,26 @@
+<div id="login_main">
+  <h1>Listing completed batches</h1>
+  
+  <% if @batches.size > 0 %>
+    <div class="light_info">
+      <%= form_tag :action => 'batch_status' do %>
+            <%= select_tag 'criteria',  optionize('Batch Date', 'Batch ID',  'Site Number', 'Site Name') %>
+            <%= select_tag 'compare', optionize('=','>', '<')%>
+            <%= text_field_tag 'to_find', nil,  :size => '10' %>
+            <%= submit_tag 'Filter', :class => 'button' %>
+      <% end %>
+      <%= set_focus 'to_find' %>
+    </div>
+  
+        <%= legend_start %>
+    <table style="width:100%"><td class="black_text" style="width:900px">
+        <%= legend "color" => "white", "text" => "Complete" %>
+        <%= legend "color" => "palered", "text" => "Batches older than 30 mins" %>
+    </td> </table>
+    <%= legend_end %>
+<% end %>
+
+  <div id="table">
+    <%= render :partial => "batch_status_list" %>
+  </div>
+</div>

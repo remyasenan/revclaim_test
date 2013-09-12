@@ -1,0 +1,22 @@
+
+<div id="login_main">
+<h1>Listing users</h1>
+ 
+<% if @rol[0].name=='admin'|| @rol[0].name=='Supervisor' %>
+<div class="light_info">
+  <%= link_to 'New user', :action => 'new' %>
+</div>
+<% end %>
+<div class="light_info">
+  <%= form_tag  '', :method => :get do %>
+    <%= select_tag 'criteria', optionize('Name', 'User ID', 'Role', 'Status')%> <%= text_field_tag 'to_find', nil, :size => '10' %>
+    <%= submit_tag 'Filter', :class => 'button'  %>
+    <%= image_tag("/assets/images/spinner.gif", :align => 'absmiddle', :border=> 0, :id => "spinner", :style=>"display: none;" ) %>
+  <% end %>
+  <%= set_focus 'to_find' %>
+</div>
+<div id="table">
+  <%= render :partial => "users_list" %>
+</div>
+
+</div>

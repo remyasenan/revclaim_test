@@ -1,0 +1,42 @@
+# == Schema Information
+# Schema version: 69
+#
+# Table name: clients
+#
+#  id             :integer(11)   not null, primary key
+#  name           :string(255)
+#  tat            :integer(11)
+#  contracted_tat :integer(11)   default(20)
+#
+
+# == Schema Information
+# Schema version: 65
+#
+# Table name: clients
+#
+#  id             :integer(11)   not null, primary key
+#  name           :string(255)
+#  tat            :integer(11)
+#  contracted_tat :integer(11)   default(20)
+#
+
+Apria:
+  id: 1
+  name: Apria
+  tat: 12
+
+Liberty:
+  id: 2
+  name: Liberty
+  tat: 12
+
+Triad:
+  id: 3
+  name: Triad
+  tat: 12
+
+client01:
+  id:             4
+  name:           apria
+  tat:            12
+  contracted_tat: 10

@@ -1,0 +1,22 @@
+<div id="login_main">
+<% batch = Batch.find(params[:id]) %>
+<h4>Comments for Batch : <%= batch.batchid %></h4>
+
+<table>
+<%= form_tag :action => 'update_tat_comments', :id => params[:id],:back_page => params[:back_page]  do %>
+<tr>
+<td><label for="tat_expected_time">Expected Completion Time (EST)</label></td><td><%= datetime_select 'tat', 'expected_time' %></td>
+<!--<tr>
+<td><label for="tat_comments">Comments</label></td><td><%= text_area 'tat', 'comments', "cols" => 30, "rows" => 5, :class => 'input' %></td>
+</tr>-->
+</table>
+<%= submit_tag 'Submit', :class => 'button'%>
+<% end %> 
+<br/> <br/>
+
+<% if params['back_page']==nil%> 
+<%= link_to 'Back',:controller => '/admin/batch', :action => 'allocate' %>
+<% else %>
+<%= link_to 'Back',:controller => '/admin/batch', :action => 'non_compliant' %>  
+<%end%>
+</div>

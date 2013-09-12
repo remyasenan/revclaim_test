@@ -1,0 +1,18 @@
+<%= error_messages_for 'client' %>
+
+<!--[form:client]-->
+<div id="login_main">
+<table>
+  <tr>
+    <th> Name </th>
+    <th> TAT </th>
+  </tr>
+  <tr>
+    <td><%= text_field 'client', 'name' %> </td>
+    <td><%= text_field 'client', 'tat' %> </td>
+  </tr>
+</table>
+<%= set_focus 'client_name' %>
+</div>
+<!--[eoform:client]-->
+

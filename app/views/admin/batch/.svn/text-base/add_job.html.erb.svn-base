@@ -1,0 +1,101 @@
+<div id="login_main">
+<h1>Job Administration for <%= link_to @batch.batchid, :action => 'show', :id => @batch %></h1>
+
+<div class="light_info">
+  <%= link_to_function('Import Jobs from CSV file',  "Effect.toggle('upload_file', 'blind')") %> |
+  <% if params[:from].nil? %>
+    <%= link_to image_tag("arrow_undo.png", :alt => "Back"), :action => :list %>
+  <% elsif params[:payer].nil? %>
+    <%= link_to image_tag("arrow_undo.png", :alt => "Back"), :controller => 'job', :action => 'allocate', :id => params[:from] %>
+  <% else %>
+    <%= link_to image_tag("arrow_undo.png", :alt => "Back"), :controller => 'job', :action => 'allocate_payer_jobs', :payer => params[:payer] %>
+  <% end %>
+</div>
+
+<div id='upload_file' style="display:none">
+  <% form_tag({:controller => 'upload', :action => 'create', :type => 'job', :batch => @batch }, :multipart => true) do %>
+  <p>Local File : <%= file_field "upload", "file"%> </p>
+	<p> <%= submit_tag "Import", :class => 'button' %> </p>
+  <% end  %>
+</div>
+
+
+<h1> Create new Job </h1>
+<table>
+  <tr>
+    <th>Payer</th>
+    <th>Check Number</th>
+    <th>Tiff Number</th>
+    <th>Estimated EOB</th>
+    <th> &nbsp;</th> 
+  </tr>
+  <tr>
+    <% form_tag :action => 'create_job', :id => :job, :batch => @batch do %>
+      <td><% if params[:payer].nil? %>
+            <%= link_to 'Select Payer', :controller => 'payer', :action => 'select_payer', :job => :job, :id => @batch.id %>
+          <% else %>
+            <% payer = Payer.find(params[:payer]) %>
+            <%= text_field 'job1', 'payer', :value => payer.payer %>
+          <% end %>
+      </td>
+      <td><%= text_field 'job', 'check_number', :size => 10 %></td>
+      <td><%= text_field 'job', 'tiff_number', :size => 10 %></td>
+      <!-- <td><%= text_field 'job', 'image_count', :size => 10 %></td> -->
+      <td><%= text_field 'job', 'estimated_eob', :size => 10 %></td>
+      <td><%= submit_tag 'Create', :class => 'button' %></td>
+    <% end %>
+    <%= set_focus 'job_check_number' %>
+  </tr>
+</table>
+<% if @jobs.size > 0 %>
+  <h2> Job List </h2>
+  <% form_tag :action => 'delete_jobs', :id => @jobs_to_delete, :batch => @batch do %>
+  <table>
+    <tr>
+      <th>Check Number</th>
+      <th>Tiff Number</th>
+      <!-- <th>Image Count</th> -->
+      <th>Estimated EOB</th>
+      <th>Payer</th>
+      <th>Edit</th>
+      <th>Split</th>
+      <th><input type="checkbox" name="all" onClick="checkAll(document.forms[2].toggle,this)"/></th>
+    </tr>
+    <tr>
+      <% @jobs.each do |job|%>
+        <tr>
+          <td><%= job.check_number %></td>
+
+          <td>
+ <%if job.tiff_number.blank? %>
+   <%='-'%>
+   <%else%>
+      <%=job.tiff_number%>
+      <%end%>
+  </td>
+
+          <!-- <td><%= job.image_count %><td> -->
+          <td align='right'><%= job.estimated_eob %></td>
+          <td><% if job.payer.nil? %>
+                  No Payer
+              <% else %>
+                <%= job.payer.payer %>
+              <% end %>
+          </td>
+          <td><%= link_to image_tag("report_edit.png", :alt => "Edit"), :controller => 'job', :action => 'edit_payer', :id => job.id, :from => params[:from] %></td>
+          <td><%= link_to image_tag("cut_red.png", :alt => "Split"), :controller => 'job', :action => 'split', :id => job, :from => params[:from], :payer => params[:payer] %></td>
+          <td><%= check_box :jobs_to_delete, job.id, :id => 'toggle' %></td>
+        </tr>
+      <% end %>
+  </table>
+
+<%= submit_tag 'Delete', :class => 'button', :action => 'delete_batches' %>
+<% end %>
+<% end %>
+<br/> <!-- TODO: Handle in CSS -->
+<% if params[:from].nil? %>
+  <%= link_to image_tag("arrow_undo.png", :alt => "Back"), :action => :list %>
+<% else %>
+  <%= link_to image_tag("arrow_undo.png", :alt => "Back"), :controller => 'job', :action => 'allocate', :id => params[:from] %>
+<% end %>
+</div>

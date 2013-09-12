@@ -1,0 +1,143 @@
+K 25
+svn:wc:ra_dav:version-url
+V 61
+/revenuemed/revclaim/!svn/ver/1453/trunk/app/views/admin/user
+END
+assign_members.rhtml
+K 25
+svn:wc:ra_dav:version-url
+V 81
+/revenuemed/revclaim/!svn/ver/879/trunk/app/views/admin/user/assign_members.rhtml
+END
+list.html.erb
+K 25
+svn:wc:ra_dav:version-url
+V 75
+/revenuemed/revclaim/!svn/ver/1453/trunk/app/views/admin/user/list.html.erb
+END
+list_qa_occupancy.rhtml
+K 25
+svn:wc:ra_dav:version-url
+V 84
+/revenuemed/revclaim/!svn/ver/879/trunk/app/views/admin/user/list_qa_occupancy.rhtml
+END
+_form.rhtml
+K 25
+svn:wc:ra_dav:version-url
+V 72
+/revenuemed/revclaim/!svn/ver/879/trunk/app/views/admin/user/_form.rhtml
+END
+_processor_report_list.rhtml
+K 25
+svn:wc:ra_dav:version-url
+V 89
+/revenuemed/revclaim/!svn/ver/879/trunk/app/views/admin/user/_processor_report_list.rhtml
+END
+_job_list.rhtml
+K 25
+svn:wc:ra_dav:version-url
+V 76
+/revenuemed/revclaim/!svn/ver/879/trunk/app/views/admin/user/_job_list.rhtml
+END
+assign_clients.rhtml
+K 25
+svn:wc:ra_dav:version-url
+V 81
+/revenuemed/revclaim/!svn/ver/879/trunk/app/views/admin/user/assign_clients.rhtml
+END
+_assign_member_list.rhtml
+K 25
+svn:wc:ra_dav:version-url
+V 86
+/revenuemed/revclaim/!svn/ver/879/trunk/app/views/admin/user/_assign_member_list.rhtml
+END
+show.html.erb
+K 25
+svn:wc:ra_dav:version-url
+V 74
+/revenuemed/revclaim/!svn/ver/879/trunk/app/views/admin/user/show.html.erb
+END
+edit.html.erb
+K 25
+svn:wc:ra_dav:version-url
+V 74
+/revenuemed/revclaim/!svn/ver/879/trunk/app/views/admin/user/edit.html.erb
+END
+accuracy_report.html.erb
+K 25
+svn:wc:ra_dav:version-url
+V 85
+/revenuemed/revclaim/!svn/ver/879/trunk/app/views/admin/user/accuracy_report.html.erb
+END
+processor_report.rhtml
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/revenuemed/revclaim/!svn/ver/879/trunk/app/views/admin/user/processor_report.rhtml
+END
+list_facility_jobs.rhtml
+K 25
+svn:wc:ra_dav:version-url
+V 85
+/revenuemed/revclaim/!svn/ver/879/trunk/app/views/admin/user/list_facility_jobs.rhtml
+END
+_assign_client_list.rhtml
+K 25
+svn:wc:ra_dav:version-url
+V 86
+/revenuemed/revclaim/!svn/ver/879/trunk/app/views/admin/user/_assign_client_list.rhtml
+END
+list_processor_occupancy.rhtml
+K 25
+svn:wc:ra_dav:version-url
+V 91
+/revenuemed/revclaim/!svn/ver/879/trunk/app/views/admin/user/list_processor_occupancy.rhtml
+END
+new.html.erb
+K 25
+svn:wc:ra_dav:version-url
+V 73
+/revenuemed/revclaim/!svn/ver/879/trunk/app/views/admin/user/new.html.erb
+END
+processor_facility_jobs.rhtml
+K 25
+svn:wc:ra_dav:version-url
+V 90
+/revenuemed/revclaim/!svn/ver/879/trunk/app/views/admin/user/processor_facility_jobs.rhtml
+END
+list_members.rhtml
+K 25
+svn:wc:ra_dav:version-url
+V 79
+/revenuemed/revclaim/!svn/ver/879/trunk/app/views/admin/user/list_members.rhtml
+END
+productivity_report.html.erb
+K 25
+svn:wc:ra_dav:version-url
+V 89
+/revenuemed/revclaim/!svn/ver/879/trunk/app/views/admin/user/productivity_report.html.erb
+END
+list_jobs.rhtml
+K 25
+svn:wc:ra_dav:version-url
+V 76
+/revenuemed/revclaim/!svn/ver/879/trunk/app/views/admin/user/list_jobs.rhtml
+END
+_productivity_report_list.rhtml
+K 25
+svn:wc:ra_dav:version-url
+V 92
+/revenuemed/revclaim/!svn/ver/879/trunk/app/views/admin/user/_productivity_report_list.rhtml
+END
+joblist.html.erb
+K 25
+svn:wc:ra_dav:version-url
+V 77
+/revenuemed/revclaim/!svn/ver/879/trunk/app/views/admin/user/joblist.html.erb
+END
+_users_list.rhtml
+K 25
+svn:wc:ra_dav:version-url
+V 78
+/revenuemed/revclaim/!svn/ver/879/trunk/app/views/admin/user/_users_list.rhtml
+END

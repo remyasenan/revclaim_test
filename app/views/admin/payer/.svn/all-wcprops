@@ -1,0 +1,71 @@
+K 25
+svn:wc:ra_dav:version-url
+V 62
+/revenuemed/revclaim/!svn/ver/1472/trunk/app/views/admin/payer
+END
+new_payers.rhtml
+K 25
+svn:wc:ra_dav:version-url
+V 78
+/revenuemed/revclaim/!svn/ver/879/trunk/app/views/admin/payer/new_payers.rhtml
+END
+list_payers_processor.rhtml
+K 25
+svn:wc:ra_dav:version-url
+V 89
+/revenuemed/revclaim/!svn/ver/879/trunk/app/views/admin/payer/list_payers_processor.rhtml
+END
+new.html.erb
+K 25
+svn:wc:ra_dav:version-url
+V 75
+/revenuemed/revclaim/!svn/ver/1472/trunk/app/views/admin/payer/new.html.erb
+END
+select_payer.rhtml
+K 25
+svn:wc:ra_dav:version-url
+V 80
+/revenuemed/revclaim/!svn/ver/879/trunk/app/views/admin/payer/select_payer.rhtml
+END
+list.html.erb
+K 25
+svn:wc:ra_dav:version-url
+V 76
+/revenuemed/revclaim/!svn/ver/1471/trunk/app/views/admin/payer/list.html.erb
+END
+filter.rhtml
+K 25
+svn:wc:ra_dav:version-url
+V 74
+/revenuemed/revclaim/!svn/ver/879/trunk/app/views/admin/payer/filter.rhtml
+END
+payer_selection.rhtml
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/revenuemed/revclaim/!svn/ver/879/trunk/app/views/admin/payer/payer_selection.rhtml
+END
+show.html.erb
+K 25
+svn:wc:ra_dav:version-url
+V 75
+/revenuemed/revclaim/!svn/ver/879/trunk/app/views/admin/payer/show.html.erb
+END
+_form.html.erb
+K 25
+svn:wc:ra_dav:version-url
+V 77
+/revenuemed/revclaim/!svn/ver/1472/trunk/app/views/admin/payer/_form.html.erb
+END
+edit.html.erb
+K 25
+svn:wc:ra_dav:version-url
+V 75
+/revenuemed/revclaim/!svn/ver/879/trunk/app/views/admin/payer/edit.html.erb
+END
+filter_for_processor.rhtml
+K 25
+svn:wc:ra_dav:version-url
+V 88
+/revenuemed/revclaim/!svn/ver/879/trunk/app/views/admin/payer/filter_for_processor.rhtml
+END

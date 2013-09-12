@@ -1,0 +1,121 @@
+#!/usr/bin/env ruby
+require File.dirname(__FILE__) + '/../config/boot'
+
+require 'optparse'
+
+options = { :environment => (ENV['RAILS_ENV'] || "development").dup }
+
+ARGV.options do |opts|
+  script_name = File.basename($0)
+  opts.banner = "Usage: purge_jobs [options]"
+
+  opts.separator ""
+
+  opts.on("-e", "--environment=name", String,
+          "Specifies the environment for the runner to operate under (test/development/production).",
+          "Default: development") { |v| options[:environment] = v }
+
+  opts.separator ""
+
+  opts.on("-h", "--help",
+          "Show this help message.") { puts opts; exit }
+
+  opts.parse!
+end
+
+ENV["RAILS_ENV"] = options[:environment]
+RAILS_ENV.replace(options[:environment]) if defined?(RAILS_ENV)
+
+require Rails.root + '/config/environment'
+
+class JobPurger
+  BATCH_STATUS = 'HLSC Verified'
+  CONDITIONS = "batches.status = ? and batches.date <= ? and batches.updated_at <= ?"
+  CYCLE_TIME = 60
+
+  def initialize(*args)
+    hlsc_verified_count = Batch.count(:conditions => ["status = ?", BATCH_STATUS])
+    
+    if hlsc_verified_count == 0 then
+      puts "No batches in '#{BATCH_STATUS}' status. Exiting."
+      exit
+    else
+      puts "Total of #{hlsc_verified_count} batches in '#{BATCH_STATUS}' status."
+    end
+    
+    earliest_batch_date = Batch.minimum(:date, :conditions => ["status = ?", BATCH_STATUS])
+    puts "Earliest batch date is #{earliest_batch_date}"
+    earliest_updated_at = Batch.minimum(:updated_at, :conditions => ["status = ?", BATCH_STATUS]).to_date
+    puts "Earliest updated_at is #{earliest_updated_at}"
+
+    # Need to pick the later of the two dates so that we don't exclude everything if they are more than 
+    # one month apart.
+    earliest_date = [earliest_batch_date, earliest_updated_at].max
+    
+    @target_date = (earliest_date.to_time + 1.month).to_date
+
+    date_three_months_ago = (Time.now - 3.months).to_date
+    if date_three_months_ago < @target_date then
+      puts "Target date (#{@target_date}) more recent than 3 months ago. Exiting."
+      exit
+    end
+    
+  end
+
+  def batch_count
+    return Batch.count(:conditions => [CONDITIONS, BATCH_STATUS, @target_date, @target_date.to_time])
+  end
+
+  def job_count
+    return Job.count(:conditions => [CONDITIONS, BATCH_STATUS, @target_date, @target_date.to_time], :include => :batch)
+  end
+
+  def check_with_operator
+    batch_count = self.batch_count()
+    job_count = self.job_count()
+
+    puts "#{batch_count} #{BATCH_STATUS} batches with batch date and updated_at <= #{@target_date}"
+    puts "#{job_count} associated jobs"
+    puts "Are you sure you want to continue (y/n):"
+    answer = gets.chop
+    if answer != 'y' then
+      exit
+    end
+  end
+
+  def do_purge
+    batches = Batch.find(:all, :conditions => [CONDITIONS, BATCH_STATUS, @target_date, @target_date.to_time])
+
+    start_time = Time.now
+    batch_count = self.batch_count()
+    job_count = self.job_count()
+
+    batches.each do |b|
+      b.destroy
+
+      if (Time.now - start_time) > CYCLE_TIME then
+        start_time = Time.now
+        prev_batch_count = batch_count
+        prev_job_count = job_count
+        
+        batch_count = self.batch_count()
+        job_count = self.job_count()
+    
+        batch_diff = prev_batch_count - batch_count
+        job_diff = prev_job_count - job_count
+    
+        puts "#{Time.now.strftime('%H:%M:%S')} - #{batch_diff} batches and #{job_diff} jobs deleted; #{batch_count} batches and #{job_count} jobs remaining"
+      end
+    end
+  end
+  
+  def purge_jobs
+    self.check_with_operator
+    self.do_purge
+  end
+end
+
+jp = JobPurger.new
+jp.purge_jobs
+
+

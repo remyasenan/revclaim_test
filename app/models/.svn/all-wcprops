@@ -1,0 +1,389 @@
+K 25
+svn:wc:ra_dav:version-url
+V 51
+/revenuemed/revclaim/!svn/ver/1787/trunk/app/models
+END
+error_popup.rb
+K 25
+svn:wc:ra_dav:version-url
+V 65
+/revenuemed/revclaim/!svn/ver/879/trunk/app/models/error_popup.rb
+END
+typeahead_service_facilities.rb
+K 25
+svn:wc:ra_dav:version-url
+V 82
+/revenuemed/revclaim/!svn/ver/879/trunk/app/models/typeahead_service_facilities.rb
+END
+cms1500serviceline.rb
+K 25
+svn:wc:ra_dav:version-url
+V 73
+/revenuemed/revclaim/!svn/ver/1612/trunk/app/models/cms1500serviceline.rb
+END
+processor_status.rb
+K 25
+svn:wc:ra_dav:version-url
+V 71
+/revenuemed/revclaim/!svn/ver/1453/trunk/app/models/processor_status.rb
+END
+status.rb
+K 25
+svn:wc:ra_dav:version-url
+V 60
+/revenuemed/revclaim/!svn/ver/879/trunk/app/models/status.rb
+END
+query_detail.rb
+K 25
+svn:wc:ra_dav:version-url
+V 66
+/revenuemed/revclaim/!svn/ver/879/trunk/app/models/query_detail.rb
+END
+cms1500.rb
+K 25
+svn:wc:ra_dav:version-url
+V 62
+/revenuemed/revclaim/!svn/ver/1648/trunk/app/models/cms1500.rb
+END
+eob_qa_status.rb
+K 25
+svn:wc:ra_dav:version-url
+V 68
+/revenuemed/revclaim/!svn/ver/1453/trunk/app/models/eob_qa_status.rb
+END
+payergroup.rb
+K 25
+svn:wc:ra_dav:version-url
+V 64
+/revenuemed/revclaim/!svn/ver/879/trunk/app/models/payergroup.rb
+END
+typeahead_billing_providers.rb
+K 25
+svn:wc:ra_dav:version-url
+V 81
+/revenuemed/revclaim/!svn/ver/879/trunk/app/models/typeahead_billing_providers.rb
+END
+payer_detail.rb
+K 25
+svn:wc:ra_dav:version-url
+V 66
+/revenuemed/revclaim/!svn/ver/879/trunk/app/models/payer_detail.rb
+END
+qa_status.rb
+K 25
+svn:wc:ra_dav:version-url
+V 64
+/revenuemed/revclaim/!svn/ver/1453/trunk/app/models/qa_status.rb
+END
+facility.rb
+K 25
+svn:wc:ra_dav:version-url
+V 63
+/revenuemed/revclaim/!svn/ver/1628/trunk/app/models/facility.rb
+END
+team_leader_queue.rb
+K 25
+svn:wc:ra_dav:version-url
+V 71
+/revenuemed/revclaim/!svn/ver/879/trunk/app/models/team_leader_queue.rb
+END
+remittors_role.rb
+K 25
+svn:wc:ra_dav:version-url
+V 68
+/revenuemed/revclaim/!svn/ver/879/trunk/app/models/remittors_role.rb
+END
+hlsc_qa.rb
+K 25
+svn:wc:ra_dav:version-url
+V 61
+/revenuemed/revclaim/!svn/ver/879/trunk/app/models/hlsc_qa.rb
+END
+job_status.rb
+K 25
+svn:wc:ra_dav:version-url
+V 65
+/revenuemed/revclaim/!svn/ver/1453/trunk/app/models/job_status.rb
+END
+state.rb
+K 25
+svn:wc:ra_dav:version-url
+V 59
+/revenuemed/revclaim/!svn/ver/879/trunk/app/models/state.rb
+END
+payer.rb
+K 25
+svn:wc:ra_dav:version-url
+V 60
+/revenuemed/revclaim/!svn/ver/1612/trunk/app/models/payer.rb
+END
+certification.rb
+K 25
+svn:wc:ra_dav:version-url
+V 67
+/revenuemed/revclaim/!svn/ver/879/trunk/app/models/certification.rb
+END
+batch_upload.rb
+K 25
+svn:wc:ra_dav:version-url
+V 67
+/revenuemed/revclaim/!svn/ver/1474/trunk/app/models/batch_upload.rb
+END
+occurence_span.rb
+K 25
+svn:wc:ra_dav:version-url
+V 69
+/revenuemed/revclaim/!svn/ver/1612/trunk/app/models/occurence_span.rb
+END
+role.rb
+K 25
+svn:wc:ra_dav:version-url
+V 58
+/revenuemed/revclaim/!svn/ver/879/trunk/app/models/role.rb
+END
+client_status_history.rb
+K 25
+svn:wc:ra_dav:version-url
+V 75
+/revenuemed/revclaim/!svn/ver/879/trunk/app/models/client_status_history.rb
+END
+batch_rejection_comment.rb
+K 25
+svn:wc:ra_dav:version-url
+V 77
+/revenuemed/revclaim/!svn/ver/879/trunk/app/models/batch_rejection_comment.rb
+END
+value_code.rb
+K 25
+svn:wc:ra_dav:version-url
+V 65
+/revenuemed/revclaim/!svn/ver/1612/trunk/app/models/value_code.rb
+END
+ub04_serviceline_information.rb
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/revenuemed/revclaim/!svn/ver/1612/trunk/app/models/ub04_serviceline_information.rb
+END
+qualifier_code_value.rb
+K 25
+svn:wc:ra_dav:version-url
+V 75
+/revenuemed/revclaim/!svn/ver/1612/trunk/app/models/qualifier_code_value.rb
+END
+patient_file_information.rb
+K 25
+svn:wc:ra_dav:version-url
+V 78
+/revenuemed/revclaim/!svn/ver/914/trunk/app/models/patient_file_information.rb
+END
+sqa_job_setting.rb
+K 25
+svn:wc:ra_dav:version-url
+V 69
+/revenuemed/revclaim/!svn/ver/879/trunk/app/models/sqa_job_setting.rb
+END
+ub04payer.rb
+K 25
+svn:wc:ra_dav:version-url
+V 64
+/revenuemed/revclaim/!svn/ver/1612/trunk/app/models/ub04payer.rb
+END
+shift.rb
+K 25
+svn:wc:ra_dav:version-url
+V 59
+/revenuemed/revclaim/!svn/ver/879/trunk/app/models/shift.rb
+END
+document.rb
+K 25
+svn:wc:ra_dav:version-url
+V 62
+/revenuemed/revclaim/!svn/ver/879/trunk/app/models/document.rb
+END
+isa_identifier.rb
+K 25
+svn:wc:ra_dav:version-url
+V 68
+/revenuemed/revclaim/!svn/ver/879/trunk/app/models/isa_identifier.rb
+END
+notifier.rb
+K 25
+svn:wc:ra_dav:version-url
+V 62
+/revenuemed/revclaim/!svn/ver/879/trunk/app/models/notifier.rb
+END
+session.rb
+K 25
+svn:wc:ra_dav:version-url
+V 61
+/revenuemed/revclaim/!svn/ver/879/trunk/app/models/session.rb
+END
+batch_status.rb
+K 25
+svn:wc:ra_dav:version-url
+V 67
+/revenuemed/revclaim/!svn/ver/1453/trunk/app/models/batch_status.rb
+END
+eob_qa.rb
+K 25
+svn:wc:ra_dav:version-url
+V 60
+/revenuemed/revclaim/!svn/ver/879/trunk/app/models/eob_qa.rb
+END
+typeahead_payers.rb
+K 25
+svn:wc:ra_dav:version-url
+V 70
+/revenuemed/revclaim/!svn/ver/879/trunk/app/models/typeahead_payers.rb
+END
+line_information.rb
+K 25
+svn:wc:ra_dav:version-url
+V 70
+/revenuemed/revclaim/!svn/ver/879/trunk/app/models/line_information.rb
+END
+images_for_job.rb
+K 25
+svn:wc:ra_dav:version-url
+V 69
+/revenuemed/revclaim/!svn/ver/1503/trunk/app/models/images_for_job.rb
+END
+patient_information.rb
+K 25
+svn:wc:ra_dav:version-url
+V 73
+/revenuemed/revclaim/!svn/ver/914/trunk/app/models/patient_information.rb
+END
+eob_sqa.rb
+K 25
+svn:wc:ra_dav:version-url
+V 61
+/revenuemed/revclaim/!svn/ver/879/trunk/app/models/eob_sqa.rb
+END
+rendering_provider_detail.rb
+K 25
+svn:wc:ra_dav:version-url
+V 79
+/revenuemed/revclaim/!svn/ver/879/trunk/app/models/rendering_provider_detail.rb
+END
+job.rb
+K 25
+svn:wc:ra_dav:version-url
+V 58
+/revenuemed/revclaim/!svn/ver/1726/trunk/app/models/job.rb
+END
+billing_provider_detail.rb
+K 25
+svn:wc:ra_dav:version-url
+V 77
+/revenuemed/revclaim/!svn/ver/879/trunk/app/models/billing_provider_detail.rb
+END
+user.rb
+K 25
+svn:wc:ra_dav:version-url
+V 58
+/revenuemed/revclaim/!svn/ver/879/trunk/app/models/user.rb
+END
+eob_error.rb
+K 25
+svn:wc:ra_dav:version-url
+V 63
+/revenuemed/revclaim/!svn/ver/879/trunk/app/models/eob_error.rb
+END
+client.rb
+K 25
+svn:wc:ra_dav:version-url
+V 60
+/revenuemed/revclaim/!svn/ver/879/trunk/app/models/client.rb
+END
+cpt_code.rb
+K 25
+svn:wc:ra_dav:version-url
+V 62
+/revenuemed/revclaim/!svn/ver/879/trunk/app/models/cpt_code.rb
+END
+batch.rb
+K 25
+svn:wc:ra_dav:version-url
+V 60
+/revenuemed/revclaim/!svn/ver/1787/trunk/app/models/batch.rb
+END
+eobrate.rb
+K 25
+svn:wc:ra_dav:version-url
+V 61
+/revenuemed/revclaim/!svn/ver/879/trunk/app/models/eobrate.rb
+END
+ub04_claim_information.rb
+K 25
+svn:wc:ra_dav:version-url
+V 77
+/revenuemed/revclaim/!svn/ver/1612/trunk/app/models/ub04_claim_information.rb
+END
+sampling_rate.rb
+K 25
+svn:wc:ra_dav:version-url
+V 67
+/revenuemed/revclaim/!svn/ver/879/trunk/app/models/sampling_rate.rb
+END
+hlsc_document.rb
+K 25
+svn:wc:ra_dav:version-url
+V 67
+/revenuemed/revclaim/!svn/ver/879/trunk/app/models/hlsc_document.rb
+END
+user_client_job_history.rb
+K 25
+svn:wc:ra_dav:version-url
+V 77
+/revenuemed/revclaim/!svn/ver/879/trunk/app/models/user_client_job_history.rb
+END
+tat.rb
+K 25
+svn:wc:ra_dav:version-url
+V 57
+/revenuemed/revclaim/!svn/ver/879/trunk/app/models/tat.rb
+END
+user_payer_job_history.rb
+K 25
+svn:wc:ra_dav:version-url
+V 76
+/revenuemed/revclaim/!svn/ver/879/trunk/app/models/user_payer_job_history.rb
+END
+job_rejection_comment.rb
+K 25
+svn:wc:ra_dav:version-url
+V 75
+/revenuemed/revclaim/!svn/ver/879/trunk/app/models/job_rejection_comment.rb
+END
+eob_report.rb
+K 25
+svn:wc:ra_dav:version-url
+V 64
+/revenuemed/revclaim/!svn/ver/879/trunk/app/models/eob_report.rb
+END
+site_setting.rb
+K 25
+svn:wc:ra_dav:version-url
+V 66
+/revenuemed/revclaim/!svn/ver/879/trunk/app/models/site_setting.rb
+END
+remittor.rb
+K 25
+svn:wc:ra_dav:version-url
+V 63
+/revenuemed/revclaim/!svn/ver/1718/trunk/app/models/remittor.rb
+END
+occurence.rb
+K 25
+svn:wc:ra_dav:version-url
+V 64
+/revenuemed/revclaim/!svn/ver/1612/trunk/app/models/occurence.rb
+END
+runner.rb
+K 25
+svn:wc:ra_dav:version-url
+V 61
+/revenuemed/revclaim/!svn/ver/1781/trunk/app/models/runner.rb
+END

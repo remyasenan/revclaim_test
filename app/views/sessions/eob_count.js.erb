@@ -1,0 +1,3 @@
+$('#eob').hide()
+$('#eob').html("<%= escape_javascript(render :partial =>'eob_count') %>")
+$('#eob').stop().slideDown("slow","swing");

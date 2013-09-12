@@ -1,0 +1,52 @@
+
+<div id="login_main">
+
+  <div id="login_right">
+     <%=image_tag "lock.jpg",:align => "absmiddle"%><strong class="sub_title">&nbsp;&nbsp;Restricted Access</strong>
+    <ul class="bullet_links">
+      <li class="black_text">&nbsp;&nbsp;Please login to continue</li>
+    </ul>
+  </div>
+
+  <div class="login">
+    <div class="roundtop"><span class="sec_title">Login</span></div>
+
+    <%= form_tag session_path do %>
+
+      <table style=width:263px>
+        <tr>
+          <td> &nbsp; &nbsp; &nbsp; User Name : </td>
+        </tr>
+        <tr>
+          <td>
+            &nbsp; &nbsp; &nbsp;  <%= text_field_tag 'login' %>    </td    </tr>
+
+        <tr>
+          <td> &nbsp; &nbsp; &nbsp; Password: </td>
+        </tr>
+        <tr>
+          <!--  <td> &nbsp; &nbsp; &nbsp; <%= password_field_tag 'password', :size => 35,:class => 'black_text'  %>
+            </td>-->
+          <td> &nbsp; &nbsp; &nbsp; <%= password_field_tag 'password' %>    </td
+        </tr>
+
+        <tr>
+          <td> &nbsp; &nbsp;  &nbsp; <%= submit_tag 'Login', :class => 'black_text' %>
+            <%#= set_focus 'user_userid' %>
+
+          </td>
+        </tr>
+      </table>
+
+
+    <% end %>
+    <div class="roundbottom">
+      <img src="/assets/bl.gif" alt=""
+           width="10" height="9" class="corner"
+           style="display: none;" />						</div>
+  </div>
+
+
+
+
+</div>

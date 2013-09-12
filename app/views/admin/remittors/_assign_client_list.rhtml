@@ -1,0 +1,25 @@
+<!-- This handles document.forms[] index -->
+<div id="login_main">
+<% if @processor.clients.size == 0 or @processor.clients.nil? %>
+<% i=0 %>
+<% else %>
+<% i=1 %>
+<% end %>
+<table>
+<tr>
+  <th style="width: 278px">Client Name</th>
+  <th style="width: 143px">TAT</th>
+  <th style="width: 20px"><input type="checkbox" name="all" onClick="checkAll(document.forms[<%= "#{i}"%>].toggle,this)"></th>
+</tr>
+<% form_tag :action => 'allocate_clients', :processor => @processor do %>
+<% for client in @all_clients %>
+  <tr>
+    <td style="width: 278px"><%= client.name %></td>
+    <td style="width: 143px"><%= client.tat %></td>
+    <td style="width: 20px"><%= check_box :clients_to_assign, client.id , :id => 'toggle' %></td>
+  </tr>
+<% end %>
+</table>
+<%= submit_tag "Assign", :class => 'button' %>
+<% end %>
+</div>

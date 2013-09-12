@@ -1,0 +1,104 @@
+#!/usr/bin/env ruby
+require File.dirname(__FILE__) + '/../config/boot'
+
+# FIXME: This needs to be changed to work on neptune
+# TODO: make require 'dbf' below work without this path hack at all
+# for Windows
+$:.unshift('C:/ruby/lib/ruby/gems/1.8/gems/dbf-0.4.0/lib')
+#$:.unshift('/opt/local/lib/ruby/gems/1.8/gems/dbf-0.4.0/lib')
+ 
+require 'dbf'
+require 'Batch'
+require 'Job'
+
+# TODO: Make this take options rather than hard code as below
+# require 'optparse'
+# options = { :facility => sitecode, :dbf => dbf }
+# OptionParser.new do |opt|
+#   opt.banner = "Usage: ldbf [options]"
+#   opt.on('-f', '--facility', 'Set facility by sitecode.') { |v| options[:facility] = v }
+#   opt.on("--dbf=[#{dbf}]", 'Load date from DBF file.') { |v| options[:dbf] = v }
+#   opt.parse!(ARGV)
+# end
+
+logger = Logger.new(STDOUT)
+logger.level = Logger::DEBUG
+
+# TODO: Get filename from command line
+
+file_to_read = ARGV[0]
+#if ARGV[0] =~ /\d{4}\w{1}(\d{3})/ 
+#	file_to_read = $1
+#end
+
+
+dbu = DBF::Reader.new(file_to_read)
+
+
+# TODO: Get database connection information from database.yml and Rails environment settings
+ActiveRecord::Base.establish_connection(
+        :adapter  => "mysql",
+        :host     => "localhost",
+        :username => "root",
+        :password => "",
+        :database => "workalloc021_dev"
+      )
+
+# TODO: Get sitecode from command line.
+
+site_code = ARGV[1]
+
+# TODO: Use directory name for site code number
+#directory_name = File.dirname(ARGV[0])
+#if directory_name =~ /\d{4}\w{1}(\d{3})/
+#	site_code = "00" + $1
+#end
+
+r = dbu.record(1)
+
+f = Facility.find_by_sitecode(site_code)
+
+b = Batch.create!(:batchid=>r['BAT_ID'],
+                  :date => r['BAT_DATE'],
+                  :facility=> f,
+                  :arrival_time => Time.now,
+                  :target_time  => Time.now + f.client.tat.hours,
+                  :status => "New",
+                  :source => file_to_read)
+
+seen_chk_num = {}
+current_job = nil
+eob_count = 0
+chk_num = ""
+dbu.records.each do |r|
+  chk_num = r['CHK_NUM'].strip
+  next if chk_num == '999999999'
+  img_type = r['IMG_TYPE']
+  
+  logger.debug "\t|#{chk_num}| |#{img_type}|"
+  
+  if !seen_chk_num[chk_num]
+    seen_chk_num[chk_num] = 1
+    
+    if !current_job.nil?
+      current_job.estimated_eob = eob_count 
+      logger.info "saving #{current_job.check_number} with #{current_job.estimated_eob} EOBs"
+      current_job.save!
+    end
+    
+    payer = Payer.find_by_payid(r['PAY_ID'])
+    logger.warn "Unable to find payer #{r['PAY_ID']}" if payer.nil?
+    
+    current_job = Job.new(:batch => b, :check_number => chk_num, :payer => payer)
+    eob_count = 0
+  end
+  
+  eob_count += 1 if img_type == 'EOB'
+end
+
+# TODO: Reorganize so this doesn't duplicate code in loop above
+current_job.estimated_eob = eob_count
+logger.info "saving #{current_job.check_number} with #{current_job.estimated_eob} EOBs"
+current_job.save!
+
+

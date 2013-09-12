@@ -1,0 +1,66 @@
+# == Schema Information
+# Schema version: 69
+#
+# Table name: tats
+#
+#  id            :integer(11)   not null, primary key
+#  expected_time :datetime      
+#  comments      :string(255)   
+#  batch_id      :integer(11)   
+#
+
+# Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
+
+tat1:
+  id:             1
+  expected_time:  <%= (Time.now + 24.hours).to_s(:db) %>
+  comments:       "comment1"
+  batch_id:       1
+  
+tat2:
+  id:             2
+  expected_time:  <%= (Time.now + 24.hours).to_s(:db) %>
+  comments:       "comment1"
+  batch_id:       2
+  
+tat3:
+  id:             3
+  expected_time:  <%= (Time.now + 24.hours).to_s(:db) %>
+  comments:       "comment1"
+  batch_id:       3
+  
+tat4:
+  id:             4
+  expected_time:  <%= (Time.now + 24.hours).to_s(:db) %>
+  comments:       "comment1"
+  batch_id:       4
+  
+tat5:
+  id:             5
+  expected_time:  <%= (Time.now + 24.hours).to_s(:db) %>
+  comments:       "comment1"
+  batch_id:       5
+  
+tat6:
+  id:             6
+  expected_time:  <%= (Time.now + 24.hours).to_s(:db) %>
+  comments:       "comment1"
+  batch_id:       6
+  
+tat7:
+  id:             7
+  expected_time:  <%= (Time.now + 24.hours).to_s(:db) %>
+  comments:       "comment1"
+  batch_id:       18
+  
+tat8:
+  id:             8
+  expected_time:  <%= (Time.now + 24.hours).to_s(:db) %>
+  comments:       "comment1"
+  batch_id:       19
+  
+tat9:
+  id:             9
+  expected_time:  <%= (Time.now + 24.hours).to_s(:db) %>
+  comments:       "comment1"
+  batch_id:       20

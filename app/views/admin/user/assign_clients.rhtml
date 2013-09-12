@@ -1,0 +1,43 @@
+<div id="login_main">
+<h1>Assign Clients to <%= @processor.userid %></h1>
+
+<div id="assigned_clients">
+<% if @processor.clients.size == 0 or @processor.clients.nil? %>
+No assigned clients! Add them using the list below:
+<% else %>
+
+<div id="login_main">
+<table>
+<tr>
+  <th style="width: 278px">Client Name</th>
+  <th style="width: 143px">TAT</th>
+  <th style="width: 20px"><input type="checkbox" name="all" onClick="checkAll(document.forms[0].toggle,this)"></th>
+</tr>
+<% form_tag :action => 'remove_clients', :processor => @processor do %>
+<% for client in @processor.clients %>
+  <tr>
+    <td><%= client.name %></td>
+    <td><%= client.tat %></td>
+    <td><%= check_box :clients_to_remove, client.id , :id => 'toggle' %></td>
+  </tr>
+<% end %>
+</table>
+<%= submit_tag "Remove", :class => 'button' %>
+<% end %>
+<% end %>
+</div>
+</div>
+
+<hr/>
+
+<div id="client_list">
+<% if @all_clients.size > 0 %>
+  <%= render :partial => 'assign_client_list' %>
+<% else %>
+  <h4> All Clients have been assigned.</h4>
+<% end %>
+</div>
+<br/><br/>
+<%= link_to image_tag("arrow_undo.png", :alt => 'Back'), :action => 'list' %>
+
+</div>

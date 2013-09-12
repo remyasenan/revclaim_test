@@ -1,0 +1,10 @@
+     <div>
+        Logged in as <%= @user.name %> (<%= @rol[0].name %>)<br/>
+        <% if @rol[0].name == 'Processor' %>
+          Today's Claim Count   : <%= @user.completed_jobs %><br/>
+          Accuracy Percentage : <%= @user.field_accuracy %><br/>
+        <% elsif @rol[0].name == 'QA' %>
+          Today's Claim Count   : <%= @user.completed_jobs_by_qa %><br/>
+        <% end %>
+        <%= link_to "Change Password", :action => "change_password" %>
+      </div>

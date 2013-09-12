@@ -1,0 +1,77 @@
+K 25
+svn:wc:ra_dav:version-url
+V 44
+/revenuemed/revclaim/!svn/ver/1488/trunk/lib
+END
+role_requirement_system.rb
+K 25
+svn:wc:ra_dav:version-url
+V 70
+/revenuemed/revclaim/!svn/ver/879/trunk/lib/role_requirement_system.rb
+END
+xchar.rb
+K 25
+svn:wc:ra_dav:version-url
+V 52
+/revenuemed/revclaim/!svn/ver/879/trunk/lib/xchar.rb
+END
+authenticated_system.rb
+K 25
+svn:wc:ra_dav:version-url
+V 68
+/revenuemed/revclaim/!svn/ver/1471/trunk/lib/authenticated_system.rb
+END
+zipper.rb
+K 25
+svn:wc:ra_dav:version-url
+V 54
+/revenuemed/revclaim/!svn/ver/1428/trunk/lib/zipper.rb
+END
+OCR_Data.rb
+K 25
+svn:wc:ra_dav:version-url
+V 55
+/revenuemed/revclaim/!svn/ver/879/trunk/lib/OCR_Data.rb
+END
+Parser.rb
+K 25
+svn:wc:ra_dav:version-url
+V 54
+/revenuemed/revclaim/!svn/ver/1472/trunk/lib/Parser.rb
+END
+role_requirement_test_helper.rb
+K 25
+svn:wc:ra_dav:version-url
+V 75
+/revenuemed/revclaim/!svn/ver/879/trunk/lib/role_requirement_test_helper.rb
+END
+authenticated_test_helper.rb
+K 25
+svn:wc:ra_dav:version-url
+V 73
+/revenuemed/revclaim/!svn/ver/1453/trunk/lib/authenticated_test_helper.rb
+END
+edi_helper.rb
+K 25
+svn:wc:ra_dav:version-url
+V 57
+/revenuemed/revclaim/!svn/ver/879/trunk/lib/edi_helper.rb
+END
+hijacker.rb
+K 25
+svn:wc:ra_dav:version-url
+V 55
+/revenuemed/revclaim/!svn/ver/879/trunk/lib/hijacker.rb
+END
+hodel_3000_compliant_logger.rb
+K 25
+svn:wc:ra_dav:version-url
+V 74
+/revenuemed/revclaim/!svn/ver/879/trunk/lib/hodel_3000_compliant_logger.rb
+END
+837I_xml_validation.rb
+K 25
+svn:wc:ra_dav:version-url
+V 67
+/revenuemed/revclaim/!svn/ver/1117/trunk/lib/837I_xml_validation.rb
+END

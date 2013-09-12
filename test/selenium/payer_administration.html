@@ -1,0 +1,179 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>payer_administration</title>
+</head>
+<body>
+<table cellpadding="1" cellspacing="1" border="1">
+<thead>
+<tr><td rowspan="1" colspan="3">payer_administration</td></tr>
+</thead><tbody>
+<tr>
+	<td>open</td>
+	<td>/dashboard/login</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>link=Login</td>
+	<td></td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>userid</td>
+	<td>admin</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>password</td>
+	<td>admin341</td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>commit</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>link=Payer Administration</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>link=New payer</td>
+	<td></td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>payer_gateway</td>
+	<td>Test Gateway</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>payer_payid</td>
+	<td>1234</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>payer_payer</td>
+	<td>Test Payer</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>payer_gr_name</td>
+	<td>Test Name</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>payer_pay_address_one</td>
+	<td>Address one</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>payer_pay_address_two</td>
+	<td>Address two</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>payer_pay_address_three</td>
+	<td>Address three</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>payer_pay_address_four</td>
+	<td>Address four</td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>commit</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyTextPresent</td>
+	<td>Payer was successfully created.</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>link=New payer</td>
+	<td></td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>payer_gateway</td>
+	<td>Test Gateway 2</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>payer_payid</td>
+	<td>235432</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>payer_payer</td>
+	<td>Test Payer 2</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>payer_gr_name</td>
+	<td>Test Name 2</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>payer_pay_address_one</td>
+	<td>Address one</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>payer_pay_address_two</td>
+	<td>Address two</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>payer_pay_address_three</td>
+	<td>Address three</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>payer_pay_address_four</td>
+	<td>Address four</td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>commit</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyTextPresent</td>
+	<td>Payer was successfully created.</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>payers_to_delete_1</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>payers_to_delete_2</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>document.forms[1].commit</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyTextPresent</td>
+	<td>Deleted 2 payer(s).</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>link=Logout</td>
+	<td></td>
+</tr>
+
+</tbody></table>
+</body>
+</html>

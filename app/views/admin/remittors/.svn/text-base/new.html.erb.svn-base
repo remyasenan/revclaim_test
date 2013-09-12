@@ -1,0 +1,63 @@
+<%= javascript_include_tag "default" %>
+<script type="text/javascript">
+
+</script>
+<div id="login_main">
+<h1>Sign up as a new user</h1>
+<% @remittor.password = @remittor.password_confirmation = nil %>
+
+
+<%= form_for :remittor, :url => admin_remittors_path do |f| %>
+  <%= errors_for(@remittor) %>
+  <table>
+    <tr>
+      <td style="width: 278px"><label for="remittor_name">Name *</label></td><td><%= text_field 'remittor', 'name',:class => 'black_text'  %></td>
+    </tr>
+    <tr>
+      <td><label for="remittor_login">User ID *</label></td><td><%= text_field 'remittor', 'login',:class => 'black_text' %></td>
+    </tr>
+    <tr>
+      <td><label for="remittor_email">Email *</label></td><td><%= text_field 'remittor', 'email',:value => "support@revenuemed.com",:class => 'black_text' %></td>
+    </tr>
+    <tr>
+      <td><label for="remittor_password">Password *</label></td><td><%= password_field 'remittor', 'password',:class => 'black_text' %></td>
+    </tr>
+    <tr>
+      <td><label for="remittor_password_confirmation">Confirm Password *</label></td><td><%= password_field 'remittor', 'password_confirmation',:class => 'black_text' %></td>
+    </tr>
+    <tr>
+      <td><label for="remittor_shift">Shift</label></td><td><%= select_tag 'shift', options_for_select(@shifts, @selected),:class => 'black_text' %></td>
+    </tr>
+    <tr>
+      <td><label for="remittor_role">Role</label></td><td><%o = 0
+
+        @roles.each do |role| %>
+          <%o = o+1%>
+
+          | <%=role%><label for="o<%= o %>"><input id="o<%= o %>" name="role[id][]" type="checkbox" value= "<%=role%>" onclick="choose_facility(id)"; > </label>
+          <% end %>
+
+      </td>
+    </tr>
+
+
+
+
+    <tr>
+      <td><label for="remittor_accuracy"> Accuracy %</label></td><td><%= text_field 'remittor', 'field_accuracy',:class => 'black_text' %></td>
+    </tr>
+
+    <tr>
+      <td><label for="remittor_total_eobs">Total Claims</label></td><td><%= text_field 'remittor', 'total_eobs',:class => 'black_text' %></td>
+    </tr>
+    <tr>
+      <td><label for="remittorr_rejected_eobs">Rejected Claims</label></td><td><%= text_field 'remittor', 'rejected_eobs',:class => 'black_text' %></td>
+    </tr>
+  </table>
+  <%= set_focus 'remittor_name' %>
+
+  <p><%= submit_tag 'Create'%> </p>
+  <br/> <!-- TODO: Handle in CSS -->
+  <%= link_to image_tag("arrow_undo.png", :alt => "Cancel"), :action => 'list' %>
+<% end %>
+</div>

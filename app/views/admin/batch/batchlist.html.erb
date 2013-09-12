@@ -1,0 +1,97 @@
+
+<div id="login_main">
+  
+  <div class="light_info">
+    <%= form_tag "",:method =>"get" do %>
+      <%= select_tag 'criteria',  optionize('Batch Date', 'Batch ID',   'Site Name') %>
+      <%= select_tag 'compare', optionize('=','>', '<')%>
+      <%= text_field_tag 'to_find', nil,  :size => '10' %>
+      <%= submit_tag 'Filter', :class => 'button' %>
+    <% end %>
+    <%= set_focus 'to_find' %>
+  </div>
+  <%= legend_start %>
+  <table style="width:100%"><td class="black_text" style="width:900px">
+      
+      
+      <%= legend "color" => "red", "text" => "Output Ready" %>
+  </td>  </table>
+  <%= legend_end %>
+  <% unless @batches.blank? %>
+    <BR><BR>
+    <%= form_tag :action => 'status_change' do %>
+      <table>
+        <tr>
+          <th> Batch Date </th>
+          <th> <a>Batch ID</a> </th>
+          <th> Facility </th>
+          <th> Total Claims </th>
+          <th> Completed Claims </th>
+          <th> Incompleted Claims </th>
+          <th> Arrival Time (EST)</th>
+          <th> Expected Completion Time (EST)</th>
+      
+        </tr>
+   <%=  will_paginate @batches%>
+        <%  @batches.each do|batch| %>
+    
+          <% cls = ''
+          batchcount = batch.eob
+          @batch_id = Batch.find_by_batchid(batch.batchid).id
+          completedjob = Job.count(:all,:conditions=>"job_status='complete' and batch_id=#{@batch_id}")
+          incompletedjob = Job.count(:all,:conditions=>"job_status='Incomplete' and batch_id=#{@batch_id}")
+          totalcount = completedjob + incompletedjob
+          if  batchcount == totalcount
+            cls = 'red'
+          end
+    
+    
+          %>
+    
+          <tr>
+            <td nowrap class="<%= cls %>" align='right'><%= format_date(batch.date) %> </td>
+            <% if @rol[0].name == 'Supervisor' or @rol[0].name == 'admin'  or   @rol[0].name == 'HLSC' %>
+              <%@id =Batch.find_by_batchid(batch.batchid).id%>
+              <td nowrap class="<%= cls %>" align='right'><%= link_to batch.batchid, :controller => 'batch', :action => 'incompletedjobs', :id => @id %> </td>
+      
+            <% end %>
+            <td nowrap class="<%= cls %>"><%= batch.facility.name%> (<%= batch.facility.sitecode %>) </td>
+            <td nowrap class="<%= cls %>" align='right'>&nbsp;<%= batch.eob %></td>
+            <%
+            completedjob = Job.count(:all,:conditions=>"job_status='complete' and batch_id=#{@id}")
+            incompletedjob = Job.count(:all,:conditions=>"job_status='Incomplete' and batch_id=#{@id}")
+            %>
+            <td nowrap class="<%= cls %>" align='right'><%= completedjob %></td>
+            <td nowrap class="<%= cls %>" align='right'><%= incompletedjob %></td>
+            <td nowrap class="<%= cls %>" align='right'><%= format_datetime(batch.arrival_time) %></td>
+            <td nowrap class="<%= cls %>"  align='right'>
+              <% 
+              @batchid = Batch.find_by_batchid(batch.batchid).id
+              @count=Tat.count(:all,:conditions=>"batch_id=#{@batchid}")
+              %>
+              <% if @count==0  %>
+                N/A
+              <% else %>
+                <% date=Tat.find_by_batch_id(@batchid ).expected_time%>
+                <%= format_datetime(date)%>
+                  <% if @rol[0].name == 'Supervisor' or @rol[0].name == 'HLSC' && batch.manual_override %> *<% end %>
+                <% end %>
+                <td><%= check_box :batch_to_delete, batch.batchid, :id => 'toggle' %> </td>
+              </td>
+              <%
+              @batchid = Batch.find_by_batchid(batch.batchid).id
+              @totaljobcount = Job.count(:conditions=>"batch_id=#{@batchid}")
+              @totalcomletedjobcount = Job.count(:conditions=>"batch_id=#{@batchid} and job_status='Complete' ")
+              %>
+      
+            </tr>
+          <% end %>
+    
+        </table>
+        <%= submit_tag "Output Ready", :class => 'button', :name => "option1" %>
+      <% end %>
+      <br/>
+    <% else %>
+      <h4> No matching Batches found. </h4>
+    <% end %>
+  </div>

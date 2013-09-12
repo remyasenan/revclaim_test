@@ -1,0 +1,142 @@
+<div id="login_main">
+  <% unless @jobs.blank? %>
+    <%= javascript_include_tag 'application' %>
+    <h1>Allocate Jobs - Batch
+      <%= @jobs[0].batch.batchid %>
+      (Batch Date: <%= format_date(@jobs[0].batch.date) %>,
+      Client: <%= @jobs[0].batch.facility.client.name %>)</h1>
+  <% else %>
+    <h1>Allocate Jobs</h1>
+  <% end %>
+
+  <div class="light_info">
+    <%= form_tag :action => 'allocate', :jobs => @batch ,:back_page => params[:back_page] do %>
+      <%= select 'job', 'criteria', ['Count', 'Status', 'Processor', 'QA'] %>
+      <%= select 'job', 'compare', ['=','>=', '<=']%>
+      <%= text_field 'job', 'to_find', :size => '10' %>
+      <%= submit_tag 'Filter', :class => 'button' %>
+    <% end %>
+    <%= set_focus 'job_to_find' %>
+  </div>
+
+  <%= legend_start %>
+  <table style="width:100%"><td class="black_text" style="width:900px">
+      <%= legend "color" => "white", "text" => "New"%>
+      <%= legend "color" => "blue", "text" => "Processing"%>
+      <%= legend "color" => "green", "text" => "Complete"%>
+      <%= legend "color" => "red", "text" => "Rejected"%>
+      <%= legend "color" => "lightgrey", "text" => "Incomplete" %>
+    </td>  </table>
+  <%= legend_end %>
+  <br/>
+  <br/>
+  <% unless @jobs.blank? %>
+    <%= form_tag :action => 'allocate_deallocate', :id => @jobs_to_allocate ,:page=> params[:page] ,:batchid => params[:id], :back_page => params[:back_page] do %>
+
+      <table style="width: 100%">
+        <tr>
+          <th>Batch ID</th>
+          <th>Image <br/>Name </th>
+          <th>Claims<br/><font size='1'>Est./Comp.</font></th>
+          <th>Page count</th>
+          <th>Processor</th>
+          <th>Processors <br/> Status</th>
+          <th>QA </th>
+          <th>QAs <br/>status</th>
+          <th>Job Status</th>
+          <th>Incomplete<br/>Claims</th>
+          <th>Payer</th>
+          <th>Comment</th>
+          <th style="width: 20px"><input type="checkbox" name="all" onClick="checkAll(document.forms[1].toggle,this)"></th>
+        </tr>
+
+        <%@jobs.each do |job| %>
+          <%cls=''%>
+          <%if job.job_status == "Rejected"
+            cls = 'red'
+          elsif job.job_status == "Processing"
+            cls = 'blue'
+          elsif job.job_status == "Complete"
+            cls = 'green'
+          elsif (job.job_status == "Incomplete")
+            cls = 'lightgrey'
+          else
+            cls = 'white'
+          end
+        %>
+          <tr>
+            <td class="<%= cls %>" align='right'><%= job.batch.batchid %></td>
+
+            <td class="<%= cls %>"><%= job.tiff_number %></td>
+            <% 
+            if job.batch.batchid.upcase.include?("CMS1500")
+              completed_eob = Cms1500.where("job_id = #{job.id}").count
+            else
+              completed_eob = Ub04ClaimInformation.where("job_id = #{job.id}").count
+            end
+            %>
+            <%# job.job_status == "Complete" ? completed_claims = job.estimated_eob : completed_claims = 0 %>
+            <td class="<%= cls %>" align='right'><%= job.estimated_eob %> / <%= completed_eob %></td>
+
+            <td class="<%= cls %>" align='right'><%= job.page_count %></td>
+            <td class="<%= cls %>">&nbsp;
+
+              <% if job.processor_id %>
+                <%= link_to Job.processor_name_id(job.processor_id), :controller => '/admin/remittors', :action => 'show',:id => job.processor_id,:back_page=>params[:back_page]%>
+
+              <% end %>
+            </td>
+            <td class="<%= cls %>">&nbsp;<%= job.processor_status %>
+            </td>
+            <td class="<%= cls %>">&nbsp;
+              <% if job.qa_id %>
+                <%= link_to Job.qa_name(job.qa_id), :controller => '/admin/remittors', :action => 'show', :id => job.qa ,:back_page=>params[:back_page]%>
+              <% end %>
+            </td>
+            <td class="<%= cls %>"><%= job.qa_status %></td>
+            <td class="<%= cls %>"><%= job.job_status %></td>
+            <td class="<%= cls %>">
+              <% if job.incomplete_tiff.blank? %>
+                None (<% unless job.incomplete_count.blank? %><%= job.incomplete_count %><% else %>0<%end%>)</td>
+            <% else %>
+                <%= job.incomplete_tiff %> (<%= job.incomplete_count %>)</td>
+              <% end %>
+            <td class="<%= cls %>">
+              <% if job.payer.nil? %>
+                No Payer
+              <% else %>
+                <strong><%= link_to "#{job.payer.payer}", :action => 'allocate_payer_jobs', :payer => job.payer %></strong>
+              <% end %>
+            </td>
+            <td><textarea readonly='true' cols="20" rows="2" class="black_text"><%= job.comment %></textarea></td>
+            <td><%= check_box :jobs_to_allocate, job.id, :id => 'toggle' %></td>
+          </tr>
+        <% end %>
+      </table>
+
+      <%= submit_tag "Allocate Processor", :class => 'button', :name => "option1" %>
+      <%= submit_tag "Deallocate Processor", :class => 'button', :name => "option1" %>
+      <%= submit_tag "Allocate QA", :class => 'button', :name => "option1" %>
+      <%= submit_tag "Deallocate QA", :class => 'button', :name => "option1" %>
+
+    <% end %>
+  <% else %>
+    <%if @flag==2%>
+      <h4> No Jobs Created for batch <%= link_to @batch.batchid, :controller => '/admin/batch', :action => 'show', :id => @batch %> . </h4>
+    <% end %>
+  <% end %>
+
+  <br/>
+</div>
+<br/>
+
+<br/>
+<br/>
+
+<div>
+  <% if params['back_page']==nil%>
+    <%= link_to image_tag("arrow_undo.png", :alt => "Back"),:page => params[:page],:controller => '/admin/batch', :action => 'allocate' %>
+  <% else %>
+    <%= link_to image_tag("arrow_undo.png", :alt => "Back"),:page => params[:page],:controller => '/admin/batch', :action => 'non_compliant' %>
+  <%end%>
+</div>

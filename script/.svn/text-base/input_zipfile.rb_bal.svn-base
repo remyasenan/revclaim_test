@@ -1,0 +1,121 @@
+#!/usr/bin/env ruby
+require "logger"
+require 'net/smtp'
+
+RAILS_PATH = "/var/apps/revclaim/releases/20091112121600/"
+ZIP_PATH = "#{RAILS_PATH}zip_new/"
+LOG_FILE_PATH = "#{RAILS_PATH}"
+BACKUP_PATH = "/home/revlogic/revsync/back_zip/"
+ARCHIVE_PATH = "#{ZIP_PATH}zip_archive/"
+
+ZIP_PATH_DENTAL = "#{RAILS_PATH}zip_new_ans_dental/"
+LOG_FILE_PATH_DENTAL = "#{RAILS_PATH}/log_files_dental/"
+BACKUP_PATH_DENTAL = "/home/revlogic/ans_dental/back_zip/"
+ARCHIVE_PATH_DENTAL= "#{ZIP_PATH}zip_archive/ans_dental/"
+
+#REVCLAIM FILE TRANSFER STARTS
+file_to_write = Time.now.strftime("%d%m%Y-%H%M").to_s + ".log"
+log_file = File.open("#{RAILS_PATH}zip_import/#{file_to_write}", "w")
+log = Logger.new(log_file)
+log.info "Getting list of files @ backup location:"
+backup_files = Dir.glob(BACKUP_PATH+"*.zip")
+text_files = Dir.glob(BACKUP_PATH+"*.zip.txt")
+log.info "backup files"
+log.info backup_files
+unless backup_files
+  log.info "No files found."
+  exit
+end
+log.info "Getting list of files @ archive location:"
+archive_files = Dir.glob(ARCHIVE_PATH+"*.zip")
+unless archive_files
+  log.info "No files found."
+  exit
+end
+log.info "Copying files from backup directory to data directory..."
+#log.info "Total files to copy: #{(backup_files - archive_files).size}"
+#files_to_copy = backup_files - archive_files
+log.info "Total text files to copy: #{(text_files).size}"
+text_files_to_copy = text_files
+log.info "Starting text file transfer"
+text_files_to_copy.each do |txt_file|
+  text_file_size = File.size("#{txt_file}")rescue 0
+  if text_file_size >0
+    system "mv #{txt_file} #{ZIP_PATH}"
+  else
+    log.error "File #{txt_file} has 0 bytes"
+    system "mv #{txt_file} #{ZIP_PATH}zip_archive/"
+  end 
+end
+log.info "Total zip files to copy: #{(backup_files).size}"
+files_to_copy = backup_files
+log.info "Starting zip transfer"
+files_to_copy.each do |ftc|
+  file_size = File.size("#{ftc}") rescue 0
+  if file_size > 0
+    system "#{RAILS_PATH}script/runner \"Runner.input_zipfile('#{ftc}')\""
+    log.info "#{RAILS_PATH}script/runner \"Runner.input_zipfile('#{ftc}')\""
+    system "mv #{ftc} #{ZIP_PATH}zip_archive/"
+  else
+    log.error "File #{ftc} had 0 bytes"
+    system "mv #{ftc} #{ZIP_PATH}zip_archive/"
+  end
+end
+
+log.info "Zip transfer complete"
+#REVCLAIM FILE TRANSFER ENDS
+
+
+#REVDENTAL FILE TRANSFER STARTS
+file_to_write = Time.now.strftime("%d%m%Y-%H%M").to_s + ".log"
+log_file = File.open("#{RAILS_PATH}zip_import/ans_dental/#{file_to_write}", "w")
+log = Logger.new(log_file)
+log.info "Getting list of files @ backup location:"
+backup_files_dental = Dir.glob(BACKUP_PATH_DENTAL+"*.zip")
+text_files_dental = Dir.glob(BACKUP_PATH_DENTAL+"*.zip.txt")
+log.info "ANS Dental backup files"
+log.info backup_files_dental
+unless backup_files_dental
+  log.info " No ANS Dental zip files found."
+  exit
+end
+log.info "Getting list of ANS Dental files @ archive location:"
+archive_files_dental = Dir.glob(ARCHIVE_PATH_DENTAL+"*.zip")
+unless archive_files_dental
+  log.info "No ANS Dental archive files found."
+  exit
+end
+log.info "Copying ANS dental claim files from backup directory to data directory..."
+#log.info "Total files to copy: #{(backup_files - archive_files).size}"
+#files_to_copy = backup_files - archive_files
+log.info "Total ANS dental text files to copy: #{(text_files_dental).size}"
+ans_dental_text_files_to_copy = text_files_dental
+log.info "Starting text file transfer"
+ans_dental_text_files_to_copy.each do |txt_file|
+  ans_dental_text_file_size = File.size("#{txt_file}")rescue 0
+  if ans_dental_text_file_size >0
+    system "mv #{txt_file} #{ZIP_PATH_DENTAL}"
+  else
+    log.error "File #{txt_file} has 0 bytes"
+    system "mv #{txt_file} #{ZIP_PATH}zip_archive/ans_dental/"
+  end 
+end
+log.info "Total ANS dental zip files to copy: #{(backup_files_dental).size}"
+ans_dental_files_to_copy = backup_files_dental
+log.info "Starting zip transfer"
+ans_dental_files_to_copy.each do |ftc|
+ ans_dental_file_size = File.size("#{ftc}") rescue 0
+  if ans_dental_file_size > 0
+    system "#{RAILS_PATH}script/runner \"Runner.ans_dental_input_zipfile('#{ftc}')\""
+    log.info "#{RAILS_PATH}script/runner \"Runner.ans_dental_input_zipfile('#{ftc}')\""
+    system "mv #{ftc} #{ZIP_PATH}zip_archive/ans_dental/"
+  else
+    log.error "File #{ftc} had 0 bytes"
+    system "mv #{ftc} #{ZIP_PATH}zip_archive/ans_dental/"
+  end
+end
+
+log.info "ANS Dental Zip transfer complete"
+
+
+#REVDENTAL FILE TRANSFER ENDS

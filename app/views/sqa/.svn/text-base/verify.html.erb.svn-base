@@ -1,0 +1,123 @@
+<%= error_messages_for 'eob' %>
+<h1></h1>
+<h2>Job details</h2>
+  <table>
+    <tr>
+      <th>Batch ID</th>
+      <th>Date</th>
+      <th>Facility</th>
+     <th>Check Number</th>
+	<th>Tiff Number</th>
+      <th>QA</th>
+      <th>QA status</th>
+      <th>Accuracy(%) <br/> Field | EOB</th>
+      <th>Sampling Rate</th>
+<!--     <th>EOBs SQAd</th>
+      <th>EOB Pending SQA</th> -->
+    </tr>
+    <tr>
+      <% batch = @job.batch %>
+      <td><%= batch.batchid%></td>
+      <td><%= batch.date %></td>
+      <td><%= batch.facility.name %></td>
+      <td><%= @job.check_number %></td>
+		<td><%= @job.tiff_number %></td>
+      <td><%= @user.name %></td>
+      <td><%= @job.qa_status %></td>
+      <td align=center><%= format_percentage(@user.field_accuracy) %> | <%= format_percentage(@user.eob_accuracy) %></td>
+      <td><%= @sample_rate %></td>
+ <!--    <td><%= @user.eob_qa_checked %></td>
+      <td><% if (@sample_rate - @user.eob_qa_checked) < 0 %>0<% else %><%= @sample_rate - @user.eob_qa_checked %><% end %></td> -->
+    </tr>
+  </table>
+  <% if @eobs.size > 0 %>
+  <h2>EOBs Verified by QA</h2>
+  <table>
+    <tr>
+      <th>Total fields</th>
+      <th>Total Incorrect Fields</th>
+      <th>Account Number</th>
+      <th>Error Type</th>
+      <th>Comment</th>
+      <th>Status</th>
+      <th>Payer</th>
+    </tr>
+    <% @eobs.each do |eob| %>
+    <tr>
+        <td><%= eob.total_fields %></td>
+        <td><%= eob.total_incorrect_fields %></td>
+        <td><%= eob.account_number %></td>
+        <td><%= eob.eob_error %></td>
+        <td><%= eob.comment %></td>
+        <td><%= eob.status%></td>
+        <td><%= eob.payer %></td>
+        
+    </tr>
+    <% end %>
+  </table>
+  <% else %>
+    <h2>No EOB verified </h2>
+  <% end %>
+  <h2>Verify EOBs QAd</h2>
+  <table>
+    <tr>
+      <th>Total fields</th>
+      <th>Total Incorrect<br/> Fields</th>
+      
+      <th>Error Type </th>
+      <th>Comment</th>
+      
+    </tr>
+
+      <% form_tag :action => 'eob_complete', :job => @job do %>
+        <td><%= text_field 'eob', 'total_fields', :size => 10 %></td>
+        <td><%= text_field 'eob', 'total_incorrect_fields', :size => 10%></td>
+       
+        <td><%= select 'error', 'type', @error_types %></td>
+        <td><%= text_area 'eob', 'comment', :rows => 2, :cols => 20 %></td>
+        
+       
+       
+		
+			
+      <%= set_focus 'eob_total_fields' %>
+    </tr>
+	
+	
+	<tr></tr>
+	<tr></tr>
+	<tr></tr>
+	<tr></tr>
+	<tr></tr>
+	<tr></tr>
+	<tr></tr>
+	<tr></tr>
+		<tr>
+		<th>Total EOBs</th>
+      <th>Total Incorrect <br/>EOBs</th>
+	  <th>Comment</th>
+	</tr>
+	
+   
+	<tr>
+		<td><%= text_field 'eob', 'total_eobs', :size => 10 %></td>
+        <td><%= text_field 'eob', 'total_incorrect_eobs', :size => 10%></td>	
+		<td><%= text_area 'eob', 'eob_comment', :rows => 2, :cols => 30 %></td>
+	</tr>
+		
+	<tr></tr>
+	<tr></tr>
+	<tr></tr>
+	<tr></tr>
+	<tr></tr>
+	<tr></tr>
+	<tr></tr>
+	 <tr> <td><%= submit_tag "Complete", :class => 'button' %></td></tr>
+	 <% end %>
+  </table>
+  <h7><i>*All fields except comments are necessary.</i></h7>
+  <br/><br/>
+
+
+
+ <%= link_to image_tag("arrow_undo.png", :alt => "Cancel"), :action => 'my_job' ,:back_page=>params[:back_page]%>

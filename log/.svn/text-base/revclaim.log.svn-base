@@ -1,0 +1,52 @@
+** Daemonized, any open files are closed.  Look at log/revclaim.pid and log/revclaim.log for info.
+** Starting Mongrel listening at 0.0.0.0:3005
+** Starting Rails with development environment...
+** Rails loaded.
+** Loading any Rails specific GemPlugins
+** Signals ready.  TERM => stop.  USR2 => restart.  INT => stop (no restart).
+** Rails signals registered.  HUP => reload (without restart).  It might not work well.
+** Mongrel 1.1.5 available at 0.0.0.0:3005
+** Writing PID file to log/revclaim.pid
+[#<Role id: 376, name: "Processor">]
+[#<Role id: 376, name: "Processor">]
+[#<Role id: 376, name: "Processor">]
+[#<Role id: 376, name: "Processor">]
+[#<Role id: 376, name: "Processor">]
+[#<Role id: 1, name: "admin">]
+[#<Role id: 377, name: "QA">]
+4
+4
+4
+[#<Role id: 376, name: "Processor">]
+[#<Role id: 1, name: "admin">]
+4
+4
+4
+376
+376
+376
+376
+376
+376
+[#<Role id: 377, name: "QA">]
+376
+376
+376
+376
+376
+376
+376
+376
+376
+376
+376
+376
+376
+376
+376
+[#<Role id: 376, name: "Processor">]
+[#<Role id: 377, name: "QA">]
+376
+376
+376
+[#<Role id: 376, name: "Processor">]

@@ -1,0 +1,62 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+    <title>Revclaim</title>
+  </head>
+  <body>
+    <div class="inner_cont">
+      <div id="page_left">
+        <% if !(flash[:notice].nil?)%>
+          <div class="caption_success">
+            <%#= flash[:notice]%>
+          </div>
+        <%end%>
+<div class="page_caption">
+          	<table>
+          		<tr>
+</div>
+        <table id="table-list" style="width:30%; float:left;">
+          <thead>
+            <tr>
+              
+              <th >Client</th>
+              <th >Edit</th>
+              <th >Status</th>
+            </tr>
+          </thead>
+          <tbody>
+            <%if (@clients.size>0)%>
+              <% @clients.each do |client| %>
+                <%#if (p.status == "DEACTIVATE")%>
+                  <%#cls = 'disable'%>
+                <%#else%>
+                  <%#cls = ''%>
+                <%#end%>
+                <tr>
+                  
+                  <td align="center"><%= link_to client,{:action => 'show',:id => client.id}%> </td>
+                  <td align="center"><%= link_to image_tag("report_edit.png", :alt => "Edit",:border=>"0"), :action => 'edit',:id => client.id%></td>
+                  <td align="center"><%= client.status%> </td>
+                </tr>
+
+
+              <%end%>
+            <%end%>
+          </tbody>
+
+        </table>
+        <!--end_table-->
+      </div>
+      <!--end_revclaim_page_left-->
+      <div id="page_right">
+        
+        <%#= link_to "About", (:partial => 'about'}, {:class => "a"}, :remote => true %>
+<%#= render :partial => "new",:layout => false %>
+      </div>
+      <!--end_revclaim_page_right-->
+    </div><!--end_revclaim_inner_cont-->
+    
+  </body>
+  <%= link_to 'Add New Client',{:action => 'new'}%>
+</html>

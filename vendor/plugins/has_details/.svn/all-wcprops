@@ -1,0 +1,41 @@
+K 25
+svn:wc:ra_dav:version-url
+V 67
+/revenuemed/revclaim/!svn/ver/1472/trunk/vendor/plugins/has_details
+END
+Rakefile
+K 25
+svn:wc:ra_dav:version-url
+V 76
+/revenuemed/revclaim/!svn/ver/1472/trunk/vendor/plugins/has_details/Rakefile
+END
+init.rb
+K 25
+svn:wc:ra_dav:version-url
+V 75
+/revenuemed/revclaim/!svn/ver/1472/trunk/vendor/plugins/has_details/init.rb
+END
+install.rb
+K 25
+svn:wc:ra_dav:version-url
+V 78
+/revenuemed/revclaim/!svn/ver/1472/trunk/vendor/plugins/has_details/install.rb
+END
+MIT-LICENSE
+K 25
+svn:wc:ra_dav:version-url
+V 79
+/revenuemed/revclaim/!svn/ver/1472/trunk/vendor/plugins/has_details/MIT-LICENSE
+END
+uninstall.rb
+K 25
+svn:wc:ra_dav:version-url
+V 80
+/revenuemed/revclaim/!svn/ver/1472/trunk/vendor/plugins/has_details/uninstall.rb
+END
+README
+K 25
+svn:wc:ra_dav:version-url
+V 74
+/revenuemed/revclaim/!svn/ver/1472/trunk/vendor/plugins/has_details/README
+END

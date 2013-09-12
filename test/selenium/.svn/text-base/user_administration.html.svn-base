@@ -1,0 +1,219 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>user_administration</title>
+</head>
+<body>
+<table cellpadding="1" cellspacing="1" border="1">
+<thead>
+<tr><td rowspan="1" colspan="3">user_administration</td></tr>
+</thead><tbody>
+<tr>
+	<td>open</td>
+	<td>/dashboard/login</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>link=Home</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyTextPresent</td>
+	<td>Please login to continue</td>
+	<td></td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>userid</td>
+	<td>admin</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>password</td>
+	<td>admin341</td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>commit</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyTextPresent</td>
+	<td>Login successful</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>link=User Administration</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>link=New user</td>
+	<td></td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>user_name</td>
+	<td>proc</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>user_userid</td>
+	<td>proc</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>user_password</td>
+	<td>proc</td>
+</tr>
+<tr>
+	<td>select</td>
+	<td>user_role</td>
+	<td>label=Processor</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>user_remark</td>
+	<td>Test Processor</td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>commit</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyTextPresent</td>
+	<td>User was successfully created.</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>link=New user</td>
+	<td></td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>user_name</td>
+	<td>qa</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>user_userid</td>
+	<td>qa</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>user_password</td>
+	<td>qa</td>
+</tr>
+<tr>
+	<td>select</td>
+	<td>user_role</td>
+	<td>label=QA</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>user_remark</td>
+	<td>Test QA</td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>commit</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyTextPresent</td>
+	<td>User was successfully created.</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>link=New user</td>
+	<td></td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>user_name</td>
+	<td>super</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>user_userid</td>
+	<td>super</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>user_password</td>
+	<td>super</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>user_remark</td>
+	<td>Test Supervisor</td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>commit</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyTextPresent</td>
+	<td>User was successfully created.</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>link=Home</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>link=User Administration</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>users_to_delete_1</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>users_to_delete_2</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>users_to_delete_3</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>users_to_delete_4</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>document.forms[1].commit</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyTextPresent</td>
+	<td>Deleted 3 users.</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyTextPresent</td>
+	<td>The default Admin user cannot be deleted.</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>link=Logout</td>
+	<td></td>
+</tr>
+
+</tbody></table>
+</body>
+</html>

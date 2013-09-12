@@ -1,0 +1,1540 @@
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1"></meta>
+  <title>Claim Document</title>
+  <%= javascript_include_tag "highlight" %>
+  <%= javascript_include_tag "ub04" %>
+  <%= javascript_include_tag 'restrict' %>
+</head>
+<body onload="countr()">
+
+<script type="text/javascript" charset="utf-8">
+    //<![CDATA[
+    document.observe("dom:loaded", function() {
+        //for(var i=1;i<=75;i++)
+        //{
+        $("ub04_serviceline_informations_hcpcs").observe("keyup", function() {
+            if ($(this).value.length == 5) {
+                var url = "/cpt_codes/show?code=" + $(this).value;
+                //"/cpt_codes/show?code=" + $(this).value;
+                new Ajax.Request(url, {
+                    method: 'get',
+                    onSuccess: function(transport) {
+                        $("cpt_code_description").update("CPT Code Description :" + transport.responseText);
+                    }
+                })
+            } else {
+                $("cpt_code_description").update("CPT Code Description : CODE INCOMPLETE");
+            }
+        });
+        //}
+    });
+    //]]>
+</script>
+
+
+<div id="Layer2">
+  <script LANGUAGE="JavaScript">
+      imagedisply('<%=@image.public_filename()%>')
+  </script>
+</div>
+
+
+<div id="down_table">
+<%= form_tag({:action => 'submit_ub04'}, :name=>'form1', :onKeyUp=>"highlight1(event)", :onClick=>"highlight1(event)") do %>
+    <br></br>
+    <%= hidden_field_tag :jobid, @jobid %>
+    <%= hidden_field_tag :batchid, session[:batchid] %>
+    <%= hidden_field_tag :payerid, session[:payerid] %>
+    <%= hidden_field_tag :patient_id, @patientinfo.id %>      
+    <%= hidden_field_tag :save_claim, 'false' %>
+    
+    <% unless params[:batch_type].blank? %>
+      <% pcn_batch_type = params[:batch_type] %>
+      <% if pcn_batch_type.include?("PCN") %>
+        <% batch_type = "PCN" %>
+      <% else %>
+        <% batch_type = nil %>
+      <% end %>
+    <% else %>
+      <% batch_type = nil %>
+    <% end %>
+
+    <table width="1000" border="1" cellpadding="0" cellspacing="0" bordercolor="#999999" style="border-collapse:collapse;">
+    <tr>
+    <td>
+    <table width="933" border="0" cellpadding="0" cellspacing="0" class="bord" style="margin-left:18px;">
+      <tr>
+        <td width="284" valign="top" style="height:74px">
+          <table width="282" border="0" cellpadding="0" cellspacing="0">
+            <tr>
+              1 BILLING PROVIDER 
+              <td>&nbsp;&nbsp;&nbsp;
+                <%= text_field_with_auto_complete :billing_provider_details, :billing_provider_last_name, :size => "50",
+                                                  :class => "black_text", :onFocus=>"setXYScroll(15)", :tabindex=>"1",
+                                                  :onkeypress => "enlargeTextfieldSize('billing_provider_details_billing_provider_last_name',50)",
+                                                  :onblur => "resetTextfieldSize('billing_provider_details_billing_provider_last_name',50); billing_providerdetails_autopopulate(); convert_case_toupper('billing_provider_details_billing_provider_last_name')",
+                                                  :value => @patientinfo.billing_provider_last_name unless @patientinfo.nil? %>
+              </td>
+            </tr>
+            <tr>
+              <td colspan="3">&nbsp;&nbsp;
+                <%= text_field :billing_provider_details, :billing_provider_address1,
+                               :class => "black_text", :onFocus=>"setXYScroll(15)", :tabindex=>"3", :size => "50",
+                               :onkeypress => "enlargeTextfieldSize('billing_provider_details_billing_provider_address1',50)",
+                               :onblur => "resetTextfieldSize('billing_provider_details_billing_provider_address1',50); convert_case_toupper('billing_provider_details_billing_provider_address1')",
+                               :value => @patientinfo.billing_provider_address1 unless @patientinfo.nil? %>
+              </td>
+            </tr>
+            <tr>
+              <td colspan="3">&nbsp;&nbsp;
+                <%= text_field :billing_provider_details, :billing_provider_address2,
+                               :class => "black_text", :onFocus=>"setXYScroll(15)", :tabindex=>"3", :size => "50",
+                               :onkeypress => "enlargeTextfieldSize('billing_provider_details_billing_provider_address2',50)",
+                               :onblur => "resetTextfieldSize('billing_provider_details_billing_provider_address2',50); convert_case_toupper('billing_provider_details_billing_provider_address2')",
+                               :value => @patientinfo.billing_provider_address2 unless @patientinfo.nil? %>
+              </td>
+            </tr>
+            <tr>
+              <td colspan="3">&nbsp;&nbsp;
+                <%= text_field :billing_provider_details, :billing_provider_city, :class => "black_text",
+                               :onFocus=>"setXYScroll(15)", :tabindex=>"4", :size => "26",
+                               :onkeypress => "enlargeTextfieldSize('billing_provider_details_billing_provider_city',26)",
+                               :onblur => "resetTextfieldSize('billing_provider_details_billing_provider_city',26); convert_case_toupper('billing_provider_details_billing_provider_city')",
+                               :value => @patientinfo.billing_provider_city unless @patientinfo.nil? %>
+                <%= select_tag "billing_provider_details[billing_provider_state]", options_for_select(@state, @patientinfo.billing_provider_state), :class => "black_text", :onFocus=>"setXYScroll(15)", :tabindex=>"5" %>
+                <%= text_field :billing_provider_details, :billing_provider_zipcode, :class => "black_text", :size => "10", :onFocus=>"setXYScroll(15)", :onblur=>"zipcode_validator('billing_provider_details_billing_provider_zipcode')", :tabindex=>"6", :value => @patientinfo.billing_provider_zipcode unless @patientinfo.nil? %>
+              </td>
+            </tr>
+            <tr>
+              <td colspan="3">&nbsp;&nbsp;
+                <%= text_field :billing_provider_details, :billing_provider_telephone, :class => "black_text", :size => "23", :onFocus=>"setXYScroll(15)", :tabindex=>"7", :value => @patientinfo.billing_provider_telephone unless @patientinfo.nil? %>
+
+                <%= text_field :billing_provider_details, :billing_provider_telephone2, :class => "black_text", :size => "23", :onFocus=>"setXYScroll(15)", :tabindex=>"8", :value => @patientinfo.billing_provider_telephone2 unless @patientinfo.nil? %>
+              </td>
+            </tr>
+          </table>
+        </td>
+
+        <td width="284" valign="top" style="height:74px">
+          <table width="282" border="0" cellpadding="0" cellspacing="0">
+            <tr>2 PAY TO
+              PROVIDER &nbsp;&nbsp;<input type="checkbox" onclick="billing_provider_self()" id="billing_prv_self" tabindex="9" value="self">
+              <td>&nbsp;&nbsp;&nbsp;
+                <%= text_field_with_auto_complete :rendering_provider_details, :rendering_provider_last_name,
+                                                  :class => "black_text", :size => "50", :onFocus=>"setXYScroll(15)", :tabindex=>"9",
+                                                  :onkeypress => "enlargeTextfieldSize('rendering_provider_details_rendering_provider_last_name',50)",
+                                                  :onblur => "resetTextfieldSize('rendering_provider_details_rendering_provider_last_name',50); providerdetails_autopopulate(); convert_case_toupper('rendering_provider_details_rendering_provider_last_name')",
+                                                  :value => @patientinfo.rendering_provider_last_name unless @patientinfo.nil? %>
+
+              </td>
+            </tr>
+            <tr>
+              <td colspan="3">&nbsp;&nbsp;
+                <%= text_field :rendering_provider_details, :rendering_provider_address1,
+                               :class => "black_text", :size => "50", :onFocus=>"setXYScroll(15)", :tabindex=>"11",
+                               :onkeypress => "enlargeTextfieldSize('rendering_provider_details_rendering_provider_address1',50)",
+                               :onblur => "resetTextfieldSize('rendering_provider_details_rendering_provider_address1',50); convert_case_toupper('rendering_provider_details_rendering_provider_address1')",
+                               :value => @patientinfo.rendering_provider_address1 unless @patientinfo.nil? %></td>
+            </tr>
+            <tr>
+              <td colspan="3">&nbsp;&nbsp;
+                <%= text_field :rendering_provider_details, :rendering_provider_address2,
+                               :class => "black_text", :size => "50", :onFocus=>"setXYScroll(15)", :tabindex=>"11",
+                               :onkeypress => "enlargeTextfieldSize('rendering_provider_details_rendering_provider_address2',50)",
+                               :onblur => "resetTextfieldSize('rendering_provider_details_rendering_provider_address2',50); convert_case_toupper('rendering_provider_details_rendering_provider_address2')",
+                               :value => @patientinfo.rendering_provider_address2 unless @patientinfo.nil? %></td>
+            </tr>
+            <tr>
+              <td colspan="3">&nbsp;&nbsp;
+                <%= text_field :rendering_provider_details, :rendering_provider_city, :class => "black_text",
+                               :size => "26", :onFocus=>"setXYScroll(15)", :tabindex=>"12",
+                               :onkeypress => "enlargeTextfieldSize('rendering_provider_details_rendering_provider_city',26)",
+                               :onblur => "resetTextfieldSize('rendering_provider_details_rendering_provider_city',26); convert_case_toupper('rendering_provider_details_rendering_provider_city')",
+                               :value => @patientinfo.rendering_provider_city unless @patientinfo.nil? %>
+                <%= select_tag "rendering_provider_details[rendering_provider_state]", options_for_select(@state, @patientinfo.rendering_provider_state), :class => "black_text", :onFocus=>"setXYScroll(50)", :tabindex=>"13" %>
+                <%= text_field :rendering_provider_details, :rendering_provider_zipcode, :class => "black_text", :size => "10", :onFocus=>"setXYScroll(15)", :onblur=>"zipcode_validator('rendering_provider_details_rendering_provider_zipcode'); ", :tabindex=>"14", :value => @patientinfo.rendering_provider_zipcode unless @patientinfo.nil? %>
+              </td>
+            </tr>
+
+            <tr>
+              <td colspan="3">&nbsp;&nbsp; 
+                <%= text_field :ub04_claim_informations, :rendering_providerid, :class => "black_text", :size => "50",
+                               :onFocus=>"setXYScroll(15)", :tabindex=>"14",
+                               :onkeypress => "enlargeTextfieldSize('ub04_claim_informations_rendering_providerid',26)",
+                               :onblur => "resetTextfieldSize('ub04_claim_informations_rendering_providerid',26); optional_pay_to_provider(ub04_claim_informations_rendering_providerid, '#{batch_type}');",
+                               :value => @patientinfo.rendering_providerid unless @patientinfo.nil? %>
+              </td>
+            </tr>
+          </table>
+        </td>
+        <td width="365" valign="top" style="height:74px">
+          <table width="363" border="0" cellpadding="0" cellspacing="0">
+            <tr>
+              <td width="42">3a PAT CNTL #</td>
+              <td width="266"><%= text_field :ub04_claim_informations, :patient_account_number, :class => "black_text",
+                                             :size => "40", :onFocus=>"setXYScroll(15)", :tabindex=>"15",
+                                             :onkeypress => "enlargeTextfieldSize('ub04_claim_informations_patient_account_number',40)",
+                                             :onblur => "resetTextfieldSize('ub04_claim_informations_patient_account_number',40); convert_case_toupper('ub04_claim_informations_patient_account_number')",
+                                             :value => @patientinfo.patient_account_number unless @patientinfo.nil? %></td>
+              <td width="55" bgcolor="#918646">4 TYPE OF BILL</td>
+            </tr>
+            <tr>
+              <td bgcolor="#ECE9D8">b. MED REC#</td>
+              <td bgcolor="#ECE9D8"><%= text_field :ub04_claim_informations, :patient_med_rec_number, :class => "black_text",
+                                                   :size => "40", :onFocus=>"setXYScroll(15)", :tabindex=>"16",
+                                                   :onkeypress => "enlargeTextfieldSize('ub04_claim_informations_patient_med_rec_number',40)",
+                                                   :onblur => "resetTextfieldSize('ub04_claim_informations_patient_med_rec_number',40); convert_case_toupper('ub04_claim_informations_patient_med_rec_number')",
+                                                   :value => @patientinfo.patient_med_rec_number unless @patientinfo.nil? %></td>
+              <td><%= text_field :ub04_claim_informations, :patient_bill_type, :class => "black_text", :size => "8", :onFocus=>"setXYScroll(15)", :onBlur=>"typeofbillvalidation()", :tabindex=>"17", :value => @patientinfo.patient_bill_type unless @patientinfo.nil? %></td>
+            </tr>
+            <tr>
+              <td colspan="3">
+                <table class="side" width="100%" border="0" cellpadding="0" cellspacing="0">
+                  <tr>
+                    <td width="28%" height="18" valign="top">5. FED TAX #
+                    </td>
+
+                    <td width="49%" valign="top" bgcolor="#ECE9D8">
+                      <div align="center">6 &nbsp;&nbsp;&nbsp;STATEMENT COVERS PERIOD<br/>
+                        FROM&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;THROUGH
+                      </div>
+                    </td>
+                    <td width="23%" rowspan="2" valign="top">7 <%= text_field :ub04_claim_informations, :unlabel_7_1, :class => "black_text", :size => "12", :onFocus=>"setXYScroll(15)", :tabindex=>"21", :value => @patientinfo.unlabel_7_1 unless @patientinfo.nil? %>
+                      &nbsp;&nbsp;&nbsp;<%= text_field :ub04_claim_informations, :unlabel_7_2, :class => "black_text", :size => "12", :onFocus=>"setXYScroll(15)", :tabindex=>"22", :value => @patientinfo.unlabel_7_2 unless @patientinfo.nil? %></td>
+                  </tr>
+                  <tr>
+                    <td height="18" valign="top">
+                      <%= text_field :ub04_claim_informations, :billing_provider_tin_or_ein, :class => "black_text", :size => "10", :onFocus=>"setXYScroll(15)", :tabindex=>"18", :value => @patientinfo.billing_provider_tin_or_ein %></td>
+
+                    <td valign="top">
+                      <div align="center">
+                        <%= text_field :ub04_claim_informations, :statement_cover_from, :class => "black_text", :size => "9", :onFocus=>"setXYScroll(15)", :onBlur => "isValidDate('ub04_claim_informations_statement_cover_from')", :tabindex=>"19", :value => @patientinfo.statement_cover_from.try(:strftime,"%m%d%Y") unless @patientinfo.nil? %>
+                        &nbsp;&nbsp;
+                        <%= text_field :ub04_claim_informations, :statement_cover_to, :class => "black_text", :size => "9", :onFocus=>"setXYScroll(15)", :onBlur => "isValidDate('ub04_claim_informations_statement_cover_to')", :tabindex=>"20", :value => @patientinfo.statement_cover_to.try(:strftime,"%m%d%Y") unless @patientinfo.nil? %>
+                      </div>
+                    </td>
+                  </tr>
+                </table>
+              </td>
+            </tr>
+
+          </table>
+        </td>
+      </tr>
+
+    </table>
+    <table width="933" border="0" cellpadding="0" cellspacing="0" class="bord" style="margin-left:18px;">
+    <tr>
+      <td width="341" valign="top">
+        <table width="341" border="0" cellspacing="0" cellpadding="0">
+          <tr>
+            <td width="114" bgcolor="#ECE9D8">8. PATIENT NAME</td>
+            <td width="10" bgcolor="#ECE9D8">a</td>
+            <td width="217"><%= text_field :ub04_claim_informations, :patientid, :class => "black_text", :size=>"35",
+                                           :onFocus=>"setXYScroll(90)", :tabindex=>"23",
+                                           :onkeypress => "enlargeTextfieldSize('ub04_claim_informations_patientid',35)",
+                                           :onblur => "resetTextfieldSize('ub04_claim_informations_patientid',35); convert_case_toupper('ub04_claim_informations_patientid')",
+                                           :value => @patientinfo.patientid unless @patientinfo.nil? %></td>
+          </tr>
+        </table>
+      </td>
+      <td width="592" valign="top">
+        <table width="590" border="0" cellspacing="0" cellpadding="0">
+          <tr>
+            <td width="115" bgcolor="#ECE9D8">9. PATIENT ADDRESS</td>
+            <td width="12" bgcolor="#ECE9D8">a</td>
+            <td width="465"><%= text_field :ub04_claim_informations, :patient_address1, :class => "black_text",
+                                           :size => "90", :onFocus=>"setXYScroll(90)", :tabindex=>"27",
+                                           :onkeypress => "enlargeTextfieldSize('ub04_claim_informations_patient_address1',90)",
+                                           :onblur => "resetTextfieldSize('ub04_claim_informations_patient_address1',90); convert_case_toupper('ub04_claim_informations_patient_address1')",
+                                           :value => @patientinfo.patient_address1 unless @patientinfo.nil? %></td>
+          </tr>
+        </table>
+      </td>
+    </tr>
+    <tr>
+      <td width="341" valign="top">
+        <table width="341" border="0" cellspacing="0" cellpadding="0">
+          <tr>
+            <td width="14" bgcolor="#ECE9D8">b</td>
+            <td><%= text_field :ub04_claim_informations, :patient_last_name, :class => "black_text", :size => "22",
+                               :onFocus=>"setXYScroll(90)", :tabindex=>"24",
+                               :onkeypress => "enlargeTextfieldSize('ub04_claim_informations_patient_last_name',22)",
+                               :onblur => "resetTextfieldSize('ub04_claim_informations_patient_last_name',22); convert_case_toupper('ub04_claim_informations_patient_last_name')",
+                               :value => @patientinfo.patient_last_name unless @patientinfo.nil? %>
+              <%= text_field :ub04_claim_informations, :patient_first_name, :class => "black_text", :size => "22",
+                             :onFocus=>"setXYScroll(90)", 
+                             :onkeypress => "enlargeTextfieldSize('ub04_claim_informations_patient_first_name',22)",
+                             :onblur => "resetTextfieldSize('ub04_claim_informations_patient_first_name',22); IS_name_string_informations_patient(); convert_case_toupper('ub04_claim_informations_patient_first_name')",
+                             :tabindex=>"25", :value => @patientinfo.patient_first_name unless @patientinfo.nil? %>
+              <%= text_field :ub04_claim_informations, :patient_middle_initial, :class => "black_text", :maxlength => '1', :size => "5", :onFocus=>"setXYScroll(90)", :onblur => "convert_case_toupper('ub04_claim_informations_patient_middle_initial')", :onKeyUp=>"IS_string_initials('ub04_claim_informations_patient_middle_initial')", :tabindex=>"26", :value => @patientinfo.patient_middle_initial unless @patientinfo.nil? %>
+            </td>
+          </tr>
+        </table>
+      </td>
+      <td valign="top">
+        <table width="590" border="0" cellspacing="0" cellpadding="0">
+          <tr>
+            <td width="12" bgcolor="#ECE9D8">b</td>
+            <td width="364"><%= text_field :ub04_claim_informations, :patient_city, :class => "black_text",
+                                           :size => "65", :onFocus=>"setXYScroll(90)", :tabindex=>"28",
+                                           :onkeypress => "enlargeTextfieldSize('ub04_claim_informations_patient_city',65)",
+                                           :onblur => "resetTextfieldSize('ub04_claim_informations_patient_city',65); convert_case_toupper('ub04_claim_informations_patient_city')",
+                                           :value => @patientinfo.patient_city unless @patientinfo.nil? %></td>
+            <td width="12" bgcolor="#ECE9D8">c</td>
+            <td width="33"><%= select_tag "ub04_claim_informations[patient_state]", options_for_select(@state, @patientinfo.patient_state), :class => "black_text", :onFocus=>"setXYScroll(90)", :tabindex=>"29" %></td>
+            <td width="11" bgcolor="#ECE9D8">d</td>
+            <td width="115"><%= text_field :ub04_claim_informations, :patient_zipcode, :class => "black_text", :size => "20", :onFocus=>"setXYScroll(90)", :onblur=>"zipcode_validator('ub04_claim_informations_patient_zipcode')", :tabindex=>"30", :value => @patientinfo.patient_zipcode unless @patientinfo.nil? %></td>
+            <td width="11" bgcolor="#ECE9D8">e</td>
+            <td width="32"><%= text_field :ub04_claim_informations, :patient_country_code, :class => "black_text", :size => "8", :onFocus=>"setXYScroll(90)", :onblur => "convert_case_toupper('ub04_claim_informations_patient_country_code')", :tabindex=>"31", :value => @patientinfo.patient_country_code unless @patientinfo.nil? %></td>
+          </tr>
+        </table>
+      </td>
+    </tr>
+    <tr>
+      <td width="341" valign="top">
+        <table width="341" border="0" cellspacing="0" cellpadding="0">
+          <tr>
+            <td width="102" rowspan="2">10 BIRTH DATE</td>
+            <td width="33" rowspan="2">11 SEX</td>
+            <td colspan="4" bgcolor="#ECE9D8">
+              <div align="center">ADMISSION<br/>
+              </div>
+            </td>
+            <td width="35" rowspan="2">16DHR
+              <div align="center"></div>
+            </td>
+          </tr>
+          <tr>
+            <td width="60" bgcolor="#ECE9D8">12 DATE &nbsp;</td>
+            <td width="36" bgcolor="#ECE9D8">
+              <div align="center">13 HR</div>
+            </td>
+            <td width="39" bgcolor="#ECE9D8">
+              <div align="center">14 TYPE</div>
+            </td>
+            <td width="36" bgcolor="#ECE9D8">
+              <div align="center">15 SRC</div>
+            </td>
+          </tr>
+          <tr>
+            <td><%= text_field :ub04_claim_informations, :patient_dob, :class => "black_text", :size => "9", :onFocus=>"setXYScroll(120)", :onBlur => "isValidDate_dob('ub04_claim_informations_patient_dob')", :tabindex=>"32", :value => @patientinfo.patient_dob.try(:strftime,"%m%d%Y") unless @patientinfo.nil? %></td>
+            <td>
+              <div align="center">
+                <%= select_tag "ub04_claim_informations[patient_gender]", options_for_select([["M", "M"], ["F", "F"],["U","U"]], @patientinfo.patient_gender), :class => "black_text", :size => "1", :onFocus=>"setXYScroll(120)", :tabindex=>"33" %>
+              </div>
+            </td>
+            <td><%= text_field :ub04_claim_informations, :admission_date, :class => "black_text", :size => "9", :onFocus=>"setXYScroll(120)", :onBlur => "isValidDate('ub04_claim_informations_admission_date')", :tabindex=>"34", :value => @patientinfo.admission_date.try(:strftime,"%m%d%Y") unless @patientinfo.nil? %></td>
+            <td>
+              <div align="center">
+                <%= text_field :ub04_claim_informations, :admission_hour, :class => "black_text", :size => "1", :onFocus=>"setXYScroll(120)", :tabindex=>"35", :onblur=>'admission_hour()', :value => @patientinfo.admission_hour unless @patientinfo.nil? %>
+              </div>
+            </td>
+            <td>
+              <div align="center">
+                <%= text_field :ub04_claim_informations, :admission_type, :class => "black_text", :size => "1", :onFocus=>"setXYScroll(120)", :tabindex=>"36", :value => @patientinfo.admission_type unless @patientinfo.nil? %>
+              </div>
+            </td>
+            <td>
+              <div align="center">
+                <%= text_field :ub04_claim_informations, :admission_source, :class => "black_text", :size => "1", :onFocus=>"setXYScroll(120)", :tabindex=>"37", :onblur=>'admission_source()', :value => @patientinfo.admission_source unless @patientinfo.nil? %>
+              </div>
+            </td>
+            <td>
+              <div align="center">
+                <%= text_field :ub04_claim_informations, :discharge_hour, :class => "black_text", :size => "1", :onFocus=>"setXYScroll(120)", :tabindex=>"38", :value => @patientinfo.discharge_hour unless @patientinfo.nil? %>
+              </div>
+            </td>
+          </tr>
+        </table>
+      </td>
+
+      <td valign="top">
+        <table width="590" border="0" cellspacing="0" cellpadding="0">
+          <tr>
+            <td width="34" rowspan="2">17 STAT</td>
+            <td width="374" colspan="11" bgcolor="#ECE9D8">
+              <div align="center">CONDITION CODES</div>
+            </td>
+            <td width="37" rowspan="2" bgcolor="#ECE9D8">29 ACDT STATE</td>
+            <td rowspan="2" rowspan="2" bgcolor="#ECE9D8">30 <%= text_field :ub04_claim_informations, :unlabel_30_1, :class => "black_text", :size => "15", :onFocus=>"setXYScroll(120)", :onblur => "convert_case_toupper('ub04_claim_informations_unlabel_30_1')", :tabindex=>"53", :value => @patientinfo.unlabel_30_1 unless @patientinfo.nil? %>
+            </td>
+          </tr>
+          <tr>
+            <td bgcolor="#ECE9D8">
+              <div align="center">18</div>
+            </td>
+            <td bgcolor="#ECE9D8">
+              <div align="center">19</div>
+            </td>
+            <td bgcolor="#ECE9D8">
+              <div align="center">20</div>
+            </td>
+            <td bgcolor="#ECE9D8">
+              <div align="center">21</div>
+            </td>
+            <td bgcolor="#ECE9D8">
+              <div align="center">22</div>
+            </td>
+            <td bgcolor="#ECE9D8">
+              <div align="center">23</div>
+            </td>
+            <td bgcolor="#ECE9D8">
+              <div align="center">24</div>
+            </td>
+            <td bgcolor="#ECE9D8">
+              <div align="center">25</div>
+            </td>
+            <td bgcolor="#ECE9D8">
+              <div align="center">26</div>
+            </td>
+            <td bgcolor="#ECE9D8">
+              <div align="center">27</div>
+            </td>
+            <td bgcolor="#ECE9D8">
+              <div align="center">28</div>
+            </td>
+          </tr>
+          <tr>
+            <td> <%= text_field :ub04_claim_informations, :patient_status_code, :class => "black_text", :size => "1", :onFocus=>"setXYScroll(120)", :tabindex=>"40", :onblur=>'patient_status()', :value => @patientinfo.patient_status_code unless @patientinfo.nil? %></td>
+            <td>
+              <div align="center">
+                <%= text_field :ub04_claim_informations, :condition_code1, :class => "black_text", :size => "1", :onFocus=>"setXYScroll(120)", :tabindex=>"41", :value => @patientinfo.condition_code1 unless @patientinfo.nil? %>
+              </div>
+            </td>
+            <td>
+              <div align="center">
+                <%= text_field :ub04_claim_informations, :condition_code2, :class => "black_text", :size => "1", :onFocus=>"setXYScroll(120)", :tabindex=>"42", :value => @patientinfo.condition_code2 unless @patientinfo.nil? %>
+              </div>
+            </td>
+            <td>
+              <div align="center">
+                <%= text_field :ub04_claim_informations, :condition_code3, :class => "black_text", :size => "1", :onFocus=>"setXYScroll(120)", :tabindex=>"43", :value => @patientinfo.condition_code3 unless @patientinfo.nil? %>
+              </div>
+            </td>
+            <td>
+              <div align="center">
+                <%= text_field :ub04_claim_informations, :condition_code4, :class => "black_text", :size => "1", :onFocus=>"setXYScroll(120)", :tabindex=>"44", :value => @patientinfo.condition_code4 unless @patientinfo.nil? %>
+              </div>
+            </td>
+            <td>
+              <div align="center">
+                <%= text_field :ub04_claim_informations, :condition_code5, :class => "black_text", :size => "1", :onFocus=>"setXYScroll(120)", :tabindex=>"45", :value => @patientinfo.condition_code5 unless @patientinfo.nil? %>
+              </div>
+            </td>
+            <td>
+              <div align="center">
+                <%= text_field :ub04_claim_informations, :condition_code6, :class => "black_text", :size => "1", :onFocus=>"setXYScroll(120)", :tabindex=>"46", :value => @patientinfo.condition_code6 unless @patientinfo.nil? %>
+              </div>
+            </td>
+            <td>
+              <div align="center">
+                <%= text_field :ub04_claim_informations, :condition_code7, :class => "black_text", :size => "1", :onFocus=>"setXYScroll(120)", :tabindex=>"47", :value => @patientinfo.condition_code7 unless @patientinfo.nil? %>
+              </div>
+            </td>
+            <td>
+              <div align="center">
+                <%= text_field :ub04_claim_informations, :condition_code8, :class => "black_text", :size => "1", :onFocus=>"setXYScroll(120)", :tabindex=>"48", :value => @patientinfo.condition_code8 unless @patientinfo.nil? %>
+              </div>
+            </td>
+            <td>
+              <div align="center">
+                <%= text_field :ub04_claim_informations, :condition_code9, :class => "black_text", :size => "1", :onFocus=>"setXYScroll(120)", :tabindex=>"49", :value => @patientinfo.condition_code9 unless @patientinfo.nil? %>
+              </div>
+            </td>
+            <td>
+              <div align="center">
+                <%= text_field :ub04_claim_informations, :condition_code10, :class => "black_text", :size => "1", :onFocus=>"setXYScroll(120)", :tabindex=>"50", :value => @patientinfo.condition_code10 unless @patientinfo.nil? %>
+              </div>
+            </td>
+            <td>
+              <div align="center">
+                <%= text_field :ub04_claim_informations, :condition_code11, :class => "black_text", :size => "1", :onFocus=>"setXYScroll(120)", :tabindex=>"51", :value => @patientinfo.condition_code11 unless @patientinfo.nil? %>
+              </div>
+            </td>
+            <td>
+              <div align="center">
+                <%= text_field :ub04_claim_informations, :acdt_state, :class => "black_text", :size => "1", :onFocus=>"setXYScroll(120)", :onblur => "convert_case_toupper('ub04_claim_informations_acdt_state')", :tabindex=>"52", :value => @patientinfo.acdt_state unless @patientinfo.nil? %>
+              </div>
+            </td>
+            <td>
+              <div align="center">
+                &nbsp;<%= text_field :ub04_claim_informations, :unlabel_30_2, :class => "black_text", :size => "15", :onFocus=>"setXYScroll(120)", :onblur => "convert_case_toupper('ub04_claim_informations_unlabel_30_2')", :tabindex=>"54", :value => @patientinfo.unlabel_30_2 unless @patientinfo.nil? %>
+              </div>
+            </td>
+          </tr>
+        </table>
+      </td>
+    </tr>
+    <tr>
+      <td width="341" valign="top">
+        <table width="341" border="0" cellspacing="0" cellpadding="0">
+          <tr>
+            <td colspan="2" bgcolor="#ECE9D8">31&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; OCCURRENCE</td>
+            <td colspan="2" bgcolor="#918646">32&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; OCCURRENCE</td>
+            <td colspan="2" bgcolor="#ECE9D8">33 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; OCCURRENCE</td>
+          </tr>
+          <tr>
+            <td align="center" bgcolor="#ECE9D8">CODE</td>
+            <td align="center" bgcolor="#ECE9D8">DATE</td>
+            <td align="center" bgcolor="#918646">CODE</td>
+            <td align="center" bgcolor="#918646">DATE</td>
+            <td align="center" bgcolor="#ECE9D8">CODE</td>
+            <td align="center" bgcolor="#ECE9D8">DATE</td>
+          </tr>
+          <tr>
+            <% if @occurences[0].nil? %>
+                <td align="center"><%= text_field :occurence, :code1, :class => "black_text", :size => "1", :onFocus=>"setXYScroll(130)", :onChange=>"enable_textfield(occurence_date1);code_blank(occurence_code1,occurence_date1)", :tabindex=>"54" %></td>
+                <td align="center"><%= text_field :occurence, :date1, :class => "black_text", :size => "9", :onFocus=>"setXYScroll(130)", :onBlur => "isValidDate('occurence_date1')", :readonly=>true, :tabindex=>"54" %></td>
+                <td align="center"><%= text_field :occurence, :code2, :class => "black_text", :size => "1", :onFocus=>"setXYScroll(130)", :onChange=>"enable_textfield(occurence_date2);code_blank(occurence_code2,occurence_date2)", :tabindex=>"54" %></td>
+                <td align="center"><%= text_field :occurence, :date2, :class => "black_text", :size => "9", :onFocus=>"setXYScroll(130)", :onBlur => "isValidDate('occurence_date2')", :readonly=>true, :tabindex=>"54" %></td>
+                <td align="center"><%= text_field :occurence, :code3, :class => "black_text", :size => "1", :onFocus=>"setXYScroll(130)", :onChange=>"enable_textfield(occurence_date3);code_blank(occurence_code3,occurence_date3)", :tabindex=>"54" %></td>
+                <td align="center"><%= text_field :occurence, :date3, :class => "black_text", :size => "9", :onFocus=>"setXYScroll(130)", :onBlur => "isValidDate('occurence_date3')", :readonly=>true, :tabindex=>"54" %></td>
+            <% else %>
+                <td align="center"><%= text_field :occurence, :code1, :class => "black_text", :size => "1", :onFocus=>"setXYScroll(130)", :onChange=>"enable_textfield(occurence_date1);code_blank(occurence_code1,occurence_date1)", :tabindex=>"54", :value => @occurences[0].code1 unless @occurences[0].nil? %></td>
+                <td align="center"><%= text_field :occurence, :date1, :class => "black_text", :size => "9", :onFocus=>"setXYScroll(130)", :onBlur => "isValidDate('occurence_date1')", :readonly=>true, :tabindex=>"54", :value =>  @occurences[0].date1.try(:strftime,"%m%d%Y") unless @occurences[0].nil? %></td>
+                <td align="center"><%= text_field :occurence, :code2, :class => "black_text", :size => "1", :onFocus=>"setXYScroll(130)", :onChange=>"enable_textfield(occurence_date2);code_blank(occurence_code2,occurence_date2)", :tabindex=>"54", :value => @occurences[0].code2 unless @occurences[0].nil? %></td>
+                <td align="center"><%= text_field :occurence, :date2, :class => "black_text", :size => "9", :onFocus=>"setXYScroll(130)", :onBlur => "isValidDate('occurence_date2')", :readonly=>true, :tabindex=>"54", :value =>  @occurences[0].date2.try(:strftime,"%m%d%Y") unless @occurences[0].nil? %></td>
+                <td align="center"><%= text_field :occurence, :code3, :class => "black_text", :size => "1", :onFocus=>"setXYScroll(130)", :onChange=>"enable_textfield(occurence_date3);code_blank(occurence_code3,occurence_date3)", :tabindex=>"54", :value => @occurences[0].code3 unless @occurences[0].nil? %></td>
+                <td align="center"><%= text_field :occurence, :date3, :class => "black_text", :size => "9", :onFocus=>"setXYScroll(130)", :onBlur => "isValidDate('occurence_date3')", :readonly=>true, :tabindex=>"54", :value =>  @occurences[0].date3.try(:strftime,"%m%d%Y") unless @occurences[0].nil? %></td>
+            <% end %>
+          </tr>
+          <tr>
+            <% if @occurences[1].nil? %>
+
+                <td align="center" bgcolor="#ECE9D8"><%= text_field :occurence, :code5, :class => "black_text", :size => "1", :onFocus=>"setXYScroll(130)", :onChange=>"enable_textfield(occurence_date5);code_blank(occurence_code5,occurence_date5)", :tabindex=>"55" %></td>
+                <td align="center" bgcolor="#ECE9D8"><%= text_field :occurence, :date5, :class => "black_text", :size => "9", :onFocus=>"setXYScroll(130)", :onBlur => "isValidDate('occurence_date5')", :readonly=>true, :tabindex=>"55" %></td>
+                <td align="center" bgcolor="#ECE9D8"><%= text_field :occurence, :code6, :class => "black_text", :size => "1", :onFocus=>"setXYScroll(130)", :onChange=>"enable_textfield(occurence_date6);code_blank(occurence_code6,occurence_date6)", :tabindex=>"55" %></td>
+                <td align="center" bgcolor="#ECE9D8"><%= text_field :occurence, :date6, :class => "black_text", :size => "9", :onFocus=>"setXYScroll(130)", :onBlur => "isValidDate('occurence_date6')", :readonly=>true, :tabindex=>"55" %></td>
+                <td align="center" bgcolor="#ECE9D8"><%= text_field :occurence, :code7, :class => "black_text", :size => "1", :onFocus=>"setXYScroll(130)", :onChange=>"enable_textfield(occurence_date7);code_blank(occurence_code7,occurence_date7)", :tabindex=>"55" %></td>
+                <td align="center" bgcolor="#ECE9D8"><%= text_field :occurence, :date7, :class => "black_text", :size => "9", :onFocus=>"setXYScroll(130)", :onBlur => "isValidDate('occurence_date7')", :readonly=>true, :tabindex=>"55" %></td>
+            <% else %>
+                <td align="center" bgcolor="#ECE9D8"><%= text_field :occurence, :code5, :class => "black_text", :size => "1", :onFocus=>"setXYScroll(130)", :onChange=>"enable_textfield(occurence_date5);code_blank(occurence_code5,occurence_date5)", :tabindex=>"55", :value => @occurences[1].code1 unless @occurences[1].nil? %></td>
+                <td align="center" bgcolor="#ECE9D8"><%= text_field :occurence, :date5, :class => "black_text", :size => "9", :onFocus=>"setXYScroll(130)", :onBlur => "isValidDate('occurence_date5')", :readonly=>true, :tabindex=>"55", :value =>  @occurences[1].date1.try(:strftime,"%m%d%Y") unless @occurences[1].nil? %></td>
+                <td align="center" bgcolor="#ECE9D8"><%= text_field :occurence, :code6, :class => "black_text", :size => "1", :onFocus=>"setXYScroll(130)", :onChange=>"enable_textfield(occurence_date6);code_blank(occurence_code6,occurence_date6)", :tabindex=>"55", :value => @occurences[1].code2 unless @occurences[1].nil? %></td>
+                <td align="center" bgcolor="#ECE9D8"><%= text_field :occurence, :date6, :class => "black_text", :size => "9", :onFocus=>"setXYScroll(130)", :onBlur => "isValidDate('occurence_date6')", :readonly=>true, :tabindex=>"55", :value =>  @occurences[1].date2.try(:strftime,"%m%d%Y") unless @occurences[1].nil? %></td>
+                <td align="center" bgcolor="#ECE9D8"><%= text_field :occurence, :code7, :class => "black_text", :size => "1", :onFocus=>"setXYScroll(130)", :onChange=>"enable_textfield(occurence_date7);code_blank(occurence_code7,occurence_date7)", :tabindex=>"55", :value => @occurences[1].code3 unless @occurences[1].nil? %></td>
+                <td align="center" bgcolor="#ECE9D8"><%= text_field :occurence, :date7, :class => "black_text", :size => "9", :onFocus=>"setXYScroll(130)", :onBlur => "isValidDate('occurence_date7')", :readonly=>true, :tabindex=>"55", :value =>  @occurences[1].date3.try(:strftime,"%m%d%Y") unless @occurences[1].nil? %></td>
+            <% end %>
+          </tr>
+
+        </table>
+      </td>
+      <td valign="top">
+        <table width="590" border="0" cellspacing="0" cellpadding="0">
+          <tr>
+            <td colspan="2" bgcolor="#918646">34&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;OCCURRENCE</td>
+            <td colspan="3" bgcolor="#ECE9D8">35&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;OCCURRENCESPAN</td>
+            <td colspan="3" bgcolor="#ECE9D8">36&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;OCCURRENCESPAN</td>
+            <td width="78" rowspan="2" bgcolor="#ECE9D8">37</td>
+          </tr>
+          <tr>
+            <td width="45" align="center" bgcolor="#918646">CODE</td>
+            <td width="74" align="center" bgcolor="#918646">DATE</td>
+            <td width="34" align="center" bgcolor="#ECE9D8">CODE</td>
+            <td width="79" align="center" bgcolor="#ECE9D8">FROM</td>
+            <td width="72" align="center" bgcolor="#ECE9D8">THROUGH</td>
+            <td width="46" align="center" bgcolor="#ECE9D8">CODE</td>
+            <td width="79" align="center" bgcolor="#ECE9D8">FROM</td>
+            <td width="83" align="center" bgcolor="#ECE9D8">THROUGH</td>
+          </tr>
+          <tr>
+            <% if @occurences[0].nil? %>
+                <td align="center"><%= text_field :occurence, :code4, :class => "black_text", :size => "1", :onFocus=>"setXYScroll(130)", :onChange=>"enable_textfield(occurence_date4);code_blank(occurence_code4,occurence_date4)", :tabindex=>"54" %></td>
+                <td align="center"><%= text_field :occurence, :date4, :class => "black_text", :size => "9", :onFocus=>"setXYScroll(130)", :onBlur => "isValidDate('occurence_date4')", :readonly=>true, :tabindex=>"54" %></td>
+            <% else %>
+                <td align="center"><%= text_field :occurence, :code4, :class => "black_text", :size => "1", :onFocus=>"setXYScroll(130)", :onChange=>"enable_textfield(occurence_date4);code_blank(occurence_code4,occurence_date4)", :tabindex=>"54", :value =>  @occurences[0].code4 unless @occurences[0].nil? %></td>
+                <td align="center"><%= text_field :occurence, :date4, :class => "black_text", :size => "9", :onFocus=>"setXYScroll(130)", :onBlur => "isValidDate('occurence_date4')", :readonly=>true, :tabindex=>"54", :value =>  @occurences[0].date4.try(:strftime,"%m%d%Y") unless @occurences[0].nil? %></td>
+            <% end %>
+
+            <% if @occurence_spans[0].nil? %>
+                <td align="center"><%= text_field :occurence_span, :code1, :class => "black_text", :size => "1", :onFocus=>"setXYScroll(130)", :onChange=>"enable_textfield(occurence_span_from_date1); enable_textfield(occurence_span_through_date1); code_blank(occurence_span_code1,occurence_span_from_date1); code_blank(occurence_span_code1,occurence_span_through_date1)", :tabindex=>"56" %></td>
+                <td align="center"><%= text_field :occurence_span, :from_date1, :class => "black_text", :size => "9", :onFocus=>"setXYScroll(130)", :onBlur => "isValidDate('occurence_span_from_date1')", :readonly=>true, :tabindex=>"56" %></td>
+                <td align="center"><%= text_field :occurence_span, :through_date1, :class => "black_text", :size => "9", :onFocus=>"setXYScroll(130)", :onBlur => "isValidDate('occurence_span_through_date1')", :readonly=>true, :tabindex=>"56" %></td>
+                <td align="center"><%= text_field :occurence_span, :code2, :class => "black_text", :size => "1", :onFocus=>"setXYScroll(130)", :onChange=>"enable_textfield(occurence_span_from_date2); enable_textfield(occurence_span_through_date2); code_blank(occurence_span_code2,occurence_span_from_date2); code_blank(occurence_span_code2,occurence_span_through_date2)", :tabindex=>"56" %></td>
+                <td align="center"><%= text_field :occurence_span, :from_date2, :class => "black_text", :size => "9", :onFocus=>"setXYScroll(130)", :onBlur => "isValidDate('occurence_span_from_date2')", :readonly=>true, :tabindex=>"56" %></td>
+                <td align="center"><%= text_field :occurence_span, :through_date2, :class => "black_text", :size => "9", :onFocus=>"setXYScroll(130)", :onBlur => "isValidDate('occurence_span_through_date2')", :readonly=>true, :tabindex=>"56" %></td>
+            <% else %>
+                <td align="center"><%= text_field :occurence_span, :code1, :class => "black_text", :size => "1", :onFocus=>"setXYScroll(130)", :onChange=>"enable_textfield(occurence_span_from_date1); enable_textfield(occurence_span_through_date1); code_blank(occurence_span_code1,occurence_span_from_date1); code_blank(occurence_span_code1,occurence_span_through_date1)", :tabindex=>"56", :value =>  @occurence_spans[0].code1 unless @occurence_spans[0].nil? %></td>
+                <td align="center"><%= text_field :occurence_span, :from_date1, :class => "black_text", :size => "9", :onFocus=>"setXYScroll(130)", :onBlur => "isValidDate('occurence_span_from_date1')", :readonly=>true, :tabindex=>"56", :value =>  @occurence_spans[0].from_date1.try(:strftime,"%m%d%Y") unless @occurence_spans[0].nil? %></td>
+                <td align="center"><%= text_field :occurence_span, :through_date1, :class => "black_text", :size => "9", :onFocus=>"setXYScroll(130)", :onBlur => "isValidDate('occurence_span_through_date1')", :readonly=>true, :tabindex=>"56", :value =>  @occurence_spans[0].through_date1.try(:strftime,"%m%d%Y") unless @occurence_spans[0].nil? %></td>
+                <td align="center"><%= text_field :occurence_span, :code2, :class => "black_text", :size => "1", :onFocus=>"setXYScroll(130)", :onChange=>"enable_textfield(occurence_span_from_date2); enable_textfield(occurence_span_through_date2); code_blank(occurence_span_code2,occurence_span_from_date2); code_blank(occurence_span_code2,occurence_span_through_date2)", :tabindex=>"56", :value =>  @occurence_spans[0].code2 unless @occurence_spans[0].nil? %></td>
+                <td align="center"><%= text_field :occurence_span, :from_date2, :class => "black_text", :size => "9", :onFocus=>"setXYScroll(130)", :onBlur => "isValidDate('occurence_span_from_date2')", :readonly=>true, :tabindex=>"56", :value =>  @occurence_spans[0].from_date2.try(:strftime,"%m%d%Y") unless @occurence_spans[0].nil? %></td>
+                <td align="center"><%= text_field :occurence_span, :through_date2, :class => "black_text", :size => "9", :onFocus=>"setXYScroll(130)", :onBlur => "isValidDate('occurence_span_through_date2')", :readonly=>true, :tabindex=>"56", :value =>  @occurence_spans[0].through_date2.try(:strftime,"%m%d%Y") unless @occurence_spans[0].nil? %></td>
+            <% end %>
+            <td align="center"><%= text_field :ub04_claim_informations, :unlabel_37_1, :class => "black_text", :size => "7", :onFocus=>"setXYScroll(130)", :onblur => "convert_case_toupper('ub04_claim_informations_unlabel_37_1')",  :tabindex=>"57", :value =>  @patientinfo.unlabel_37_1 unless  @patientinfo.nil? %></td>
+          </tr>
+          <tr>
+            <% if @occurences[1].nil? %>
+                <td align="center" bgcolor="#ECE9D8"><%= text_field :occurence, :code8, :class => "black_text", :size => "1", :onFocus=>"setXYScroll(130)", :onChange=>"enable_textfield(occurence_date8);code_blank(occurence_code8,occurence_date8)", :tabindex=>"55" %></td>
+                <td align="center" bgcolor="#ECE9D8"><%= text_field :occurence, :date8, :class => "black_text", :size => "9", :onFocus=>"setXYScroll(130)", :onBlur => "isValidDate('occurence_date8')", :readonly=>true, :tabindex=>"55" %></td>
+            <% else %>
+                <td align="center" bgcolor="#ECE9D8"><%= text_field :occurence, :code8, :class => "black_text", :size => "1", :onFocus=>"setXYScroll(130)", :onChange=>"enable_textfield(occurence_date8);code_blank(occurence_code8,occurence_date8)", :tabindex=>"55", :value =>  @occurences[1].code4 unless @occurences[1].nil? %></td>
+                <td align="center" bgcolor="#ECE9D8"><%= text_field :occurence, :date8, :class => "black_text", :size => "9", :onFocus=>"setXYScroll(130)", :onBlur => "isValidDate('occurence_date8')", :readonly=>true, :tabindex=>"55", :value =>  @occurences[1].date4.try(:strftime,"%m%d%Y") unless @occurences[1].nil? %></td>
+            <% end %>
+            <% if @occurence_spans[1].nil? %>
+                <td align="center" bgcolor="#ECE9D8"><%= text_field :occurence_span, :code3, :class => "black_text", :size => "1", :onFocus=>"setXYScroll(130)", :onChange=>"enable_textfield(occurence_span_from_date3); enable_textfield(occurence_span_through_date3); code_blank(occurence_span_code3,occurence_span_from_date3); code_blank(occurence_span_code3,occurence_span_through_date3)", :tabindex=>"56" %></td>
+                <td align="center" bgcolor="#ECE9D8"><%= text_field :occurence_span, :from_date3, :class => "black_text", :size => "9", :onFocus=>"setXYScroll(130)", :onBlur => "isValidDate('occurence_span_from_date3')", :readonly=>true, :tabindex=>"56" %></td>
+                <td align="center" bgcolor="#ECE9D8"><%= text_field :occurence_span, :through_date3, :class => "black_text", :size => "9", :onFocus=>"setXYScroll(130)", :onBlur => "isValidDate('occurence_span_through_date3')", :readonly=>true, :tabindex=>"56" %></td>
+                <td align="center" bgcolor="#ECE9D8"><%= text_field :occurence_span, :code4, :class => "black_text", :size => "1", :onFocus=>"setXYScroll(130)", :onChange=>"enable_textfield(occurence_span_from_date4); enable_textfield(occurence_span_through_date4); code_blank(occurence_span_code4,occurence_span_from_date4); code_blank(occurence_span_code4,occurence_span_through_date4)", :tabindex=>"56" %></td>
+                <td align="center" bgcolor="#ECE9D8"><%= text_field :occurence_span, :from_date4, :class => "black_text", :size => "9", :onFocus=>"setXYScroll(130)", :onBlur => "isValidDate('occurence_span_from_date4')", :readonly=>true, :tabindex=>"56" %></td>
+                <td align="center" bgcolor="#ECE9D8"><%= text_field :occurence_span, :through_date4, :class => "black_text", :size => "9", :onFocus=>"setXYScroll(130)", :onBlur => "isValidDate('occurence_span_through_date4')", :readonly=>true, :tabindex=>"56" %></td>
+            <% else %>
+                <td align="center" bgcolor="#ECE9D8"><%= text_field :occurence_span, :code3, :class => "black_text", :size => "1", :onFocus=>"setXYScroll(130)", :onChange=>"enable_textfield(occurence_span_from_date3); enable_textfield(occurence_span_through_date3); code_blank(occurence_span_code3,occurence_span_from_date3); code_blank(occurence_span_code3,occurence_span_through_date3)", :tabindex=>"56", :value =>  @occurence_spans[1].code1 unless @occurence_spans[1].nil? %></td>
+                <td align="center" bgcolor="#ECE9D8"><%= text_field :occurence_span, :from_date3, :class => "black_text", :size => "9", :onFocus=>"setXYScroll(130)", :onBlur => "isValidDate('occurence_span_from_date3')", :readonly=>true, :tabindex=>"56", :value =>  @occurence_spans[1].from_date1.try(:strftime,"%m%d%Y") unless @occurence_spans[1].nil? %></td>
+                <td align="center" bgcolor="#ECE9D8"><%= text_field :occurence_span, :through_date3, :class => "black_text", :size => "9", :onFocus=>"setXYScroll(130)", :onBlur => "isValidDate('occurence_span_through_date3')", :readonly=>true, :tabindex=>"56", :value =>  @occurence_spans[1].through_date1.try(:strftime,"%m%d%Y") unless @occurence_spans[1].nil? %></td>
+                <td align="center" bgcolor="#ECE9D8"><%= text_field :occurence_span, :code4, :class => "black_text", :size => "1", :onFocus=>"setXYScroll(130)", :onChange=>"enable_textfield(occurence_span_from_date4); enable_textfield(occurence_span_through_date4); code_blank(occurence_span_code4,occurence_span_from_date4); code_blank(occurence_span_code4,occurence_span_through_date4)", :tabindex=>"56", :value =>  @occurence_spans[1].code2 unless @occurence_spans[1].nil? %></td>
+                <td align="center" bgcolor="#ECE9D8"><%= text_field :occurence_span, :from_date4, :class => "black_text", :size => "9", :onFocus=>"setXYScroll(130)", :onBlur => "isValidDate('occurence_span_from_date4')", :readonly=>true, :tabindex=>"56", :value =>  @occurence_spans[1].from_date2.try(:strftime,"%m%d%Y") unless @occurence_spans[1].nil? %></td>
+                <td align="center" bgcolor="#ECE9D8"><%= text_field :occurence_span, :through_date4, :class => "black_text", :size => "9", :onFocus=>"setXYScroll(130)", :onBlur => "isValidDate('occurence_span_through_date4')", :readonly=>true, :tabindex=>"56", :value =>  @occurence_spans[1].through_date2.try(:strftime,"%m%d%Y") unless @occurence_spans[1].nil? %></td>
+            <% end %>
+            <td align="center"><%= text_field :ub04_claim_informations, :unlabel_37_2, :class => "black_text", :size => "7", :onFocus=>"setXYScroll(130)", :onblur => "convert_case_toupper('ub04_claim_informations_unlabel_37_2')", :tabindex=>"58", :value =>  @patientinfo.unlabel_37_2 unless  @patientinfo.nil? %></td>
+          </tr>
+        </table>
+      </td>
+    </tr>
+    </table>
+    <table width="933" border="0" cellspacing="0" cellpadding="0" class="bord" style="margin-left:18px;">
+      <tr>
+        <td width="451">
+          <table border="0" cellspacing="0" cellpadding="0">
+            <tr>
+              <td>38 SUBSCRIBER
+                <input type="checkbox" id="subscriber_self" onclick="subscr_self()" tabindex="59" value="self"></td>
+            </tr>
+            <tr>
+              <td colspan="3">&nbsp;&nbsp;
+                <%= text_field :ub04_claim_informations, :subscriber_last_name, :class => "black_text", :size => "25",
+                               :onFocus=>"setXYScroll(210)", :tabindex=>"59",
+                               :onkeypress => "enlargeTextfieldSize('ub04_claim_informations_subscriber_last_name',25)",
+                               :onblur => "resetTextfieldSize('ub04_claim_informations_subscriber_last_name',25); convert_case_toupper('ub04_claim_informations_subscriber_last_name')",
+                               :value => @patientinfo.subscriber_last_name unless @patientinfo.nil? %>
+                <%= text_field :ub04_claim_informations, :subscriber_first_name, :class => "black_text", :size => "25",
+                               :onFocus=>"setXYScroll(210)", :onblur=>"IS_name_string_informations_subscriber()",
+                               :onkeypress => "enlargeTextfieldSize('ub04_claim_informations_subscriber_first_name',25)",
+                               :onblur => "resetTextfieldSize('ub04_claim_informations_subscriber_first_name',25); convert_case_toupper('ub04_claim_informations_subscriber_first_name')",
+                               :tabindex=>"59", :value => @patientinfo.subscriber_first_name unless @patientinfo.nil? %>
+                <%= text_field :ub04_claim_informations, :subscriber_middle_initial, :class => "black_text", :size => "5", :onFocus=>"setXYScroll(210)", :onblur => "convert_case_toupper('ub04_claim_informations_subscriber_middle_initial')", :onKeyUp=>"IS_string_initials('ub04_claim_informations_subscriber_middle_initial')", :tabindex=>"59", :value => @patientinfo.subscriber_middle_initial unless @patientinfo.nil? %>
+              </td>
+            </tr>
+            <tr>
+              <td colspan="3">&nbsp;&nbsp;
+                <%= text_field :ub04_claim_informations, :subscriber_address1, :class => "black_text", :size => "63",
+                               :onFocus=>"setXYScroll(210)", :tabindex=>"59",
+                               :onkeypress => "enlargeTextfieldSize('ub04_claim_informations_subscriber_address1',63)",
+                               :onblur => "resetTextfieldSize('ub04_claim_informations_subscriber_address1',63); convert_case_toupper('ub04_claim_informations_subscriber_address1')",
+                               :value => @patientinfo.subscriber_address1 unless @patientinfo.nil? %>
+              </td>
+            </tr>
+            <tr>
+              <td colspan="3">&nbsp;&nbsp;
+                <%= text_field :ub04_claim_informations, :subscriber_address2, :class => "black_text", :size => "63",
+                               :onFocus=>"setXYScroll(210)", :onblur=>"subscriber_address1_notprovided()", :tabindex=>"60",
+                               :onkeypress => "enlargeTextfieldSize('ub04_claim_informations_subscriber_address2',63)",
+                               :onblur => "resetTextfieldSize('ub04_claim_informations_subscriber_address2',63); convert_case_toupper('ub04_claim_informations_subscriber_address2')",
+                               :value => @patientinfo.subscriber_address2 unless @patientinfo.nil? %></td>
+
+            </tr>
+            <tr>
+              <td colspan="3">&nbsp;&nbsp;
+                <%= text_field :ub04_claim_informations, :subscriber_city, :class => "black_text", :size => "39",
+                               :onFocus=>"setXYScroll(210)", :tabindex=>"61",
+                               :onkeypress => "enlargeTextfieldSize('ub04_claim_informations_subscriber_city',63)",
+                               :onblur => "resetTextfieldSize('ub04_claim_informations_subscriber_city',63); convert_case_toupper('ub04_claim_informations_subscriber_city')",
+                               :value => @patientinfo.subscriber_city unless @patientinfo.nil? %>
+                <%= select_tag "ub04_claim_informations[subscriber_state]", options_for_select(@state, @patientinfo.subscriber_state), :class => "black_text", :onFocus=>"setXYScroll(210)", :tabindex=>"62" %>
+                <%= text_field :ub04_claim_informations, :subscriber_zipcode, :class => "black_text", :size => "10", :onFocus=>"setXYScroll(210)", :onblur=>"zipcode_validator('ub04_claim_informations_subscriber_zipcode')", :tabindex=>"63", :value => @patientinfo.subscriber_zipcode unless @patientinfo.nil? %>
+              </td>
+            </tr>
+
+
+          </table>
+        </td>
+
+
+        <td width="14">&nbsp;</td>
+        <td width="465" valign="top">
+          <table width="465" border="0" cellpadding="0" cellspacing="0">
+            <tr>
+              <td colspan="2" bgcolor="#ECE9D8">39&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;VALUE CODES</td>
+              <td colspan="2" bgcolor="#918646">40&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;VALUE CODES</td>
+              <td colspan="2" bgcolor="#ECE9D8">41&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;VALUE CODES</td>
+            </tr>
+            <tr>
+              <td width="12%" align="center">CODE</td>
+              <td width="22%" bgcolor="#ECE9D8">AMOUNT</td>
+              <td width="12%" align="center" bgcolor="#918646">CODE</td>
+              <td width="21%" bgcolor="#918646">AMOUNT</td>
+              <td width="12%" align="center" bgcolor="#ECE9D8">CODE</td>
+              <td width="21%" bgcolor="#ECE9D8">AMOUNT</td>
+            </tr>
+
+            <tr>
+              <% if @value_codes[0].nil? %>
+                  <td align="center"><%= text_field :value_code, :code1, :class => "black_text", :size => "1", :onFocus=>"setXYScroll(210)", :tabindex=>"64" %></td>
+                  <td><%= text_field :value_code, :amount1, :class => "black_text", :size => "10", :onFocus=>"setXYScroll(210)", :tabindex=>"64" %></td>
+                  <td align="center"><%= text_field :value_code, :code2, :class => "black_text", :size => "1", :onFocus=>"setXYScroll(210)", :tabindex=>"64" %></td>
+                  <td><%= text_field :value_code, :amount2, :class => "black_text", :size => "10", :onFocus=>"setXYScroll(210)", :tabindex=>"64" %></td>
+                  <td align="center"><%= text_field :value_code, :code3, :class => "black_text", :size => "1", :onFocus=>"setXYScroll(210)", :tabindex=>"64" %></td>
+                  <td><%= text_field :value_code, :amount3, :class => "black_text", :size => "10", :onFocus=>"setXYScroll(210)", :tabindex=>"64" %></td>
+              <% else %>
+                  <td align="center"><%= text_field :value_code, :code1, :class => "black_text", :size => "1", :onFocus=>"setXYScroll(210)", :tabindex=>"64", :value => @value_codes[0].code1 unless @value_codes[0].nil? %></td>
+                  <td><%= text_field :value_code, :amount1, :class => "black_text", :size => "10", :onFocus=>"setXYScroll(210)", :tabindex=>"64", :value =>  @value_codes[0].amount1 unless @value_codes[0].nil? %></td>
+                  <td align="center"><%= text_field :value_code, :code2, :class => "black_text", :size => "1", :onFocus=>"setXYScroll(210)", :tabindex=>"64", :value => @value_codes[0].code2 unless @value_codes[0].nil? %></td>
+                  <td><%= text_field :value_code, :amount2, :class => "black_text", :size => "10", :onFocus=>"setXYScroll(210)", :tabindex=>"64", :value =>  @value_codes[0].amount2 unless @value_codes[0].nil? %></td>
+                  <td align="center"><%= text_field :value_code, :code3, :class => "black_text", :size => "1", :onFocus=>"setXYScroll(210)", :tabindex=>"64", :value => @value_codes[0].code3 unless @value_codes[0].nil? %></td>
+                  <td><%= text_field :value_code, :amount3, :class => "black_text", :size => "10", :onFocus=>"setXYScroll(210)", :tabindex=>"64", :value =>   @value_codes[0].amount3 unless @value_codes[0].nil? %></td>
+              <% end %>
+            </tr>
+            <tr>
+              <% if @value_codes[1].nil? %>
+                  <td align="center" bgcolor="#ECE9D8"><%= text_field :value_code, :code4, :class => "black_text", :size => "1", :onFocus=>"setXYScroll(210)", :tabindex=>"65" %></td>
+                  <td bgcolor="#ECE9D8"><%= text_field :value_code, :amount4, :class => "black_text", :size => "10", :onFocus=>"setXYScroll(210)", :tabindex=>"65" %></td>
+                  <td align="center" bgcolor="#ECE9D8"><%= text_field :value_code, :code5, :class => "black_text", :size => "1", :onFocus=>"setXYScroll(210)", :tabindex=>"65" %></td>
+                  <td bgcolor="#ECE9D8"><%= text_field :value_code, :amount5, :class => "black_text", :size => "10", :onFocus=>"setXYScroll(210)", :tabindex=>"65" %></td>
+                  <td align="center" bgcolor="#ECE9D8"><%= text_field :value_code, :code6, :class => "black_text", :size => "1", :onFocus=>"setXYScroll(150)", :tabindex=>"65" %></td>
+                  <td bgcolor="#ECE9D8"><%= text_field :value_code, :amount6, :class => "black_text", :size => "10", :onFocus=>"setXYScroll(210)", :tabindex=>"65" %></td>
+              <% else %>
+                  <td align="center" bgcolor="#ECE9D8"><%= text_field :value_code, :code4, :class => "black_text", :size => "1", :onFocus=>"setXYScroll(210)", :tabindex=>"65", :value => @value_codes[1].code1 unless @value_codes[1].nil? %></td>
+                  <td bgcolor="#ECE9D8"><%= text_field :value_code, :amount4, :class => "black_text", :size => "10", :onFocus=>"setXYScroll(210)", :tabindex=>"65", :value =>  @value_codes[1].amount1 unless @value_codes[1].nil? %></td>
+                  <td align="center" bgcolor="#ECE9D8"><%= text_field :value_code, :code5, :class => "black_text", :size => "1", :onFocus=>"setXYScroll(210)", :tabindex=>"65", :value => @value_codes[1].code2 unless @value_codes[1].nil? %></td>
+                  <td bgcolor="#ECE9D8"><%= text_field :value_code, :amount5, :class => "black_text", :size => "10", :onFocus=>"setXYScroll(210)", :tabindex=>"65", :value =>  @value_codes[1].amount2 unless @value_codes[1].nil? %></td>
+                  <td align="center" bgcolor="#ECE9D8"><%= text_field :value_code, :code6, :class => "black_text", :size => "1", :onFocus=>"setXYScroll(210)", :tabindex=>"65", :value => @value_codes[1].code3 unless @value_codes[1].nil? %></td>
+                  <td bgcolor="#ECE9D8"><%= text_field :value_code, :amount6, :class => "black_text", :size => "10", :onFocus=>"setXYScroll(210)", :tabindex=>"65", :value =>   @value_codes[1].amount3 unless @value_codes[1].nil? %></td>
+              <% end %>
+            </tr>
+            <tr>
+              <% if @value_codes[2].nil? %>
+                  <td align="center"><%= text_field :value_code, :code7, :class => "black_text", :size => "1", :onFocus=>"setXYScroll(210)", :tabindex=>"66" %></td>
+                  <td><%= text_field :value_code, :amount7, :class => "black_text", :size => "10", :onFocus=>"setXYScroll(210)", :tabindex=>"66" %></td>
+                  <td align="center"><%= text_field :value_code, :code8, :class => "black_text", :size => "1", :onFocus=>"setXYScroll(210)", :tabindex=>"66" %></td>
+                  <td><%= text_field :value_code, :amount8, :class => "black_text", :size => "10", :onFocus=>"setXYScroll(210)", :tabindex=>"66" %></td>
+                  <td align="center"><%= text_field :value_code, :code9, :class => "black_text", :size => "1", :onFocus=>"setXYScroll(210)", :tabindex=>"66" %></td>
+                  <td><%= text_field :value_code, :amount9, :class => "black_text", :size => "10", :onFocus=>"setXYScroll(210)", :tabindex=>"66" %></td>
+              <% else %>
+                  <td align="center"><%= text_field :value_code, :code7, :class => "black_text", :size => "1", :onFocus=>"setXYScroll(210)", :tabindex=>"66", :value => @value_codes[2].code1 unless @value_codes[2].nil? %></td>
+                  <td><%= text_field :value_code, :amount7, :class => "black_text", :size => "10", :onFocus=>"setXYScroll(210)", :tabindex=>"66", :value =>   @value_codes[2].amount1 unless @value_codes[2].nil? %></td>
+                  <td align="center"><%= text_field :value_code, :code8, :class => "black_text", :size => "1", :onFocus=>"setXYScroll(210)", :tabindex=>"66", :value => @value_codes[2].code2 unless @value_codes[2].nil? %></td>
+                  <td><%= text_field :value_code, :amount8, :class => "black_text", :size => "10", :onFocus=>"setXYScroll(210)", :tabindex=>"66", :value =>   @value_codes[2].amount2 unless @value_codes[2].nil? %></td>
+                  <td align="center"><%= text_field :value_code, :code9, :class => "black_text", :size => "1", :onFocus=>"setXYScroll(210)", :tabindex=>"66", :value => @value_codes[2].code3 unless @value_codes[2].nil? %></td>
+                  <td><%= text_field :value_code, :amount9, :class => "black_text", :size => "10", :onFocus=>"setXYScroll(210)", :tabindex=>"66", :value =>   @value_codes[2].amount3 unless @value_codes[2].nil? %></td>
+              <% end %>
+            </tr>
+            <tr>
+              <% if @value_codes[3].nil? %>
+                  <td align="center" bgcolor="#ECE9D8"><%= text_field :value_code, :code10, :class => "black_text", :size => "1", :onFocus=>"setXYScroll(210)", :tabindex=>"67" %></td>
+                  <td bgcolor="#ECE9D8"><%= text_field :value_code, :amount10, :class => "black_text", :size => "10", :onFocus=>"setXYScroll(210)", :tabindex=>"67" %></td>
+                  <td align="center" bgcolor="#ECE9D8"><%= text_field :value_code, :code11, :class => "black_text", :size => "1", :onFocus=>"setXYScroll(210)", :tabindex=>"67" %></td>
+                  <td bgcolor="#ECE9D8"><%= text_field :value_code, :amount11, :class => "black_text", :size => "10", :onFocus=>"setXYScroll(210)", :tabindex=>"67" %></td>
+                  <td align="center" bgcolor="#ECE9D8"><%= text_field :value_code, :code12, :class => "black_text", :size => "1", :onFocus=>"setXYScroll(210)", :tabindex=>"67" %></td>
+                  <td bgcolor="#ECE9D8"><%= text_field :value_code, :amount12, :class => "black_text", :size => "10", :onFocus=>"setXYScroll(210)", :tabindex=>"67" %></td>
+              <% else %>
+                  <td align="center" bgcolor="#ECE9D8"><%= text_field :value_code, :code10, :class => "black_text", :size => "1", :onFocus=>"setXYScroll(210)", :tabindex=>"67", :value => @value_codes[3].code1 unless @value_codes[3].nil? %></td>
+                  <td bgcolor="#ECE9D8"><%= text_field :value_code, :amount10, :class => "black_text", :size => "10", :onFocus=>"setXYScroll(210)", :tabindex=>"67", :value =>   @value_codes[3].amount1 unless @value_codes[3].nil? %></td>
+                  <td align="center" bgcolor="#ECE9D8"><%= text_field :value_code, :code11, :class => "black_text", :size => "1", :onFocus=>"setXYScroll(210)", :tabindex=>"67", :value => @value_codes[3].code2 unless @value_codes[3].nil? %></td>
+                  <td bgcolor="#ECE9D8"><%= text_field :value_code, :amount11, :class => "black_text", :size => "10", :onFocus=>"setXYScroll(210)", :tabindex=>"67", :value =>  @value_codes[3].amount2 unless @value_codes[3].nil? %></td>
+                  <td align="center" bgcolor="#ECE9D8"><%= text_field :value_code, :code12, :class => "black_text", :size => "1", :onFocus=>"setXYScroll(210)", :tabindex=>"67", :value => @value_codes[3].code3 unless @value_codes[3].nil? %></td>
+                  <td bgcolor="#ECE9D8"><%= text_field :value_code, :amount12, :class => "black_text", :size => "10", :onFocus=>"setXYScroll(210)", :tabindex=>"67", :value =>   @value_codes[3].amount3 unless @value_codes[3].nil? %></td>
+              <% end %>
+            </tr>
+
+
+          </table>
+        </td>
+      </tr>
+    </table>
+    <table width="933" border="0" cellspacing="0" cellpadding="0" class="bord" style="margin-left:18px;">
+      <tr>
+        <td width="52" height="18">42 REV CD</td>
+        <td width="220">43 DESCRIPTION</td>
+        <td width="200">44 HCPCS / RATE / HIPPS CODE / MODIFIER</td>
+        <td width="80">45 SERV DATE</td>
+        <td width="70">46 SERV UNITS</td>
+        <td width="80">47 TOTAL CHARGES</td>
+        <td width="115">48 NON-COVERED CHARGES</td>
+        <td width="23">49</td>
+        <td width="23">+</td>
+      </tr>
+      <tr>
+
+        <% scroll_position = 320 + 14 %>
+        <td bgcolor="#ECE9D8"><%= text_field :ub04_serviceline_informations, :"rev_code", :class => "black_text", :size => "5", :onFocus=>"setXYScroll(#{scroll_position})", :tabindex=>"68" %></td>
+        <td bgcolor="#ECE9D8"><%= text_field :ub04_serviceline_informations, :"description", :class => "black_text",
+                                             :size => "40", :onFocus=>"setXYScroll(#{scroll_position})",
+                                             :onkeypress => "enlargeTextfieldSize('ub04_serviceline_informations_description',63)",
+                                             :onblur => "resetTextfieldSize('ub04_serviceline_informations_description',63);",
+                                             :tabindex=>"68", :disabled => true %></td>
+        <td bgcolor="#ECE9D8"><%= text_field :ub04_serviceline_informations, :"hcpcs", :class => "black_text", :size => "5", :onFocus=>"setXYScroll(#{scroll_position})", :onblur => "convert_case_toupper('ub04_serviceline_informations_hcpcs')", :tabindex=>"68", :tabindex=>"68" %>
+          <%= text_field :ub04_serviceline_informations, :"rates", :class => "black_text", :size => "5", :onFocus=>"setXYScroll(#{scroll_position})", :tabindex=>"68" %>
+          <%= text_field :ub04_serviceline_informations, :"hipps_codes", :class => "black_text", :size => "5", :onblur => "convert_case_toupper('ub04_serviceline_informations_hipps_codes')", :onFocus=>"setXYScroll(#{scroll_position})", :tabindex=>"68" %>
+          <%= text_field :ub04_serviceline_informations, :"modifier", :maxlength=>'2', :class => "black_text", :size => "1", :onBlur => "validate_modifier('ub04_serviceline_informations_modifier'); convert_case_toupper('ub04_serviceline_informations_modifier')", :onFocus=>"setXYScroll(#{scroll_position})", :tabindex=>"68" %>
+          <%= text_field :ub04_serviceline_informations, :"modifier2", :maxlength=>'2', :class => "black_text", :size => "1", :onBlur => "validate_modifier('ub04_serviceline_informations_modifier2'); convert_case_toupper('ub04_serviceline_informations_modifier2')", :onFocus=>"setXYScroll(#{scroll_position})", :tabindex=>"68" %>
+          <%= text_field :ub04_serviceline_informations, :"modifier3", :maxlength=>'2', :class => "black_text", :size => "1", :onBlur => "validate_modifier('ub04_serviceline_informations_modifier3'); convert_case_toupper('ub04_serviceline_informations_modifier3')", :onFocus=>"setXYScroll(#{scroll_position})", :tabindex=>"68" %>
+          <%= text_field :ub04_serviceline_informations, :"modifier4", :maxlength=>'2', :class => "black_text", :size => "1", :onBlur => "validate_modifier('ub04_serviceline_informations_modifier4'); convert_case_toupper('ub04_serviceline_informations_modifier4')", :onFocus=>"setXYScroll(#{scroll_position})", :tabindex=>"68" %>
+        </td>
+        <td bgcolor="#ECE9D8"><%= text_field :ub04_serviceline_informations, :"service_date", :class => "black_text", :size => "9", :onFocus=>"setXYScroll(#{scroll_position})", :onblur => "service_line_service_date()", :tabindex=>"68" %></td>
+        <td bgcolor="#ECE9D8"><%= text_field :ub04_serviceline_informations, :"service_units", :class => "black_text", :size => "5", :onFocus=>"setXYScroll(#{scroll_position})", :tabindex=>"68" %></td>
+        <td bgcolor="#ECE9D8"><%= text_field :ub04_serviceline_informations, :"charges", :class => "black_text", :size => "10", :onFocus=>"setXYScroll(#{scroll_position})", :tabindex=>"68" %></td>
+        <td bgcolor="#ECE9D8"><%= text_field :ub04_serviceline_informations, :"non_covered_charges", :class => "black_text", :size => "10", :onFocus=>"setXYScroll(#{scroll_position})", :tabindex=>"68" %></td>
+        <td bgcolor="#ECE9D8"><%= text_field :ub04_serviceline_informations, :"unlabel_49", :class => "black_text", :size => "5", :onFocus=>"setXYScroll(#{scroll_position})", :tabindex=>"68" %></td>
+        <%= hidden_field 'ub04_serviceline_informations', 'count', :id=>1700, :size => 3 %>
+        <%= hidden_field 'ub04_serviceline_informations', 'rowcount', :id=>1800, :size => 3 %>
+        <td height="30" bgcolor="#ECE9D8">
+          <input type="button" value="Add" id = "svc_add_btn" class='button' name="option1" onclick="javascript:addRow('myTable')" tabindex="68" accesskey = '+'>
+        </td>
+      </tr>
+    </table>
+    <table width="933" border="0" cellspacing="0" cellpadding="0" class="bord" id="myTable" style="margin-left:18px;">
+      <tbody>
+      <tr>
+        <td width="52" height="18">#</td>
+        <td width="52" height="18">42 REV CD</td>
+        <td width="220">43 DESCRIPTION</td>
+        <td width="200">44 HCPCS / RATE / HIPPS CODE / MODIFIER</td>
+        <td width="80">45 SERV DATE</td>
+        <td width="70">46 SERV UNITS</td>
+        <td width="80">47 TOTAL CHARGES</td>
+        <td width="115">48 NON-COVERED CHARGES</td>
+        <td width="23">49</td>
+        <td width="23">-</td>
+      </tr>
+      </tbody>
+      <%#*<input type="button" value="Remove" class='button' name="option1" onclick="javascript:removeRow('myTable')">%>
+     <%= tag "input", { "type" => "button", "id" => "svc_edit_btn", "accesskey" => "w", "class" => "button", "value" => "Edit", "onclick" => "unfreeze()" } %>
+     <%= tag "input", { "type" => "button", "id" => "svc_update_btn", "accesskey" => "s", "class" => "button", "value" => "Update", "onclick" => "updateaddedservicelines()" } %>
+     <%= tag "input", { "type" => "button", "id" => "svc_remove_btn", "accesskey" => "r", "name" => "option1", "class" => "button", "value" => "Remove", "onclick" => "removeaddedrow()"} %>
+    </table>
+    <table width="933" border="0" cellspacing="0" cellpadding="0" class="bord" style="margin-left:18px;">
+      <tr>
+        <td height="1" colspan="9" bgcolor="#918646"></td>
+      </tr>
+      <tr>
+        <td>&nbsp;</td>
+        <td height="22" bgcolor="#ECE9D8"><%= text_field :ub04_claim_informations, :unlabel_42_23, :class => "black_text", :size => "5", :onFocus=>"setXYScroll(750)", :tabindex=>"69", :accesskey =>'f', :value => @patientinfo.unlabel_42_23 unless @patientinfo.nil? %></td>
+        <td colspan="1" bgcolor="#ECE9D8">PAGE:
+          <%= text_field :ub04_claim_informations, :page_number, :class => "black_text", :size => "5", :onFocus=>"setXYScroll(750)", :tabindex=>"70", :value => @patientinfo.page_number unless @patientinfo.nil? %>
+          OF
+          <%= text_field :ub04_claim_informations, :page_total, :class => "black_text", :size => "5", :onFocus=>"setXYScroll(750)", :tabindex=>"71", :value => @patientinfo.page_total unless @patientinfo.nil? %></td>
+        <td bgcolor="#ECE9D8">
+          <div align="center"><strong>CREATION DATE</strong></div>
+        </td>
+        </td>
+        <td bgcolor="#ECE9D8"> <%= text_field :ub04_claim_informations, :creation_date, :class => "black_text", :size => "9", :onFocus=>"setXYScroll(750)", :onBlur => "isValidDate('ub04_claim_informations_creation_date')", :tabindex=>"72", :value => @patientinfo.creation_date.try(:strftime,"%m%d%Y") unless @patientinfo.nil? %></td>
+        <td bgcolor="#ECE9D8">
+          <div align="center"><strong>TOTALS ===&gt; </strong></div>
+        </td>
+        <td bgcolor="#ECE9D8"> <%= text_field :ub04_claim_informations, :total_charges, :class => "black_text", :size => "10", :onFocus=>"setXYScroll(750);", :onBlur => "total_charge_adder()", :tabindex=>"73", :value =>  @patientinfo.total_charges unless @patientinfo.nil? %></td>
+        <td bgcolor="#ECE9D8"> <%= text_field :ub04_claim_informations, :total_non_covered_charges, :class => "black_text", :size => "10", :onFocus=>"setXYScroll(750)", :tabindex=>"74", :value => @patientinfo.total_non_covered_charges unless @patientinfo.nil? %></td>
+        <td bgcolor="#ECE9D8"></td>
+
+      </tr>
+      <tr>
+        <td height="1" colspan="9" bgcolor="#918646"></td>
+      </tr>
+    </table>
+    <table width="933" border="0" cellspacing="0" cellpadding="0" class="bord" style="margin-left:18px;">
+      <tr>
+        <td width="451" valign="top">
+          <table width="450" border="0" cellspacing="0" cellpadding="0">
+            <tr>
+              <td width="259" bgcolor="#ECE9D8">50 PAYER NAME</td>
+              <td width="165" bgcolor="#ECE9D8">51 HEALTH PLAN ID</td>
+              <td width="26" bgcolor="#ECE9D8">52 REL INFO</td>
+            </tr>
+            <% for payer_count in 1..3 %>
+                <tr>
+                  <% if @ub04payers[payer_count-1].nil? %>
+                      <td><%= text_field :ub04payer, :"name#{payer_count}", :class => "black_text", :size => "45",
+                                         :onkeypress => "enlargeTextfieldSize('ub04payer_name#{payer_count}',45)",
+                                         :onblur => "resetTextfieldSize('ub04payer_name#{payer_count}',45); convert_case_toupper('ub04payer_name#{payer_count}')",
+                                         :onFocus=>"setXYScroll(775)", :tabindex=>"75" %></td>
+                      <td><%= text_field :ub04payer, :"health_planid#{payer_count}", :class => "black_text", :size => "28", :onFocus=>"setXYScroll(775)", :onblur => "convert_case_toupper('ub04payer_health_planid#{payer_count}')", :tabindex=>"75" %></td>
+                      <td><%= text_field :ub04payer, :"release_info#{payer_count}", :class => "black_text", :size => "1", :onFocus=>"setXYScroll(775)", :tabindex=>"75", :onblur=>"release_info('ub04payer_release_info','#{payer_count}'); convert_case_toupper('ub04payer_release_info#{payer_count}')" %></td>
+                  <% else %>
+                      <td><%= text_field :ub04payer, :"name#{payer_count}", :class => "black_text", :size => "45",
+                                         :onFocus=>"setXYScroll(775)", :tabindex=>"75",
+                                         :onkeypress => "enlargeTextfieldSize('ub04payer_name#{payer_count}',45)",
+                                         :onblur => "resetTextfieldSize('ub04payer_name#{payer_count}',45); convert_case_toupper('ub04payer_name#{payer_count}')",
+                                         :value => @ub04payers[payer_count-1].name unless @ub04payers[payer_count-1].nil? %></td>
+                      <td><%= text_field :ub04payer, :"health_planid#{payer_count}", :class => "black_text", :size => "28", :onFocus=>"setXYScroll(775)", :onblur => "convert_case_toupper('ub04payer_health_planid#{payer_count}')", :tabindex=>"75", :value => @ub04payers[payer_count-1].health_planid unless @ub04payers[payer_count-1].nil? %></td>
+                      <td><%= text_field :ub04payer, :"release_info#{payer_count}", :class => "black_text", :size => "1", :onFocus=>"setXYScroll(775)",  :tabindex=>"75", :onblur=>"release_info('ub04payer_release_info','#{payer_count}'); convert_case_toupper('ub04payer_release_info#{payer_count}')", :value => @ub04payers[payer_count-1].release_info unless @ub04payers[payer_count-1].nil? %></td>
+                  <% end %>
+                </tr>
+            <% end %>
+          </table>
+        </td>
+        <td width="14">&nbsp;</td>
+        <td width="465" valign="top">
+          <table width="464" border="0" cellspacing="0" cellpadding="0">
+            <tr>
+              <td width="31" bgcolor="#ECE9D8">53 ASG BEN</td>
+              <td width="153" bgcolor="#ECE9D8">54 PRIOR PAYMENTS</td>
+              <td width="92" bgcolor="#ECE9D8">55 EST. AMOUNT DUE</td>
+              <td width="32" bgcolor="#ECE9D8">56 NPI</td>
+              <td width="156"><%= text_field :ub04_claim_informations, :billing_provider_npi, :class => "black_text", :size => "20", :onFocus=>"setXYScroll(770)", :onBlur => "npilength()", :tabindex=>"76", :value => @patientinfo.billing_provider_npi unless @patientinfo.nil? %></td>
+            </tr>
+
+            <tr>
+              <% if @ub04payers[0].nil? %>
+                  <td><%= text_field :ub04payer, :assign_benefits1, :class => "black_text", :size => "2", :onFocus=>"setXYScroll(775)", :tabindex=>"76", :onblur=>"assign_benefits(ub04payer_assign_benefits1); convert_case_toupper('ub04payer_assign_benefits1')" %></td>
+                  <td><%= text_field :ub04payer, :prior_payments1, :class => "black_text", :size => "30", :onFocus=>"setXYScroll(775)", :tabindex=>"76" %></td>
+                  <td><%= text_field :ub04payer, :est_amounts1, :class => "black_text", :size => "10", :onFocus=>"setXYScroll(775)", :tabindex=>"76" %></td>
+              <% else %>
+                  <td><%= text_field :ub04payer, :assign_benefits1, :class => "black_text", :size => "2", :onFocus=>"setXYScroll(775)", :tabindex=>"76", :onblur=>"assign_benefits(ub04payer_assign_benefits1); convert_case_toupper('ub04payer_assign_benefits1')", :value => @ub04payers[0].assign_benefits unless @ub04payers[0].nil? %></td>
+                  <td><%= text_field :ub04payer, :prior_payments1, :class => "black_text", :size => "30", :onFocus=>"setXYScroll(775)", :tabindex=>"76", :value => @ub04payers[0].prior_payments unless @ub04payers[0].nil? %></td>
+                  <td><%= text_field :ub04payer, :est_amounts1, :class => "black_text", :size => "10", :onFocus=>"setXYScroll(775)", :tabindex=>"76", :value =>   @ub04payers[0].est_amounts unless @ub04payers[0].nil? %></td>
+              <% end %>
+              <td rowspan="3" valign="top">57 <br/>
+                OTHER<br/>
+                PRV ID
+              </td>
+              <td><%= text_field :ub04_claim_informations, :billing_providerid1, :class => "black_text", :size => "20", :onFocus=>"setXYScroll(775)", :tabindex=>"77", :value => @patientinfo.billing_providerid1 unless @patientinfo.nil? %></td>
+
+            </tr>
+
+            <tr>
+              <% if @ub04payers[1].nil? %>
+                  <td bgcolor="#ECE9D8"><%= text_field :ub04payer, :assign_benefits2, :class => "black_text", :size => "2", :onFocus=>"setXYScroll(775)", :onblur=>"convert_case_toupper('ub04payer_assign_benefits2')", :tabindex=>"76" %></td>
+                  <td bgcolor="#ECE9D8"><%= text_field :ub04payer, :prior_payments2, :class => "black_text", :size => "30", :onFocus=>"setXYScroll(775)", :tabindex=>"76" %></td>
+                  <td bgcolor="#ECE9D8"><%= text_field :ub04payer, :est_amounts2, :class => "black_text", :size => "10", :onFocus=>"setXYScroll(775)", :tabindex=>"76" %></td>
+              <% else %>
+                  <td bgcolor="#ECE9D8"><%= text_field :ub04payer, :assign_benefits2, :class => "black_text", :size => "2", :onFocus=>"setXYScroll(775)", :onblur=>"convert_case_toupper('ub04payer_assign_benefits2')", :tabindex=>"76", :value => @ub04payers[1].assign_benefits unless @ub04payers[1].nil? %></td>
+                  <td bgcolor="#ECE9D8"><%= text_field :ub04payer, :prior_payments2, :class => "black_text", :size => "30", :onFocus=>"setXYScroll(775)", :tabindex=>"76", :value => @ub04payers[1].prior_payments unless @ub04payers[1].nil? %></td>
+                  <td bgcolor="#ECE9D8"><%= text_field :ub04payer, :est_amounts2, :class => "black_text", :size => "10", :onFocus=>"setXYScroll(775)", :tabindex=>"76", :value =>  @ub04payers[1].est_amounts unless @ub04payers[1].nil? %></td>
+              <% end %>
+              <td><%= text_field :ub04_claim_informations, :billing_providerid2, :class => "black_text", :size => "20", :onFocus=>"setXYScroll(775)", :tabindex=>"78", :value => @patientinfo.billing_providerid2 unless @patientinfo.nil? %></td>
+            </tr>
+            <tr>
+              <% if @ub04payers[2].nil? %>
+                  <td><%= text_field :ub04payer, :assign_benefits3, :class => "black_text", :size => "2", :onFocus=>"setXYScroll(775)", :onblur=>"convert_case_toupper('ub04payer_assign_benefits3')", :tabindex=>"76" %></td>
+                  <td><%= text_field :ub04payer, :prior_payments3, :class => "black_text", :size => "30", :onFocus=>"setXYScroll(775)", :tabindex=>"76" %></td>
+                  <td><%= text_field :ub04payer, :est_amounts3, :class => "black_text", :size => "10", :onFocus=>"setXYScroll(775)", :tabindex=>"76" %></td>
+              <% else %>
+                  <td><%= text_field :ub04payer, :assign_benefits3, :class => "black_text", :size => "2", :onFocus=>"setXYScroll(775)", :onblur=>"convert_case_toupper('ub04payer_assign_benefits3')", :tabindex=>"76", :value => @ub04payers[2].assign_benefits unless @ub04payers[2].nil? %></td>
+                  <td><%= text_field :ub04payer, :prior_payments3, :class => "black_text", :size => "30", :onFocus=>"setXYScroll(775)", :tabindex=>"76", :value => @ub04payers[2].prior_payments unless @ub04payers[2].nil? %></td>
+                  <td><%= text_field :ub04payer, :est_amounts3, :class => "black_text", :size => "10", :onFocus=>"setXYScroll(775)", :tabindex=>"76", :value =>  @ub04payers[2].est_amounts unless @ub04payers[2].nil? %></td>
+              <% end %>
+              <td><%= text_field :ub04_claim_informations, :billing_providerid3, :class => "black_text", :size => "20", :onFocus=>"setXYScroll(775)", :tabindex=>"79", :value => @patientinfo.billing_providerid3 unless @patientinfo.nil? %></td>
+            </tr>
+
+          </table>
+        </td>
+      </tr>
+    </table>
+    <table width="933" border="0" cellspacing="0" cellpadding="0" class="bord" style="margin-left:18px;">
+      <tr>
+        <td width="277" valign="top" bgcolor="#ECE9D8">58 INSURED'S NAME</td>
+        <td width="41" valign="top" bgcolor="#ECE9D8">59 P.REL</td>
+        <td width="202" valign="top" bgcolor="#ECE9D8">60 INSURED'S UNIQUE ID</td>
+        <td width="223" valign="top" bgcolor="#ECE9D8">61 GROUP NAME</td>
+        <td width="188" valign="top" bgcolor="#ECE9D8">62 INSURANCE GROUP NO.</td>
+      </tr>
+      <tr>
+        <% if  @ub04payers[0].nil? %>
+            <td valign="top"><%= text_field :ub04payer, :insured_last_name1, :class => "black_text", :size => "20",
+                                            :onkeypress => "enlargeTextfieldSize('ub04payer_insured_last_name1',20)",
+                                            :onblur => "resetTextfieldSize('ub04payer_insured_last_name1',20); convert_case_toupper('ub04payer_insured_last_name1')",
+                                            :onFocus=>"setXYScroll(840)", :tabindex=>"80" %>
+              <%= text_field :ub04payer, :insured_first_name1, :class => "black_text", :size => "20",
+                             :onkeypress => "enlargeTextfieldSize('ub04payer_insured_first_name1',20)",
+                             :onblur => "resetTextfieldSize('ub04payer_insured_first_name1',20); IS_name_string_informations_insured(); convert_case_toupper('ub04payer_insured_first_name1')",
+                             :onFocus=>"setXYScroll(840)", :tabindex=>"80" %>
+              <%= text_field :ub04payer, :insured_middle_initial1, :class => "black_text", :size => "3", :onFocus=>"setXYScroll(840)", :onblur => "convert_case_toupper('ub04payer_insured_middle_initial1')", :onKeyUp=>"IS_string_initials('ub04payer_insured_middle_initial1')", :tabindex=>"80" %>
+
+            </td>
+            <td valign="top">
+              <% if batch_type == "PCN" %>
+                <%= select_tag "ub04payer[patient_relationship1]", options_for_select(@relationship_code), :class => "black_text", :onFocus=>"setXYScroll(840)", :tabindex=>"80" %>
+              <% else %>
+                <%= text_field :ub04payer, :patient_relationship1, :class => "black_text", :size => "1", :onFocus=>"setXYScroll(840)", :tabindex=>"80", :onblur=>'patient_relationship(ub04payer_patient_relationship1)' %>
+              <% end %>
+            </td>
+            <td valign="top"><%= text_field :ub04payer, :insured_id1, :class => "black_text", :size => "28", :onFocus=>"setXYScroll(840)", :onblur => "convert_case_toupper('ub04payer_insured_id1')", :tabindex=>"80" %></td>
+            <td valign="top"><%= text_field :ub04payer, :group_name1, :class => "black_text", :size => "28",
+                                            :onkeypress => "enlargeTextfieldSize('ub04payer_group_name1',28)",
+                                            :onblur => "resetTextfieldSize('ub04payer_group_name1',28); convert_case_toupper('ub04payer_group_name1');",
+                                            :onFocus=>"setXYScroll(840)", :tabindex=>"80" %></td>
+            <td valign="top"><%= text_field :ub04payer, :group_no1, :class => "black_text", :size => "28", :onFocus=>"setXYScroll(840)", :onblur => "convert_case_toupper('ub04payer_group_no1')", :tabindex=>"80" %></td>
+        <% else %>
+            <td valign="top"><%= text_field :ub04payer, :insured_last_name1, :class => "black_text", :size => "20",
+                                            :onFocus=>"setXYScroll(840)", :tabindex=>"80",
+                                            :onkeypress => "enlargeTextfieldSize('ub04payer_insured_last_name1',28)",
+                                            :onblur => "resetTextfieldSize('ub04payer_insured_last_name1',28); convert_case_toupper('ub04payer_insured_last_name1')",
+                                            :value => @ub04payers[0].insured_last_name unless @ub04payers[0].nil? %>
+              <%= text_field :ub04payer, :insured_first_name1, :class => "black_text", :size => "20",
+                             :onFocus=>"setXYScroll(840)",
+                             :onkeypress => "enlargeTextfieldSize('ub04payer_insured_first_name1',20)",
+                             :onblur => "resetTextfieldSize('ub04payer_insured_first_name1',20); IS_name_string_informations_insured(); convert_case_toupper('ub04payer_insured_first_name1')",
+                             :tabindex=>"80", :value => @ub04payers[0].insured_first_name unless @ub04payers[0].nil? %>
+              <%= text_field :ub04payer, :insured_middle_initial1, :class => "black_text", :size => "3", :onblur => "convert_case_toupper('ub04payer_insured_middle_initial1')", :onFocus=>"setXYScroll(840)", :onKeyUp=>"IS_string_initials('ub04payer_insured_middle_initial1')", :tabindex=>"80", :value => @ub04payers[0].insured_middle_initial unless @ub04payers[0].nil? %>
+            </td>
+            <td valign="top">
+              <% if batch_type == "PCN" %>
+                  <%= select_tag "ub04payer[patient_relationship1]", options_for_select(@relationship_code), :class => "black_text", :onFocus=>"setXYScroll(840)", :tabindex=>"80" %>
+              <% else %>
+                  <%= text_field :ub04payer, :patient_relationship1, :class => "black_text", :size => "1", :onFocus=>"setXYScroll(840)", :tabindex=>"80", :onblur=>'patient_relationship(ub04payer_patient_relationship1)', :value => @ub04payers[0].patient_relationship unless @ub04payers[0].nil? %>
+              <% end %>
+            </td>
+            <td valign="top"><%= text_field :ub04payer, :insured_id1, :class => "black_text", :size => "28", :onFocus=>"setXYScroll(840)", :onblur => "convert_case_toupper('insured_id1')", :tabindex=>"80", :value => @ub04payers[0].insured_id unless @ub04payers[0].nil? %></td>
+            <td valign="top"><%= text_field :ub04payer, :group_name1, :class => "black_text", :size => "28",
+                                            :onFocus=>"setXYScroll(840)", :tabindex=>"80",
+                                            :onkeypress => "enlargeTextfieldSize('ub04payer_insured_group_name1',28)",
+                                            :onblur => "resetTextfieldSize('ub04payer_insured_group_name1',28); convert_case_toupper('ub04payer_group_name1')",
+                                            :value => @ub04payers[0].group_name unless @ub04payers[0].nil? %></td>
+            <td valign="top"><%= text_field :ub04payer, :group_no1, :class => "black_text", :size => "28", :onFocus=>"setXYScroll(840)", :onblur => "convert_case_toupper('ub04payer_group_no1')", :tabindex=>"80", :value => @ub04payers[0].group_no unless @ub04payers[0].nil? %></td>
+        <% end %>
+      </tr>
+      <tr>
+        <% if @ub04payers[1].nil? %>
+            <td valign="top" bgcolor="#F7F5EE"><%= text_field :ub04payer, :insured_last_name2, :class => "black_text",
+                                                              :onkeypress => "enlargeTextfieldSize('ub04payer_insured_last_name2',20)",
+                                                              :onblur => "resetTextfieldSize('ub04payer_insured_last_name2',20); convert_case_toupper('ub04payer_insured_last_name2')",
+                                                              :size => "20", :onFocus=>"setXYScroll(840)", :tabindex=>"80" %>
+              <%= text_field :ub04payer, :insured_first_name2, :class => "black_text", :size => "20",
+                             :onkeypress => "enlargeTextfieldSize('ub04payer_insured_first_name2',20)",
+                             :onblur => "resetTextfieldSize('ub04payer_insured_first_name2',20); convert_case_toupper('ub04payer_insured_first_name2')",
+                             :onFocus=>"setXYScroll(840)", :tabindex=>"80" %>
+              <%= text_field :ub04payer, :insured_middle_initial2, :class => "black_text", :size => "3", :onblur => "convert_case_toupper('ub04payer_insured_middle_initial2')", :onFocus=>"setXYScroll(840)", :tabindex=>"80" %>
+            </td>
+            <td valign="top" bgcolor="#F7F5EE">
+               <% if batch_type == "PCN" %>
+                  <%= select_tag "ub04payer[patient_relationship2]", options_for_select(@relationship_code), :class => "black_text", :onFocus=>"setXYScroll(840)", :tabindex=>"80" %>
+               <% else %>
+                  <%= text_field :ub04payer, :patient_relationship2, :class => "black_text", :size => "1", :onFocus=>"setXYScroll(840)", :tabindex=>"80" %>
+               <% end %>
+            </td>
+            <td valign="top" bgcolor="#F7F5EE"><%= text_field :ub04payer, :insured_id2, :class => "black_text", :size => "28", :onblur => "convert_case_toupper('ub04payer_insured_id2')", :onFocus=>"setXYScroll(840)", :tabindex=>"80" %></td>
+            <td valign="top" bgcolor="#F7F5EE"><%= text_field :ub04payer, :group_name2, :class => "black_text", :size => "28",
+                                                              :onkeypress => "enlargeTextfieldSize('ub04payer_group_name2',28)",
+                                                              :onblur => "resetTextfieldSize('ub04payer_group_name2',28); convert_case_toupper('ub04payer_group_name2')",
+                                                              :onFocus=>"setXYScroll(840)", :tabindex=>"80" %></td>
+            <td bgcolor="#F7F5EE"><%= text_field :ub04payer, :group_no2, :class => "black_text", :size => "28", :onblur => "convert_case_toupper('ub04payer_group_no2')", :onFocus=>"setXYScroll(840)", :tabindex=>"80" %></td>
+        <% else %>
+            <td valign="top" bgcolor="#F7F5EE"><%= text_field :ub04payer, :insured_last_name2, :class => "black_text", :size => "20",
+                                                              :onFocus=>"setXYScroll(840)", :tabindex=>"80",
+                                                              :onkeypress => "enlargeTextfieldSize('ub04payer_insured_last_name2',20)",
+                                                              :onblur => "resetTextfieldSize('ub04payer_insured_last_name2',20); convert_case_toupper('ub04payer_insured_last_name2')",
+                                                              :value => @ub04payers[1].insured_last_name unless @ub04payers[1].nil? %>
+              <%= text_field :ub04payer, :insured_first_name2, :class => "black_text", :size => "20", :onFocus=>"setXYScroll(840)",
+                             :onkeypress => "enlargeTextfieldSize('ub04payer_insured_first_name2',20)",
+                             :onblur => "resetTextfieldSize('ub04payer_insured_first_name2',20); convert_case_toupper('ub04payer_insured_first_name2')",
+                             :tabindex=>"80", :value => @ub04payers[1].insured_first_name unless @ub04payers[1].nil? %>
+              <%= text_field :ub04payer, :insured_middle_initial2, :class => "black_text", :size => "3", :onblur => "convert_case_toupper('ub04payer_insured_middle_initial2')", :onFocus=>"setXYScroll(840)", :tabindex=>"80", :value => @ub04payers[1].insured_middle_initial unless @ub04payers[1].nil? %>
+            </td>
+            <td valign="top" bgcolor="#F7F5EE">
+               <% if batch_type == "PCN" %>
+                  <%= select_tag "ub04payer[patient_relationship2]", options_for_select(@relationship_code), :class => "black_text", :onFocus=>"setXYScroll(840)", :tabindex=>"80" %>
+               <% else %>
+                  <%= text_field :ub04payer, :patient_relationship2, :class => "black_text", :size => "1", :onFocus=>"setXYScroll(840)", :tabindex=>"80", :value => @ub04payers[1].patient_relationship unless @ub04payers[1].nil? %>
+               <% end %>
+            </td>
+            <td valign="top" bgcolor="#F7F5EE"><%= text_field :ub04payer, :insured_id2, :class => "black_text", :size => "28", :onblur => "convert_case_toupper('ub04payer_insured_id2')", :onFocus=>"setXYScroll(840)", :tabindex=>"80", :value => @ub04payers[1].insured_id unless @ub04payers[1].nil? %></td>
+            <td valign="top" bgcolor="#F7F5EE"><%= text_field :ub04payer, :group_name2, :class => "black_text", :size => "28",
+                                                              :onkeypress => "enlargeTextfieldSize('ub04payer_group_name2',28)",
+                                                              :onblur => "resetTextfieldSize('ub04payer_group_name2',28); convert_case_toupper('ub04payer_group_name2')",
+                                                              :onFocus=>"setXYScroll(840)", :value => @ub04payers[1].group_name unless @ub04payers[1].nil? %></td>
+            <td bgcolor="#F7F5EE"><%= text_field :ub04payer, :group_no2, :class => "black_text", :size => "28", :onblur => "convert_case_toupper('ub04payer_group_no2')", :onFocus=>"setXYScroll(840)", :tabindex=>"80", :value => @ub04payers[1].group_no unless @ub04payers[1].nil? %></td>
+        <% end %>
+      </tr>
+      <tr>
+        <% if @ub04payers[2].nil? %>
+            <td valign="top"><%= text_field :ub04payer, :insured_last_name3, :class => "black_text", :size => "20",
+                                            :onkeypress => "enlargeTextfieldSize('ub04payer_insured_last_name3',20)",
+                                            :onblur => "resetTextfieldSize('ub04payer_insured_last_name3',20); convert_case_toupper('ub04payer_insured_last_name3')",
+                                            :onFocus=>"setXYScroll(840)", :tabindex=>"80" %>
+              <%= text_field :ub04payer, :insured_first_name3, :class => "black_text", :size => "20",
+                             :onkeypress => "enlargeTextfieldSize('ub04payer_insured_first_name3',20)",
+                             :onblur => "resetTextfieldSize('ub04payer_insured_first_name3',20); convert_case_toupper('ub04payer_insured_first_name3')",
+                             :onFocus=>"setXYScroll(840)", :tabindex=>"80" %>
+              <%= text_field :ub04payer, :insured_middle_initial3, :class => "black_text", :size => "3", :onblur => "convert_case_toupper('ub04payer_insured_middle_initial3')", :onFocus=>"setXYScroll(840)", :tabindex=>"80" %>
+            </td>
+            <td valign="top">
+               <% if batch_type == "PCN" %>
+                  <%= select_tag "ub04payer[patient_relationship3]", options_for_select(@relationship_code), :class => "black_text", :onFocus=>"setXYScroll(840)", :tabindex=>"80" %>
+               <% else %>
+                  <%= text_field :ub04payer, :patient_relationship3, :class => "black_text", :size => "1", :onFocus=>"setXYScroll(840)", :tabindex=>"80" %>
+              <% end %>
+            </td>
+            <td valign="top"><%= text_field :ub04payer, :insured_id3, :class => "black_text", :size => "28", :onblur => "convert_case_toupper('ub04payer_insured_id3')", :onFocus=>"setXYScroll(840)", :tabindex=>"80" %></td>
+            <td valign="top"><%= text_field :ub04payer, :group_name3, :class => "black_text", :size => "28",
+                                            :onkeypress => "enlargeTextfieldSize('ub04payer_group_name3',28)",
+                                            :onblur => "resetTextfieldSize('ub04payer_group_name3',28); convert_case_toupper('ub04payer_group_name3')",
+                                            :onFocus=>"setXYScroll(840)", :tabindex=>"80" %></td>
+            <td valign="top"><%= text_field :ub04payer, :group_no3, :class => "black_text", :size => "28", :onblur => "convert_case_toupper('ub04payer_group_no3')", :onFocus=>"setXYScroll(840)", :tabindex=>"80" %></td>
+
+        <% else %>
+            <td valign="top"><%= text_field :ub04payer, :insured_last_name3, :class => "black_text", :size => "20",
+                                            :onkeypress => "enlargeTextfieldSize('ub04payer_insured_last_name3',20)",
+                                            :onblur => "resetTextfieldSize('ub04payer_insured_last_name3',20); convert_case_toupper('ub04payer_insured_last_name3')",
+                                            :onFocus=>"setXYScroll(840)", :tabindex=>"80", :value => @ub04payers[2].insured_last_name unless @ub04payers[2].nil? %>
+              <%= text_field :ub04payer, :insured_first_name3, :class => "black_text", :size => "20",
+                             :onkeypress => "enlargeTextfieldSize('ub04payer_insured_first_name3',20)",
+                             :onblur => "resetTextfieldSize('ub04payer_insured_first_name3',20); convert_case_toupper('ub04payer_insured_first_name3')",
+                             :onFocus=>"setXYScroll(840)", :tabindex=>"80", :value => @ub04payers[2].insured_first_name unless @ub04payers[2].nil? %>
+              <%= text_field :ub04payer, :insured_middle_initial3, :class => "black_text", :size => "3", :onFocus=>"setXYScroll(840)", :onblur => "convert_case_toupper('ub04payer_insured_middle_initial3')", :tabindex=>"80", :value => @ub04payers[2].insured_middle_initial unless @ub04payers[2].nil? %>
+            </td>
+            <td valign="top">
+              <% if batch_type == "PCN" %>
+                <%= select_tag "ub04payer[patient_relationship3]", options_for_select(@relationship_code), :class => "black_text", :onFocus=>"setXYScroll(840)", :tabindex=>"80" %>
+              <% else %>
+                <%= text_field :ub04payer, :patient_relationship3, :class => "black_text", :size => "1", :onFocus=>"setXYScroll(840)", :tabindex=>"80", :value => @ub04payers[2].patient_relationship unless @ub04payers[2].nil? %>
+              <% end %>
+            </td>
+            <td valign="top"><%= text_field :ub04payer, :insured_id3, :class => "black_text", :size => "28", :onFocus=>"setXYScroll(840)", :onblur => "convert_case_toupper('ub04payer_insured_id3')", :tabindex=>"80", :value => @ub04payers[2].insured_id unless @ub04payers[2].nil? %></td>
+            <td valign="top"><%= text_field :ub04payer, :group_name3, :class => "black_text", :size => "28",
+                                            :onkeypress => "enlargeTextfieldSize('ub04payer_group_name3',28)",
+                                            :onblur => "resetTextfieldSize('ub04payer_group_name3',28); convert_case_toupper('ub04payer_group_name3')",
+                                            :onFocus=>"setXYScroll(840)", :tabindex=>"80", :value => @ub04payers[2].group_name unless @ub04payers[2].nil? %></td>
+            <td valign="top"><%= text_field :ub04payer, :group_no3, :class => "black_text", :size => "28", :onFocus=>"setXYScroll(840)", :onblur => "convert_case_toupper('ub04payer_group_no3')", :tabindex=>"80", :value => @ub04payers[2].group_no unless @ub04payers[2].nil? %></td>
+        <% end %>
+      </tr>
+    </table>
+    <table width="933" border="0" cellspacing="0" cellpadding="0" class="bord" style="margin-left:18px;">
+      <tr>
+        <td bgcolor="#ECE9D8">63 TREATMENT AUTHORISATION CODES</td>
+        <td bgcolor="#ECE9D8">64 DOCUMENT CONTROL NUMBER</td>
+        <td bgcolor="#ECE9D8">65 EMPLOYER NAME</td>
+      </tr>
+
+      <tr>
+        <% if @ub04payers[0].nil? %>
+            <td><%= text_field :ub04payer, :treatment_authorisation1, :class => "black_text", :size => "28", :onblur => "convert_case_toupper('ub04payer_treatment_authorisation1')", :onFocus=>"setXYScroll(915)", :tabindex=>"80" %></td>
+            <td><%= text_field :ub04payer, :document_control_no1, :class => "black_text", :size => "28", :onblur => "convert_case_toupper('ub04payer_document_control_no1')", :onFocus=>"setXYScroll(915)", :tabindex=>"80" %></td>
+            <td><%= text_field :ub04payer, :employer_name1, :class => "black_text", :size => "28",
+                               :onkeypress => "enlargeTextfieldSize('ub04payer_employer_name1',28)",
+                               :onblur => "resetTextfieldSize('ub04payer_employer_name1',28); convert_case_toupper('ub04payer_employer_name1')",
+                               :onFocus=>"setXYScroll(915)", :tabindex=>"80" %></td>
+        <% else %>
+            <td><%= text_field :ub04payer, :treatment_authorisation1, :class => "black_text", :size => "28", :onblur => "convert_case_toupper('ub04payer_treatment_authorisation1')", :onFocus=>"setXYScroll(915)", :tabindex=>"80", :value => @ub04payers[0].treatment_authorisation unless @ub04payers[0].nil? %></td>
+            <td><%= text_field :ub04payer, :document_control_no1, :class => "black_text", :size => "28", :onblur => "convert_case_toupper('ub04payer_document_control_no1')", :onFocus=>"setXYScroll(915)", :tabindex=>"80", :value => @ub04payers[0].document_control_no unless @ub04payers[0].nil? %></td>
+            <td><%= text_field :ub04payer, :employer_name1, :class => "black_text", :size => "28", :onFocus=>"setXYScroll(915)",
+                               :onkeypress => "enlargeTextfieldSize('ub04payer_employer_name1',28)",
+                               :onblur => "resetTextfieldSize('ub04payer_employer_name1',28); convert_case_toupper('ub04payer_employer_name1')",
+                               :tabindex=>"80", :value => @ub04payers[0].employer_name unless @ub04payers[0].nil? %></td>
+        <% end %>
+      </tr>
+      <tr>
+        <% if  @ub04payers[1].nil? %>
+            <td bgcolor="#F7F5EE"><%= text_field :ub04payer, :treatment_authorisation2, :class => "black_text", :size => "28", :onblur => "convert_case_toupper('ub04payer_treatment_authorisation2')", :onFocus=>"setXYScroll(915)", :tabindex=>"80" %></td>
+            <td bgcolor="#F7F5EE"><%= text_field :ub04payer, :document_control_no2, :class => "black_text", :size => "28", :onblur => "convert_case_toupper('ub04payer_document_control_no2')", :onFocus=>"setXYScroll(915)", :tabindex=>"80" %></td>
+            <td bgcolor="#F7F5EE"><%= text_field :ub04payer, :employer_name2, :class => "black_text", :size => "28",
+                                                 :onkeypress => "enlargeTextfieldSize('ub04payer_employer_name2',28)",
+                                                 :onblur => "resetTextfieldSize('ub04payer_employer_name2',28); convert_case_toupper('ub04payer_employer_name2')",
+                                                 :onFocus=>"setXYScroll(915)", :tabindex=>"80" %></td>
+        <% else %>
+            <td bgcolor="#F7F5EE"><%= text_field :ub04payer, :treatment_authorisation2, :class => "black_text", :size => "28", :onblur => "convert_case_toupper('ub04payer_treatment_authorisation2')", :onFocus=>"setXYScroll(915)", :tabindex=>"80", :value => @ub04payers[1].treatment_authorisation unless @ub04payers[1].nil? %></td>
+            <td bgcolor="#F7F5EE"><%= text_field :ub04payer, :document_control_no2, :class => "black_text", :size => "28", :onblur => "convert_case_toupper('ub04payer_document_control_no2')", :onFocus=>"setXYScroll(915)", :tabindex=>"80", :value => @ub04payers[1].document_control_no unless @ub04payers[1].nil? %></td>
+            <td bgcolor="#F7F5EE"><%= text_field :ub04payer, :employer_name2, :class => "black_text", :size => "28",
+                                                 :onkeypress => "enlargeTextfieldSize('ub04payer_employer_name2',28)",
+                                                 :onblur => "resetTextfieldSize('ub04payer_employer_name2',28); convert_case_toupper('ub04payer_employer_name2')",
+                                                 :onFocus=>"setXYScroll(915)", :tabindex=>"80", :value => @ub04payers[1].employer_name unless @ub04payers[1].nil? %></td>
+        <% end %>
+      </tr>
+      <tr>
+        <% if @ub04payers[2].nil? %>
+            <td><%= text_field :ub04payer, :treatment_authorisation3, :class => "black_text", :size => "28", :onblur => "convert_case_toupper('ub04payer_treatment_authorisation3')", :onFocus=>"setXYScroll(915)", :tabindex=>"80" %></td>
+            <td><%= text_field :ub04payer, :document_control_no3, :class => "black_text", :size => "28", :onblur => "convert_case_toupper('ub04payer_document_control_no3')", :onFocus=>"setXYScroll(915)", :tabindex=>"80" %></td>
+            <td><%= text_field :ub04payer, :employer_name3, :class => "black_text", :size => "28",
+                               :onkeypress => "enlargeTextfieldSize('ub04payer_employer_name3',28)",
+                               :onblur => "resetTextfieldSize('ub04payer_employer_name3',28); convert_case_toupper('ub04payer_employer_name3')",
+                               :onFocus=>"setXYScroll(915)", :tabindex=>"80" %></td>
+        <% else %>
+            <td><%= text_field :ub04payer, :treatment_authorisation3, :class => "black_text", :size => "28", :onblur => "convert_case_toupper('ub04payer_treatment_authorisation3')", :onFocus=>"setXYScroll(915)", :tabindex=>"80", :value => @ub04payers[2].treatment_authorisation unless @ub04payers[2].nil? %></td>
+            <td><%= text_field :ub04payer, :document_control_no3, :class => "black_text", :size => "28", :onblur => "convert_case_toupper('ub04payer_document_control_no3')", :onFocus=>"setXYScroll(915)", :tabindex=>"80", :value => @ub04payers[2].document_control_no unless @ub04payers[2].nil? %></td>
+            <td><%= text_field :ub04payer, :employer_name3, :class => "black_text", :size => "28",
+                               :onkeypress => "enlargeTextfieldSize('ub04payer_employer_name3',28)",
+                               :onblur => "resetTextfieldSize('ub04payer_employer_name3',28); convert_case_toupper('ub04payer_employer_name3')",
+                               :onFocus=>"setXYScroll(915)", :tabindex=>"80", :value => @ub04payers[2].employer_name unless @ub04payers[2].nil? %></td>
+        <% end %>
+      </tr>
+    </table>
+    <table width="933" border="0" cellspacing="0" cellpadding="0" class="bord" style="margin-left:18px;">
+      <tr>
+        <td width="21" bgcolor="#ECE9D8">66 <br/>
+          DX
+        </td>
+        <td width="95">67
+          <%= text_field :ub04_claim_informations, :principal_diag, :class => "black_text", :size => "8", :onFocus=>"setXYScroll(980)", :tabindex=>"82", :onblur=>"principal_diag(); convert_case_toupper('ub04_claim_informations_principal_diag')", :value => @patientinfo.principal_diag unless @patientinfo.nil? %></td>
+        <td width="96">A
+          <%= text_field :ub04_claim_informations, :other_diag1, :class => "black_text", :size => "8", :onblur => "convert_case_toupper('ub04_claim_informations_other_diag1')", :onFocus=>"setXYScroll(980)", :tabindex=>"82", :value => @patientinfo.other_diag1 unless @patientinfo.nil? %></td>
+        <td width="94">B
+          <%= text_field :ub04_claim_informations, :other_diag2, :class => "black_text", :size => "8", :onblur => "convert_case_toupper('ub04_claim_informations_other_diag2')", :onFocus=>"setXYScroll(980)", :tabindex=>"83", :value => @patientinfo.other_diag2 unless @patientinfo.nil? %></td>
+        <td width="93">C
+          <%= text_field :ub04_claim_informations, :other_diag3, :class => "black_text", :size => "8", :onblur => "convert_case_toupper('ub04_claim_informations_other_diag3')", :onFocus=>"setXYScroll(980)", :tabindex=>"84", :value => @patientinfo.other_diag3 unless @patientinfo.nil? %></td>
+        <td width="93">D
+          <%= text_field :ub04_claim_informations, :other_diag4, :class => "black_text", :size => "8", :onblur => "convert_case_toupper('ub04_claim_informations_other_diag4')", :onFocus=>"setXYScroll(980)", :tabindex=>"85", :value => @patientinfo.other_diag4 unless @patientinfo.nil? %></td>
+        <td width="92">E
+          <%= text_field :ub04_claim_informations, :other_diag5, :class => "black_text", :size => "8", :onblur => "convert_case_toupper('ub04_claim_informations_other_diag5')", :onFocus=>"setXYScroll(980)", :tabindex=>"86", :value => @patientinfo.other_diag5 unless @patientinfo.nil? %></td>
+        <td width="95">F
+          <%= text_field :ub04_claim_informations, :other_diag6, :class => "black_text", :size => "8", :onblur => "convert_case_toupper('ub04_claim_informations_other_diag6')", :onFocus=>"setXYScroll(980)", :tabindex=>"87", :value => @patientinfo.other_diag6 unless @patientinfo.nil? %></td>
+        <td width="95">G
+          <%= text_field :ub04_claim_informations, :other_diag7, :class => "black_text", :size => "8", :onblur => "convert_case_toupper('ub04_claim_informations_other_diag7')", :onFocus=>"setXYScroll(980)", :tabindex=>"88", :value => @patientinfo.other_diag7 unless @patientinfo.nil? %></td>
+        <td width="90">H
+          <%= text_field :ub04_claim_informations, :other_diag8, :class => "black_text", :size => "8", :onblur => "convert_case_toupper('ub04_claim_informations_other_diag8')", :onFocus=>"setXYScroll(980)", :tabindex=>"89", :value => @patientinfo.other_diag8 unless @patientinfo.nil? %></td>
+        <td width="69">68
+          <%= text_field :ub04_claim_informations, :unlabel_68_1, :class => "black_text", :size => "8", :onFocus=>"setXYScroll(980)", :onblur => "convert_case_toupper('ub04_claim_informations_unlabel_68_1')", :tabindex=>"99", :value => @patientinfo.unlabel_68_1 unless @patientinfo.nil? %>
+          &nbsp;&nbsp;&nbsp;&nbsp; <%= text_field :ub04_claim_informations, :unlabel_68_2, :class => "black_text", :size => "8", :onFocus=>"setXYScroll(980)", :onblur => "convert_case_toupper('ub04_claim_informations_unlabel_68_2')", :tabindex=>"100", :value => @patientinfo.unlabel_68_2 unless @patientinfo.nil? %>
+        </td>
+      </tr>
+      <tr>
+        <td><%= text_field :ub04_claim_informations, :dx_version_qualifier, :class => "black_text", :size => "1", :onblur => "convert_case_toupper('ub04_claim_informations_dx_version_qualifier')", :onFocus=>"setXYScroll(980)", :tabindex=>"81", :value => @patientinfo.dx_version_qualifier unless @patientinfo.nil? %></td>
+        <td>&nbsp;I&nbsp;
+          <%= text_field :ub04_claim_informations, :other_diag9, :class => "black_text", :size => "8", :onblur => "convert_case_toupper('ub04_claim_informations_other_diag9')", :onFocus=>"setXYScroll(980)", :tabindex=>"90", :value => @patientinfo.other_diag9 unless @patientinfo.nil? %></td>
+        <td>J
+          <%= text_field :ub04_claim_informations, :other_diag10, :class => "black_text", :size => "8", :onblur => "convert_case_toupper('ub04_claim_informations_other_diag10')", :onFocus=>"setXYScroll(980)", :tabindex=>"91", :value => @patientinfo.other_diag10 unless @patientinfo.nil? %></td>
+        <td>K
+          <%= text_field :ub04_claim_informations, :other_diag11, :class => "black_text", :size => "8", :onblur => "convert_case_toupper('ub04_claim_informations_other_diag11')", :onFocus=>"setXYScroll(980)", :tabindex=>"92", :value => @patientinfo.other_diag11 unless @patientinfo.nil? %></td>
+        <td>L
+          <%= text_field :ub04_claim_informations, :other_diag12, :class => "black_text", :size => "8", :onblur => "convert_case_toupper('ub04_claim_informations_other_diag12')", :onFocus=>"setXYScroll(980)", :tabindex=>"93", :value => @patientinfo.other_diag12 unless @patientinfo.nil? %></td>
+        <td>M
+          <%= text_field :ub04_claim_informations, :other_diag13, :class => "black_text", :size => "8", :onblur => "convert_case_toupper('ub04_claim_informations_other_diag13')", :onFocus=>"setXYScroll(980)", :tabindex=>"94", :value => @patientinfo.other_diag13 unless @patientinfo.nil? %></td>
+        <td>N
+          <%= text_field :ub04_claim_informations, :other_diag14, :class => "black_text", :size => "8", :onblur => "convert_case_toupper('ub04_claim_informations_other_diag14')", :onFocus=>"setXYScroll(980)", :tabindex=>"95", :value => @patientinfo.other_diag14 unless @patientinfo.nil? %></td>
+        <td>O
+          <%= text_field :ub04_claim_informations, :other_diag15, :class => "black_text", :size => "8", :onblur => "convert_case_toupper('ub04_claim_informations_other_diag15')", :onFocus=>"setXYScroll(980)", :tabindex=>"96", :value => @patientinfo.other_diag15 unless @patientinfo.nil? %></td>
+        <td>P
+          <%= text_field :ub04_claim_informations, :other_diag16, :class => "black_text", :size => "8", :onblur => "convert_case_toupper('ub04_claim_informations_other_diag16')", :onFocus=>"setXYScroll(980)", :tabindex=>"97", :value => @patientinfo.other_diag16 unless @patientinfo.nil? %></td>
+        <td>Q
+          <%= text_field :ub04_claim_informations, :other_diag17, :class => "black_text", :size => "8", :onblur => "convert_case_toupper('ub04_claim_informations_other_diag17')", :onFocus=>"setXYScroll(980)", :tabindex=>"98", :value => @patientinfo.other_diag17 unless @patientinfo.nil? %></td>
+        <td>&nbsp;</td>
+      </tr>
+    </table>
+    <table width="933" border="0" cellspacing="0" cellpadding="0" class="bord" style="margin-left:18px;">
+      <tr>
+        <td width="41" bgcolor="#ECE9D8">69 ADMIT <br/>
+          DX
+        </td>
+        <td width="50"><%= text_field :ub04_claim_informations, :admit_diag, :class => "black_text", :size => "3", :onblur => "convert_case_toupper('ub04_claim_informations_admit_diag')", :onFocus=>"setXYScroll(1015)", :tabindex=>"101", :value => @patientinfo.admit_diag unless @patientinfo.nil? %></td>
+        <td width="51" bgcolor="#ECE9D8">70 PATIENT REASON DX</td>
+        <td width="91">a
+          <%= text_field :ub04_claim_informations, :patient_reason_visit_code1, :class => "black_text", :size => "8", :onblur => "convert_case_toupper('ub04_claim_informations_patient_reason_visit_code1')", :onFocus=>"setXYScroll(1015)", :tabindex=>"102", :value => @patientinfo.patient_reason_visit_code1 unless @patientinfo.nil? %></td>
+        <td width="92">b
+          <%= text_field :ub04_claim_informations, :patient_reason_visit_code2, :class => "black_text", :size => "8", :onblur => "convert_case_toupper('ub04_claim_informations_patient_reason_visit_code2')", :onFocus=>"setXYScroll(1015)", :tabindex=>"103", :value => @patientinfo.patient_reason_visit_code2 unless @patientinfo.nil? %></td>
+        <td width="102">c.
+          <%= text_field :ub04_claim_informations, :patient_reason_visit_code3, :class => "black_text", :size => "8", :onblur => "convert_case_toupper('ub04_claim_informations_patient_reason_visit_code3')", :onFocus=>"setXYScroll(1015)", :tabindex=>"104", :value => @patientinfo.patient_reason_visit_code3 unless @patientinfo.nil? %></td>
+        <td width="30" bgcolor="#ECE9D8">71 PPS <br/>
+          CODE
+        </td>
+        <td><%= text_field :ub04_claim_informations, :pps_code, :class => "black_text", :size => "8", :onFocus=>"setXYScroll(1015)", :tabindex=>"105", :value => @patientinfo.pps_code unless @patientinfo.nil? %></td>
+        <td width="21" bgcolor="#ECE9D8">72<br/>
+          ECI
+        </td>
+        <td width="88">a
+          <%= text_field :ub04_claim_informations, :eci_code1, :class => "black_text", :size => "8", :onblur => "convert_case_toupper('ub04_claim_informations_eci_code1')", :onFocus=>"setXYScroll(1015)", :tabindex=>"106", :value => @patientinfo.eci_code1 unless @patientinfo.nil? %></td>
+        <td width="91">b
+          <%= text_field :ub04_claim_informations, :eci_code2, :class => "black_text", :size => "8", :onblur => "convert_case_toupper('ub04_claim_informations_eci_code2')", :onFocus=>"setXYScroll(1015)", :tabindex=>"107", :value => @patientinfo.eci_code2 unless @patientinfo.nil? %></td>
+        <td width="90">c
+          <%= text_field :ub04_claim_informations, :eci_code3, :class => "black_text", :size => "8", :onblur => "convert_case_toupper('ub04_claim_informations_eci_code3')", :onFocus=>"setXYScroll(1015)", :tabindex=>"108", :value => @patientinfo.eci_code3 unless @patientinfo.nil? %></td>
+        <td width="92">73
+          <%= text_field :ub04_claim_informations, :unlabel_73, :class => "black_text", :size => "8", :onblur => "convert_case_toupper('ub04_claim_informations_unlabel_73')", :onFocus=>"setXYScroll(1015)", :tabindex=>"109", :value => @patientinfo.unlabel_73 unless @patientinfo.nil? %>
+        </td>
+      </tr>
+    </table>
+    <table width="933" border="0" cellspacing="0" cellpadding="0" class="bord" style="margin-left:18px;">
+    <tr>
+    <td width="569" valign="top">
+      <table width="568" border="0" cellspacing="0" cellpadding="0">
+        <tr>
+          <td colspan="2" align="center" bgcolor="#ECE9D8">74 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;PRINCIPAL
+            PROCEDURE <br/>
+            CODE &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            DATE
+          </td>
+          <td colspan="2" align="center" bgcolor="#918646">a &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;OTHER
+            PROCEDURE <br/>
+            CODE &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            DATE
+          </td>
+          <td colspan="2" align="center" bgcolor="#ECE9D8">b&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;OTHER
+            PROCEDURE <br/>
+            CODE &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+          <td width="57" rowspan="4" valign="top">75
+            <%= text_field :ub04_claim_informations, :unlabel_75_1, :class => "black_text", :size => "5", :onblur => "convert_case_toupper('ub04_claim_informations_unlabel_75_1')", :onFocus=>"setXYScroll(1035)", :tabindex=>"111", :value => @patientinfo.unlabel_75_1 unless @patientinfo.nil? %>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<%= text_field :ub04_claim_informations, :unlabel_75_2, :class => "black_text", :size => "5", :onblur => "convert_case_toupper('ub04_claim_informations_unlabel_75_2')", :onFocus=>"setXYScroll(1035)", :tabindex=>"111", :value => @patientinfo.unlabel_75_2 unless @patientinfo.nil? %>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<%= text_field :ub04_claim_informations, :unlabel_75_3, :class => "black_text", :size => "5", :onblur => "convert_case_toupper('ub04_claim_informations_unlabel_75_3')", :onFocus=>"setXYScroll(1035)", :tabindex=>"111", :value => @patientinfo.unlabel_75_3 unless @patientinfo.nil? %>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<%= text_field :ub04_claim_informations, :unlabel_75_4, :class => "black_text", :size => "5", :onblur => "convert_case_toupper('ub04_claim_informations_unlabel_75_4')", :onFocus=>"setXYScroll(1035)", :tabindex=>"111", :value => @patientinfo.unlabel_75_4 unless @patientinfo.nil? %>
+          </td>
+        </tr>
+        <tr>
+          <td width="92" align="center"><%= text_field :ub04_claim_informations, :principal_proc_code, :class => "black_text", :size => "8", :onChange=>"enable_textfield(ub04_claim_informations_principal_proc_date);code_blank(ub04_claim_informations_principal_proc_code,ub04_claim_informations_principal_proc_date)",  :onblur => "convert_case_toupper('ub04_claim_informations_principal_proc_code')", :onFocus=>"setXYScroll(1035)", :tabindex=>"110", :value => @patientinfo.principal_proc_code unless @patientinfo.nil? %></td>
+          <td width="79" align="center"><%= text_field :ub04_claim_informations, :principal_proc_date, :class => "black_text", :size => "9", :readonly=>true, :onFocus=>"setXYScroll(1035)", :onBlur => "isValidDate('ub04_claim_informations_principal_proc_date')", :tabindex=>"110", :value => @patientinfo.principal_proc_date.try(:strftime,"%m%d%Y") unless @patientinfo.nil? %></td>
+          <td width="90" align="center"><%= text_field :ub04_claim_informations, :other_proc_code1, :class => "black_text", :size => "8", :onChange=>"enable_textfield(ub04_claim_informations_other_proc_date1);code_blank(ub04_claim_informations_other_proc_code1,ub04_claim_informations_other_proc_date1)", :onblur => "convert_case_toupper('ub04_claim_informations_other_proc_code1')", :onFocus=>"setXYScroll(1035)", :tabindex=>"110", :value => @patientinfo.other_proc_code1 unless @patientinfo.nil? %></td>
+          <td width="80" align="center"><%= text_field :ub04_claim_informations, :other_proc_date1, :class => "black_text", :size => "9", :readonly=>true, :onFocus=>"setXYScroll(1035)", :onBlur => "isValidDate('ub04_claim_informations_other_proc_date1')", :tabindex=>"110", :value => @patientinfo.other_proc_date1.try(:strftime,"%m%d%Y") unless @patientinfo.nil? %></td>
+          <td width="90" align="center"><%= text_field :ub04_claim_informations, :other_proc_code2, :class => "black_text", :size => "8", :onChange=>"enable_textfield(ub04_claim_informations_other_proc_date2);code_blank(ub04_claim_informations_other_proc_code2,ub04_claim_informations_other_proc_date2)", :onblur => "convert_case_toupper('ub04_claim_informations_other_proc_code2')", :onFocus=>"setXYScroll(1035)", :tabindex=>"110", :value => @patientinfo.other_proc_code2 unless @patientinfo.nil? %></td>
+          <td width="80" align="center"><%= text_field :ub04_claim_informations, :other_proc_date2, :class => "black_text", :size => "9", :readonly=>true, :onFocus=>"setXYScroll(1035)", :onBlur => "isValidDate('ub04_claim_informations_other_proc_date2')", :tabindex=>"110", :value => @patientinfo.other_proc_date2.try(:strftime,"%m%d%Y") unless @patientinfo.nil? %></td>
+        </tr>
+        <tr>
+          <td colspan="2" align="center" bgcolor="#918646">C &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;OTHER
+            PROCEDURE <br/>
+            CODE &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            DATE
+          </td>
+          <td colspan="2" align="center" bgcolor="#ECE9D8">d &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;OTHER
+            PROCEDURE <br/>
+            CODE &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            DATE
+          </td>
+          <td colspan="2" align="center" bgcolor="#918646">e &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;OTHER
+            PROCEDURE <br/>
+            CODE &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            DATE
+          </td>
+        </tr>
+        <tr>
+          <td align="center"><%= text_field :ub04_claim_informations, :other_proc_code3, :class => "black_text", :size => "8", :onChange=>"enable_textfield(ub04_claim_informations_other_proc_date3);code_blank(ub04_claim_informations_other_proc_code3,ub04_claim_informations_other_proc_date3)", :onblur => "convert_case_toupper('ub04_claim_informations_other_proc_code3')", :onFocus=>"setXYScroll(1035)", :tabindex=>"110", :value => @patientinfo.other_proc_code3 unless @patientinfo.nil? %></td>
+          <td align="center"><%= text_field :ub04_claim_informations, :other_proc_date3, :class => "black_text", :size => "9", :readonly=>true, :onFocus=>"setXYScroll(1035)", :onBlur => "isValidDate('ub04_claim_informations_other_proc_date3')", :tabindex=>"110", :value => @patientinfo.other_proc_date3.try(:strftime,"%m%d%Y") unless @patientinfo.nil? %></td>
+          <td align="center"><%= text_field :ub04_claim_informations, :other_proc_code4, :class => "black_text", :size => "8", :onChange=>"enable_textfield(ub04_claim_informations_other_proc_date4);code_blank(ub04_claim_informations_other_proc_code4,ub04_claim_informations_other_proc_date4)", :onblur => "convert_case_toupper('ub04_claim_informations_other_proc_code4')", :onFocus=>"setXYScroll(1035)", :tabindex=>"110", :value => @patientinfo.other_proc_code4 unless @patientinfo.nil? %></td>
+          <td align="center"><%= text_field :ub04_claim_informations, :other_proc_date4, :class => "black_text", :size => "9", :readonly=>true, :onFocus=>"setXYScroll(1035)", :onBlur => "isValidDate('ub04_claim_informations_other_proc_date4')", :tabindex=>"110", :value => @patientinfo.other_proc_date4.try(:strftime,"%m%d%Y") unless @patientinfo.nil? %></td>
+          <td align="center"><%= text_field :ub04_claim_informations, :other_proc_code5, :class => "black_text", :size => "8", :onChange=>"enable_textfield(ub04_claim_informations_other_proc_date5);code_blank(ub04_claim_informations_other_proc_code5,ub04_claim_informations_other_proc_date5)", :onblur => "convert_case_toupper('ub04_claim_informations_other_proc_code5')", :onFocus=>"setXYScroll(1035)", :tabindex=>"110", :value => @patientinfo.other_proc_code5 unless @patientinfo.nil? %></td>
+          <td align="center"><%= text_field :ub04_claim_informations, :other_proc_date5, :class => "black_text", :size => "9", :readonly=>true, :onFocus=>"setXYScroll(1035)", :onBlur => "isValidDate('ub04_claim_informations_other_proc_date5')", :tabindex=>"110", :value => @patientinfo.other_proc_date5.try(:strftime,"%m%d%Y") unless @patientinfo.nil? %></td>
+        </tr>
+      </table>
+      <table width="568" border="0" cellspacing="0" cellpadding="0">
+        <tr>
+          <% @patientinfo.remarks="" if @patientinfo.remarks.nil? %>
+        <tr>
+          <td width="274" valign="top">80a Payer Name
+            <%= text_field_with_auto_complete :payer_details, :payer_name, :class => "black_text", :size => "12",
+                                              :onFocus=>"setXYScroll(1095)", :tabindex=>"112",
+                                              :onkeypress => "enlargeTextfieldSize('payer_details_payer_name',12)",
+                                              :onblur => "resetTextfieldSize('payer_details_payer_name',12); payerdetails_autopopulate(); convert_case_toupper('payer_details_payer_name')",
+                                              :value => @patientinfo.remarks.split("\n")[0] unless @patientinfo.nil? %></td>
+          <td width="274" valign="top">80b Address1
+            <%= text_field :payer_details, :payer_address1, :class => "black_text",
+                           :size => "12", :onFocus=>"setXYScroll(1095)", :tabindex=>"112.1",
+                           :onkeypress => "enlargeTextfieldSize('payer_details_payer_address1',12)",
+                           :onblur => "resetTextfieldSize('payer_details_payer_address1',12); convert_case_toupper('payer_details_payer_address1')",
+                           :value => @patientinfo.remarks.split("\n")[1] unless @patientinfo.nil? %> </td>
+          <td width="274" valign="top">80c Address2
+            <%= text_field :payer_details, :payer_address2, :class => "black_text", :size => "12",
+                           :onkeypress => "enlargeTextfieldSize('payer_details_payer_address2',12)",
+                           :onblur => "resetTextfieldSize('payer_details_payer_address2',12); convert_case_toupper('payer_details_payer_address2')",
+                           :onFocus=>"setXYScroll(1095)", :tabindex=>"112.2", :value => @patientinfo.remarks.split("\n")[2] unless @patientinfo.nil? %></td>
+        </tr>
+        <td width="274" valign="top">80d City
+          <%= text_field :payer_details, :payer_city, :class => "black_text", :size => "12", :onFocus=>"setXYScroll(1095)",
+                         :onkeypress => "enlargeTextfieldSize('payer_details_payer_city',12)",
+                         :onblur => "resetTextfieldSize('payer_details_payer_city',12); convert_case_toupper('payer_details_payer_city')",
+                         :tabindex=>"112.3", :value => @patientinfo.remarks.split("\n")[3] unless @patientinfo.nil? %> </td>
+        <td width="274" valign="top">80e State
+          <%= text_field :payer_details, :payer_state, :class => "black_text", :size => "12", :onFocus=>"setXYScroll(1095)",
+                         :onkeypress => "enlargeTextfieldSize('payer_details_payer_state',12)",
+                         :onblur => "resetTextfieldSize('payer_details_payer_state',12); convert_case_toupper('payer_details_payer_state')",
+                         :tabindex=>"112.4", :value => @patientinfo.remarks.split("\n")[4] unless @patientinfo.nil? %></td>
+        <td width="274" valign="top">80f Zip Code
+          <%= text_field :payer_details, :payer_zipcode, :class => "black_text", :size => "12", :onFocus=>"setXYScroll(1095)", :tabindex=>"112.5", :value => @patientinfo.remarks.split("\n")[5] unless @patientinfo.nil? %></td>
+
+
+        <td width="294" valign="top">
+          <table width="293" border="0" cellspacing="0" cellpadding="0">
+            <tr>
+              <td width="23">81cc<br/>
+                a
+              </td>
+              <% if @qualifier_code_values[0].nil? %>
+                  <td width="20">
+                  <td align="center"><%= text_field :qualifier_code_value, :qualifier1, :class => "black_text", :size => "1", :onFocus=>"setXYScroll(1095)", :onblur => "convert_case_toupper('qualifier_code_value_qualifier1')", :tabindex=>"113" %></td>
+                  <td width="115"><%= text_field :qualifier_code_value, :code1, :class => "black_text", :size => "20", :onFocus=>"setXYScroll(1095)", :onblur => "convert_case_toupper('qualifier_code_value_code1')", :tabindex=>"113" %></td>
+                  <td width="135"><%= text_field :qualifier_code_value, :value1, :class => "black_text", :size => "15", :onFocus=>"setXYScroll(1095)", :onblur => "convert_case_toupper('qualifier_code_value_value1')", :tabindex=>"113" %></td>
+                  </td>
+              <% else %>
+                  <td width="20">
+                  <td align="center"><%= text_field :qualifier_code_value, :qualifier1, :class => "black_text", :size => "1", :onFocus=>"setXYScroll(1095)", :onblur => "convert_case_toupper('qualifier_code_value_qualifier1')", :tabindex=>"113", :value => @qualifier_code_values[0].qualifier unless @qualifier_code_values[0].nil? %></td>
+                  <td width="115"><%= text_field :qualifier_code_value, :code1, :class => "black_text", :size => "20", :onFocus=>"setXYScroll(1095)", :onblur => "convert_case_toupper('qualifier_code_value_code1')", :tabindex=>"113", :value => @qualifier_code_values[0].code unless @qualifier_code_values[0].nil? %></td>
+                  <td width="135"><%= text_field :qualifier_code_value, :value1, :class => "black_text", :size => "15", :onFocus=>"setXYScroll(1095)", :onblur => "convert_case_toupper('qualifier_code_value_value1')", :tabindex=>"113", :value => @qualifier_code_values[0].value unless @qualifier_code_values[0].nil? %></td>
+                  </td>
+              <% end %>
+            </tr>
+            <tr>
+              <td>b</td>
+              <% if @qualifier_code_values[1].nil? %>
+                  <td width="20">
+                  <td align="center"><%= text_field :qualifier_code_value, :qualifier2, :class => "black_text", :size => "1", :onblur => "convert_case_toupper('qualifier_code_value_qualifier2')", :onFocus=>"setXYScroll(1095)", :tabindex=>"113" %></td>
+                  <td><%= text_field :qualifier_code_value, :code2, :class => "black_text", :size => "20", :onblur => "convert_case_toupper('qualifier_code_value_code2')", :onFocus=>"setXYScroll(1095)", :tabindex=>"113" %></td>
+                  <td width="135"><%= text_field :qualifier_code_value, :value2, :class => "black_text", :size => "15", :onblur => "convert_case_toupper('qualifier_code_value_value2')", :onFocus=>"setXYScroll(1095)", :tabindex=>"113" %></td>
+                  </td>
+              <% else %>
+                  <td width="20">
+                  <td align="center"><%= text_field :qualifier_code_value, :qualifier2, :class => "black_text", :size => "1", :onblur => "convert_case_toupper('qualifier_code_value_qualifier2')", :onFocus=>"setXYScroll(1095)", :tabindex=>"113", :value => @qualifier_code_values[1].qualifier unless @qualifier_code_values[1].nil? %></td>
+                  <td><%= text_field :qualifier_code_value, :code2, :class => "black_text", :size => "20", :onblur => "convert_case_toupper('qualifier_code_value_code2')", :onFocus=>"setXYScroll(1095)", :tabindex=>"113", :value => @qualifier_code_values[1].code unless @qualifier_code_values[1].nil? %></td>
+                  <td width="135"><%= text_field :qualifier_code_value, :value2, :class => "black_text", :size => "15", :onblur => "convert_case_toupper('qualifier_code_value_value2')", :onFocus=>"setXYScroll(1095)", :tabindex=>"113", :value => @qualifier_code_values[1].value unless @qualifier_code_values[1].nil? %></td>
+                  </td>
+              <% end %>
+            </tr>
+            <tr>
+              <td>c</td>
+              <% if @qualifier_code_values[2].nil? %>
+                  <td width="20">
+                  <td align="center"><%= text_field :qualifier_code_value, :qualifier3, :class => "black_text", :size => "1", :onblur => "convert_case_toupper('qualifier_code_value_qualifier3')", :onFocus=>"setXYScroll(1095)", :tabindex=>"113" %></td>
+                  <td><%= text_field :qualifier_code_value, :code3, :class => "black_text", :size => "20", :onFocus=>"setXYScroll(1095)", :onblur => "convert_case_toupper('qualifier_code_value_code3')", :tabindex=>"113" %></td>
+                  <td width="135"><%= text_field :qualifier_code_value, :value3, :class => "black_text", :size => "15", :onblur => "convert_case_toupper('qualifier_code_value_value3')", :onFocus=>"setXYScroll(1095)", :tabindex=>"113" %></td>
+                  </td>
+              <% else %>
+                  <td width="20">
+                  <td align="center"><%= text_field :qualifier_code_value, :qualifier3, :class => "black_text", :size => "1", :onblur => "convert_case_toupper('qualifier_code_value_qualifier3')", :onFocus=>"setXYScroll(1095)", :tabindex=>"113", :value => @qualifier_code_values[2].qualifier unless @qualifier_code_values[2].nil? %></td>
+                  <td><%= text_field :qualifier_code_value, :code3, :class => "black_text", :size => "20", :onFocus=>"setXYScroll(1095)", :onblur => "convert_case_toupper('qualifier_code_value_code3')", :tabindex=>"113", :value => @qualifier_code_values[2].code unless @qualifier_code_values[2].nil? %></td>
+                  <td width="135"><%= text_field :qualifier_code_value, :value3, :class => "black_text", :size => "15", :onblur => "convert_case_toupper('qualifier_code_value_value3')", :onFocus=>"setXYScroll(1095)", :tabindex=>"113", :value => @qualifier_code_values[2].value unless @qualifier_code_values[2].nil? %></td>
+                  </td>
+              <% end %>
+            </tr>
+            <tr>
+              <td>d</td>
+              <% if @qualifier_code_values[3].nil? %>
+                  <td width="20">
+                  <td align="center"><%= text_field :qualifier_code_value, :qualifier4, :class => "black_text", :size => "1", :onblur => "convert_case_toupper('qualifier_code_value_qualifier4')", :onFocus=>"setXYScroll(1095)", :tabindex=>"113" %></td>
+                  <td><%= text_field :qualifier_code_value, :code4, :class => "black_text", :size => "20", :onFocus=>"setXYScroll(1095)", :onblur => "convert_case_toupper('qualifier_code_value_code4')", :tabindex=>"113" %></td>
+                  <td width="135"><%= text_field :qualifier_code_value, :value4, :class => "black_text", :size => "15", :onblur => "convert_case_toupper('qualifier_code_value_value4')", :onFocus=>"setXYScroll(1095)", :tabindex=>"113" %></td>
+                  </td>
+              <% else %>
+                  <td width="20">
+                  <td align="center"><%= text_field :qualifier_code_value, :qualifier4, :class => "black_text", :size => "1", :onblur => "convert_case_toupper('qualifier_code_value_qualifier4')", :onFocus=>"setXYScroll(1095)", :tabindex=>"113", :value => @qualifier_code_values[3].qualifier unless @qualifier_code_values[3].nil? %></td>
+                  <td><%= text_field :qualifier_code_value, :code4, :class => "black_text", :size => "20", :onFocus=>"setXYScroll(1095)", :onblur => "convert_case_toupper('qualifier_code_value_code4')", :tabindex=>"113", :value => @qualifier_code_values[3].code unless @qualifier_code_values[3].nil? %></td>
+                  <td width="135"><%= text_field :qualifier_code_value, :value4, :class => "black_text", :size => "15", :onblur => "convert_case_toupper('qualifier_code_value_value4')", :onFocus=>"setXYScroll(1095)", :tabindex=>"113", :value => @qualifier_code_values[3].value unless @qualifier_code_values[3].nil? %></td>
+                  </td>
+              <% end %>
+            </tr>
+          </table>
+        </td>
+        </tr>
+      </table>
+    </td>
+    <td width="1" bgcolor="#918646"></td>
+    <td width="363">
+      <table width="362" border="0" cellspacing="0" cellpadding="0">
+        <tr>
+          <td width="76" bgcolor="#ECE9D8">76 ATTENDING</td>
+          <td width="133">NPI &nbsp;&nbsp;
+            <%= text_field :ub04_claim_informations, :attending_npi, :class => "black_text", :size => "15", :onFocus=>"setXYScroll(1035)", :onblur => "npilength(); optional_attending_npi1('ub04_claim_informations_attending_npi', '#{batch_type}');", :tabindex=>"114", :value => @patientinfo.attending_npi unless @patientinfo.nil? %></td>
+          <td width="27" bgcolor="#ECE9D8">QUAL</td>
+          <td width="23" bgcolor="#ECE9D8"><%= text_field :ub04_claim_informations, :attending_qual, :class => "black_text", :size => "2", :onblur => "validate_qualifier('ub04_claim_informations_attending_qual', '#{batch_type}'); convert_case_toupper('ub04_claim_informations_attending_qual')", :onFocus=>"setXYScroll(1035)", :tabindex=>"114", :value => @patientinfo.attending_qual unless @patientinfo.nil? %></td>
+          <td width="103"><%= text_field :ub04_claim_informations, :attendingid, :class => "black_text", :size => "15", :onFocus=>"setXYScroll(1035)", :tabindex=>"114", :onblur => "convert_case_toupper('ub04_claim_informations_attendingid')", :value => @patientinfo.attendingid unless @patientinfo.nil? %></td>
+        </tr>
+      </table>
+      <table width="362" border="0" cellspacing="0" cellpadding="0">
+        <tr>
+          <td width="204">LAST &nbsp;&nbsp;&nbsp;
+            <%= text_field :ub04_claim_informations, :attending_provider_last_name, :class => "black_text", :size => "20",
+                           :onkeypress => "enlargeTextfieldSize('ub04_claim_informations_attending_provider_last_name',20)",
+                           :onblur => "resetTextfieldSize('ub04_claim_informations_attending_provider_last_name',20); optional_attending_npi1('ub04_claim_informations_attending_provider_last_name', '#{batch_type}'); convert_case_toupper('ub04_claim_informations_attending_provider_last_name')",
+                           :onFocus=>"setXYScroll(1035)", :tabindex=>"114", :value => @patientinfo.attending_provider_last_name unless @patientinfo.nil? %></td>
+          <td width="158">FIRST
+            <%= text_field :ub04_claim_informations, :attending_provider_first_name, :class => "black_text", :size => "20",
+                           :onkeypress => "enlargeTextfieldSize('ub04_claim_informations_attending_provider_first_name',20)",
+                           :onblur => "resetTextfieldSize('ub04_claim_informations_attending_provider_first_name',20); optional_attending_npi1('ub04_claim_informations_attending_provider_first_name', '#{batch_type}'); convert_case_toupper('ub04_claim_informations_attending_provider_first_name')",
+                           :onFocus=>"setXYScroll(1035)", :tabindex=>"114", :value => @patientinfo.attending_provider_first_name unless @patientinfo.nil? %></td>
+        </tr>
+      </table>
+      <table width="362" border="0" cellspacing="0" cellpadding="0">
+        <tr>
+          <td width="76" bgcolor="#ECE9D8">77 OPERATING</td>
+          <td width="133">NPI &nbsp;&nbsp;
+            <%= text_field :ub04_claim_informations, :operating_npi, :class => "black_text", :size => "15", :onFocus=>"setXYScroll(1055)", :onBlur => "npilength()", :tabindex=>"114", :value => @patientinfo.operating_npi unless @patientinfo.nil? %></td>
+          <td width="27" bgcolor="#ECE9D8">QUAL</td>
+          <td width="23" bgcolor="#ECE9D8"><%= text_field :ub04_claim_informations, :operating_qual, :class => "black_text", :size => "2", :onFocus=>"setXYScroll(1055)", :onblur => "validate_qualifier('ub04_claim_informations_operating_qual', '#{batch_type}'); convert_case_toupper('ub04_claim_informations_operating_qual')", :tabindex=>"114", :value => @patientinfo.operating_qual unless @patientinfo.nil? %></td>
+          <td width="103"><%= text_field :ub04_claim_informations, :operatingid, :class => "black_text", :size => "15", :onFocus=>"setXYScroll(1055)", :tabindex=>"114", :onblur => "convert_case_toupper('ub04_claim_informations_operatingid')", :value => @patientinfo.operatingid unless @patientinfo.nil? %></td>
+        </tr>
+      </table>
+      <table width="362" border="0" cellspacing="0" cellpadding="0">
+        <tr>
+          <td width="204">LAST &nbsp;&nbsp;&nbsp;
+            <%= text_field :ub04_claim_informations, :operating_provider_last_name, :class => "black_text", :size => "20",
+                           :onkeypress => "enlargeTextfieldSize('ub04_claim_informations_operating_provider_last_name',20)",
+                           :onblur => "resetTextfieldSize('ub04_claim_informations_operating_provider_last_name',20); convert_case_toupper('ub04_claim_informations_operating_provider_last_name')",
+                           :onFocus=>"setXYScroll(1055)", :tabindex=>"114", :value => @patientinfo.operating_provider_last_name unless @patientinfo.nil? %></td>
+          <td width="158">FIRST
+            <%= text_field :ub04_claim_informations, :operating_provider_first_name, :class => "black_text",
+                           :onkeypress => "enlargeTextfieldSize('ub04_claim_informations_operating_provider_first_name',20)",
+                           :onblur => "resetTextfieldSize('ub04_claim_informations_operating_provider_first_name',20); convert_case_toupper('ub04_claim_informations_operating_provider_first_name')",
+                           :size => "20", :onFocus=>"setXYScroll(1055)", :tabindex=>"114", :value => @patientinfo.operating_provider_first_name unless @patientinfo.nil? %></td>
+        </tr>
+      </table>
+      <table width="362" border="0" cellspacing="0" cellpadding="0">
+        <tr>
+          <td width="76" bgcolor="#ECE9D8">78 OTHER</td>
+          <td width="133">NPI &nbsp;&nbsp;
+            <%= text_field :ub04_claim_informations, :other_npi1, :class => "black_text", :size => "15", :onFocus=>"setXYScroll(1075)", :onBlur => "npilength();  optional_attending_npi1('ub04_claim_informations_other_npi1', '#{batch_type}')", :tabindex=>"114", :value => @patientinfo.other_npi1 unless @patientinfo.nil? %></td>
+          <td width="27" bgcolor="#ECE9D8">QUAL</td>
+          <td width="23" bgcolor="#ECE9D8"><%= text_field :ub04_claim_informations, :other_qual1, :class => "black_text", :size => "2", :onFocus=>"setXYScroll(1075)", :onBlur => "validate_qualifier('ub04_claim_informations_other_qual1',  '#{batch_type}'); convert_case_toupper('ub04_claim_informations_other_qual1')", :tabindex=>"114", :value => @patientinfo.other_qual1 unless @patientinfo.nil? %></td>
+          <td width="103"><%= text_field :ub04_claim_informations, :otherid1, :class => "black_text", :size => "15", :onFocus=>"setXYScroll(1075)", :tabindex=>"114", :onBlur => "optional_attending_npi1('ub04_claim_informations_otherid1',  '#{batch_type}'); convert_case_toupper('ub04_claim_informations_otherid1')", :value => @patientinfo.otherid1 unless @patientinfo.nil? %></td>
+        </tr>
+      </table>
+      <table width="362" border="0" cellspacing="0" cellpadding="0">
+        <tr>
+          <td width="204">LAST &nbsp;&nbsp;&nbsp;
+            <%= text_field :ub04_claim_informations, :other_provider_last_name1, :class => "black_text", :size => "20",
+                           :onkeypress => "enlargeTextfieldSize('ub04_claim_informations_other_provider_last_name1',20)",
+                           :onblur => "resetTextfieldSize('ub04_claim_informations_other_provider_last_name1',20); optional_attending_npi1('ub04_claim_informations_other_provider_last_name1', '#{batch_type}'); convert_case_toupper('ub04_claim_informations_other_provider_last_name1')",
+                           :onFocus=>"setXYScroll(1075)", :tabindex=>"114", :value => @patientinfo.other_provider_last_name1 unless @patientinfo.nil? %></td>
+          <td width="158">FIRST
+            <%= text_field :ub04_claim_informations, :other_provider_first_name1, :class => "black_text", :size => "20",
+                           :onkeypress => "enlargeTextfieldSize('ub04_claim_informations_other_provider_first_name1',20)",
+                           :onBlur => "optional_attending_npi1(ub04_claim_informations_other_provider_first_name1, '#{batch_type}'); optional_attending_npi1('ub04_claim_informations_other_provider_first_name1', '#{batch_type}'); convert_case_toupper('ub04_claim_informations_other_provider_first_name1')",
+                           :onblur => "resetTextfieldSize('ub04_claim_informations_other_provider_first_name1',20);",
+                           :onFocus=>"setXYScroll(1075)", :tabindex=>"114", :value => @patientinfo.other_provider_first_name1 unless @patientinfo.nil? %></td>
+        </tr>
+      </table>
+      <table width="362" border="0" cellspacing="0" cellpadding="0">
+        <tr>
+          <td width="76" bgcolor="#ECE9D8">79 OTHER</td>
+          <td width="133">NPI &nbsp;&nbsp;
+            <%= text_field :ub04_claim_informations, :other_npi2, :class => "black_text", :size => "15", :onFocus=>"setXYScroll(1095)", :onBlur => "npilength()", :tabindex=>"114", :value => @patientinfo.other_npi2 unless @patientinfo.nil? %></td>
+          <td width="27" bgcolor="#ECE9D8">QUAL</td>
+          <td width="23" bgcolor="#ECE9D8"><%= text_field :ub04_claim_informations, :other_qual2, :class => "black_text", :size => "2", :onFocus=>"setXYScroll(1095)", :onBlur =>  "validate_qualifier('ub04_claim_informations_other_qual2','#{batch_type}'); convert_case_toupper('ub04_claim_informations_other_qual2')", :tabindex=>"114", :value => @patientinfo.other_qual2 unless @patientinfo.nil? %></td>
+          <td width="103"><%= text_field :ub04_claim_informations, :otherid2, :class => "black_text", :size => "15", :onFocus=>"setXYScroll(1095)", :onblur => "convert_case_toupper('ub04_claim_informations_otherid2')", :tabindex=>"114", :value => @patientinfo.otherid2 unless @patientinfo.nil? %></td>
+        </tr>
+      </table>
+      <table width="362" border="0" cellspacing="0" cellpadding="0">
+        <tr>
+          <td width="204">LAST &nbsp;&nbsp;&nbsp;
+            <%= text_field :ub04_claim_informations, :other_provider_last_name2, :class => "black_text", :size => "20",
+                           :onkeypress => "enlargeTextfieldSize('ub04_claim_informations_other_provider_last_name2',20)",
+                           :onblur => "resetTextfieldSize('ub04_claim_informations_other_provider_last_name2',20); convert_case_toupper('ub04_claim_informations_other_provider_last_name2')",
+                           :onFocus=>"setXYScroll(1095)", :tabindex=>"114", :value => @patientinfo.other_provider_last_name2 unless @patientinfo.nil? %></td>
+          <td width="158">FIRST
+            <%= text_field :ub04_claim_informations, :other_provider_first_name2, :class => "black_text", :size => "20",
+                           :onkeypress => "enlargeTextfieldSize('ub04_claim_informations_other_provider_first_name2',20)",
+                           :onblur => "resetTextfieldSize('ub04_claim_informations_other_provider_first_name2',20); convert_case_toupper('ub04_claim_informations_other_provider_first_name2')",
+                           :onFocus=>"setXYScroll(1095)", :tabindex=>"114", :value => @patientinfo.other_provider_first_name2 unless @patientinfo.nil? %></td>
+        </tr>
+      </table>
+    </td>
+    </tr>
+    </table>
+    <%= hidden_field 'job1', 'countr', :id=>"s", :size => 3 %>
+    <table width="933" border="0" cellspacing="0" cellpadding="0" class="bord" style="margin-left:18px;">
+      <tr>
+        <td height="1" valign="top" bgcolor="#918646"></td>
+      </tr>
+    </table>
+    <br/>
+    <br/></td>
+    </tr>
+    </table>
+    </div>
+    <br/>
+
+    <div style="float:left;">
+      <table width="950" border="0" cellspacing="0" cellpadding="0">
+        <tr>
+          <td width="60">  <%= submit_tag "Save", :id => 'claim_save_btn', :class => 'button', :name => "option1", :onclick => "return formValidator('#{batch_type}');javascript:alert('Are You Sure you want to save');", :tabindex=>"119" %> </td>
+          <td width="75">  <%= submit_tag "Complete", :id => 'claim_complete_btn', :class => 'button', :name => "option1", :onclick => "return validatecompletebutton()", :confirm => "Are You Sure to continue", :accesskey => 'c' %></td>
+          <td width="120"> <%= submit_tag "Mark as Incomplete", :id => 'claim_incomplete_btn', :class => 'button', :name => "option1", :tabindex=>"130", :onclick => 'return isComment()', :accesskey => 'i' %> </td>
+          <td width="85">  <%= link_to 'Stop Allocate'.html_safe, {:controller => 'processor', :action => 'stop_allocate'}, {:popup => [true, 'height=400,width=400'],:class => "link_button",:onclick=>"window.open(this.href,'create_company', 'height=400, width=400');return false;"} %></td>
+          
+          <td align="center" valign="middle">Comments
+          <%= select_tag "proc_comments", options_for_select(@ub04_incomplete_comment_list.sort << ['Other', 'Other'], '--'), :onchange => 'makeIncompleteCommentVisible()'%><br/>          
+          <textarea name="comment" id="comment" cols="50" rows="1" class="black_text" align="absmiddle" tabindex="131" style="border: 1px solid; display:none;"></textarea>
+          </td>
+          <td><%= link_to 'Completed claims view' ,{:controller => 'datacaptures',:action => 'claimqa',:batchid => params[:batchid],:job => @jobid,:view => 'completed_claim'},{:class =>"submit_link",:popup => true, :target => '_blank',:accesskey => 'v'} %> </td>
+        </tr>
+        <tr>
+          <td colspan="3" align="center" height="15" bgcolor="#FFEDA6">
+            <h6><span <%= "id ='cpt_code_description'" %>></span></h6></td>
+        </tr>
+      </table>
+
+    </div>
+<% end %>
+<!--Space for main form End -->
+
+
+</body>

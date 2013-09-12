@@ -1,0 +1,11 @@
+<div id="login_main">
+<h1>New payer</h1>
+<span class="alert">( * ) Mandatory Fields</span>
+<%= form_tag :action => 'create' do %>
+  <%= render :partial => 'form' %>
+	<%= submit_tag "Create", :class => 'button' %>
+<% end %>
+
+<br/>
+<%= link_to 'Back', :action => 'list' %>
+</div>

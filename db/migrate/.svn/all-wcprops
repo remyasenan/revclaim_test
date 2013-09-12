@@ -1,0 +1,1079 @@
+K 25
+svn:wc:ra_dav:version-url
+V 51
+/revenuemed/revclaim/!svn/ver/1769/trunk/db/migrate
+END
+049_alter_status_to_processor_status_in_job.rb
+K 25
+svn:wc:ra_dav:version-url
+V 97
+/revenuemed/revclaim/!svn/ver/879/trunk/db/migrate/049_alter_status_to_processor_status_in_job.rb
+END
+085_add_job_column.rb
+K 25
+svn:wc:ra_dav:version-url
+V 72
+/revenuemed/revclaim/!svn/ver/879/trunk/db/migrate/085_add_job_column.rb
+END
+20100310054544_add_processor_start_time_to_jobs.rb
+K 25
+svn:wc:ra_dav:version-url
+V 101
+/revenuemed/revclaim/!svn/ver/879/trunk/db/migrate/20100310054544_add_processor_start_time_to_jobs.rb
+END
+20100728082458_change_data_types_of_ub04_claim_information_fields.rb
+K 25
+svn:wc:ra_dav:version-url
+V 119
+/revenuemed/revclaim/!svn/ver/879/trunk/db/migrate/20100728082458_change_data_types_of_ub04_claim_information_fields.rb
+END
+046_add_default_ratings_to_users.rb
+K 25
+svn:wc:ra_dav:version-url
+V 86
+/revenuemed/revclaim/!svn/ver/879/trunk/db/migrate/046_add_default_ratings_to_users.rb
+END
+107_add_file_id_in_error_popups.rb
+K 25
+svn:wc:ra_dav:version-url
+V 85
+/revenuemed/revclaim/!svn/ver/879/trunk/db/migrate/107_add_file_id_in_error_popups.rb
+END
+032_add_estimated_and_adjusted_eobs_plus_image_count_to_job.rb
+K 25
+svn:wc:ra_dav:version-url
+V 113
+/revenuemed/revclaim/!svn/ver/879/trunk/db/migrate/032_add_estimated_and_adjusted_eobs_plus_image_count_to_job.rb
+END
+125_add_sequence_id_to_jobs.rb
+K 25
+svn:wc:ra_dav:version-url
+V 81
+/revenuemed/revclaim/!svn/ver/879/trunk/db/migrate/125_add_sequence_id_to_jobs.rb
+END
+115_change_type_of_batchid_in_batch.rb
+K 25
+svn:wc:ra_dav:version-url
+V 89
+/revenuemed/revclaim/!svn/ver/879/trunk/db/migrate/115_change_type_of_batchid_in_batch.rb
+END
+20091121072835_add_details_column_to_cms1500servicelines.rb
+K 25
+svn:wc:ra_dav:version-url
+V 110
+/revenuemed/revclaim/!svn/ver/879/trunk/db/migrate/20091121072835_add_details_column_to_cms1500servicelines.rb
+END
+20100114120930_alter_charges_type_in_ub04.rb
+K 25
+svn:wc:ra_dav:version-url
+V 95
+/revenuemed/revclaim/!svn/ver/879/trunk/db/migrate/20100114120930_alter_charges_type_in_ub04.rb
+END
+20100210140532_change_column_datatype_to_string_of_zipcodes_in_ub04claiminformations.rb
+K 25
+svn:wc:ra_dav:version-url
+V 138
+/revenuemed/revclaim/!svn/ver/879/trunk/db/migrate/20100210140532_change_column_datatype_to_string_of_zipcodes_in_ub04claiminformations.rb
+END
+100_add_column_in_eobsqas_for_reports.rb
+K 25
+svn:wc:ra_dav:version-url
+V 91
+/revenuemed/revclaim/!svn/ver/879/trunk/db/migrate/100_add_column_in_eobsqas_for_reports.rb
+END
+067_create_hlsc_qas.rb
+K 25
+svn:wc:ra_dav:version-url
+V 73
+/revenuemed/revclaim/!svn/ver/879/trunk/db/migrate/067_create_hlsc_qas.rb
+END
+095_create_sqa_job_settings.rb
+K 25
+svn:wc:ra_dav:version-url
+V 81
+/revenuemed/revclaim/!svn/ver/879/trunk/db/migrate/095_create_sqa_job_settings.rb
+END
+017_batch_facility_to_relationship.rb
+K 25
+svn:wc:ra_dav:version-url
+V 88
+/revenuemed/revclaim/!svn/ver/879/trunk/db/migrate/017_batch_facility_to_relationship.rb
+END
+001_create_facilities.rb
+K 25
+svn:wc:ra_dav:version-url
+V 75
+/revenuemed/revclaim/!svn/ver/879/trunk/db/migrate/001_create_facilities.rb
+END
+016_add_status_to_user.rb
+K 25
+svn:wc:ra_dav:version-url
+V 76
+/revenuemed/revclaim/!svn/ver/879/trunk/db/migrate/016_add_status_to_user.rb
+END
+082_create_query_details.rb
+K 25
+svn:wc:ra_dav:version-url
+V 78
+/revenuemed/revclaim/!svn/ver/879/trunk/db/migrate/082_create_query_details.rb
+END
+20110603102617_change_limit_of_billing_provider_city_in_cms1500s.rb
+K 25
+svn:wc:ra_dav:version-url
+V 119
+/revenuemed/revclaim/!svn/ver/1101/trunk/db/migrate/20110603102617_change_limit_of_billing_provider_city_in_cms1500s.rb
+END
+20130426052420_add_addres2_to_cms1500s.rb
+K 25
+svn:wc:ra_dav:version-url
+V 93
+/revenuemed/revclaim/!svn/ver/1618/trunk/db/migrate/20130426052420_add_addres2_to_cms1500s.rb
+END
+103_add_payergroupid_to_payers.rb
+K 25
+svn:wc:ra_dav:version-url
+V 84
+/revenuemed/revclaim/!svn/ver/879/trunk/db/migrate/103_add_payergroupid_to_payers.rb
+END
+20110420105530_add_rendering_provider_address2_to_rendering_provider_details.rb
+K 25
+svn:wc:ra_dav:version-url
+V 131
+/revenuemed/revclaim/!svn/ver/1044/trunk/db/migrate/20110420105530_add_rendering_provider_address2_to_rendering_provider_details.rb
+END
+038_add_eob_per_hour_rate_table.rb
+K 25
+svn:wc:ra_dav:version-url
+V 85
+/revenuemed/revclaim/!svn/ver/879/trunk/db/migrate/038_add_eob_per_hour_rate_table.rb
+END
+052_add_hlsc_id_to_batches.rb
+K 25
+svn:wc:ra_dav:version-url
+V 80
+/revenuemed/revclaim/!svn/ver/879/trunk/db/migrate/052_add_hlsc_id_to_batches.rb
+END
+066_create_eob_qa_statuses.rb
+K 25
+svn:wc:ra_dav:version-url
+V 80
+/revenuemed/revclaim/!svn/ver/879/trunk/db/migrate/066_create_eob_qa_statuses.rb
+END
+080_alter_job_count.rb
+K 25
+svn:wc:ra_dav:version-url
+V 73
+/revenuemed/revclaim/!svn/ver/879/trunk/db/migrate/080_alter_job_count.rb
+END
+20110308061133_add_details_column_to_ub04_releated_tables.rb
+K 25
+svn:wc:ra_dav:version-url
+V 111
+/revenuemed/revclaim/!svn/ver/972/trunk/db/migrate/20110308061133_add_details_column_to_ub04_releated_tables.rb
+END
+074_add_payer_to_eob_qas_and_eob_reports.rb
+K 25
+svn:wc:ra_dav:version-url
+V 94
+/revenuemed/revclaim/!svn/ver/879/trunk/db/migrate/074_add_payer_to_eob_qas_and_eob_reports.rb
+END
+109_alter_payer_id_start_datetime_end_datetime.rb
+K 25
+svn:wc:ra_dav:version-url
+V 100
+/revenuemed/revclaim/!svn/ver/879/trunk/db/migrate/109_alter_payer_id_start_datetime_end_datetime.rb
+END
+069_add_default_eob_errors.rb
+K 25
+svn:wc:ra_dav:version-url
+V 80
+/revenuemed/revclaim/!svn/ver/879/trunk/db/migrate/069_add_default_eob_errors.rb
+END
+20101223091602_create_patient_informations.rb
+K 25
+svn:wc:ra_dav:version-url
+V 96
+/revenuemed/revclaim/!svn/ver/914/trunk/db/migrate/20101223091602_create_patient_informations.rb
+END
+116_add_image_id_to_jobs.rb
+K 25
+svn:wc:ra_dav:version-url
+V 78
+/revenuemed/revclaim/!svn/ver/879/trunk/db/migrate/116_add_image_id_to_jobs.rb
+END
+20111226132817_change_type_of_billing_provider_suffix.rb
+K 25
+svn:wc:ra_dav:version-url
+V 108
+/revenuemed/revclaim/!svn/ver/1269/trunk/db/migrate/20111226132817_change_type_of_billing_provider_suffix.rb
+END
+098_add_column_in_eob_sqas_for_sqa.rb
+K 25
+svn:wc:ra_dav:version-url
+V 88
+/revenuemed/revclaim/!svn/ver/879/trunk/db/migrate/098_add_column_in_eob_sqas_for_sqa.rb
+END
+088_create_shifts.rb
+K 25
+svn:wc:ra_dav:version-url
+V 71
+/revenuemed/revclaim/!svn/ver/879/trunk/db/migrate/088_create_shifts.rb
+END
+20101223091449_create_patient_file_informations.rb
+K 25
+svn:wc:ra_dav:version-url
+V 101
+/revenuemed/revclaim/!svn/ver/914/trunk/db/migrate/20101223091449_create_patient_file_informations.rb
+END
+124_add_reffering_provider_orgn_name_in_cms1500s.rb
+K 25
+svn:wc:ra_dav:version-url
+V 102
+/revenuemed/revclaim/!svn/ver/879/trunk/db/migrate/124_add_reffering_provider_orgn_name_in_cms1500s.rb
+END
+034_insert_contracted_tat_to_clients.rb
+K 25
+svn:wc:ra_dav:version-url
+V 90
+/revenuemed/revclaim/!svn/ver/879/trunk/db/migrate/034_insert_contracted_tat_to_clients.rb
+END
+20110912112000_change_limit_of_insured_city_in_cms1500s.rb
+K 25
+svn:wc:ra_dav:version-url
+V 110
+/revenuemed/revclaim/!svn/ver/1166/trunk/db/migrate/20110912112000_change_limit_of_insured_city_in_cms1500s.rb
+END
+071_create_eob_reports.rb
+K 25
+svn:wc:ra_dav:version-url
+V 76
+/revenuemed/revclaim/!svn/ver/879/trunk/db/migrate/071_create_eob_reports.rb
+END
+20091208114012_add_form_type_to_eob_errors.rb
+K 25
+svn:wc:ra_dav:version-url
+V 96
+/revenuemed/revclaim/!svn/ver/879/trunk/db/migrate/20091208114012_add_form_type_to_eob_errors.rb
+END
+051_add_updated_by_updated_at_created_by_created_at_to_job.rb
+K 25
+svn:wc:ra_dav:version-url
+V 112
+/revenuemed/revclaim/!svn/ver/879/trunk/db/migrate/051_add_updated_by_updated_at_created_by_created_at_to_job.rb
+END
+041_create_batch_rejection_comments.rb
+K 25
+svn:wc:ra_dav:version-url
+V 89
+/revenuemed/revclaim/!svn/ver/879/trunk/db/migrate/041_create_batch_rejection_comments.rb
+END
+091_add_batch_issue_attributes.rb
+K 25
+svn:wc:ra_dav:version-url
+V 84
+/revenuemed/revclaim/!svn/ver/879/trunk/db/migrate/091_add_batch_issue_attributes.rb
+END
+076_add_comment_for_qa_in_jobs.rb
+K 25
+svn:wc:ra_dav:version-url
+V 84
+/revenuemed/revclaim/!svn/ver/879/trunk/db/migrate/076_add_comment_for_qa_in_jobs.rb
+END
+090_add_teamleader_to_user.rb
+K 25
+svn:wc:ra_dav:version-url
+V 80
+/revenuemed/revclaim/!svn/ver/879/trunk/db/migrate/090_add_teamleader_to_user.rb
+END
+028_create_tat.rb
+K 25
+svn:wc:ra_dav:version-url
+V 68
+/revenuemed/revclaim/!svn/ver/879/trunk/db/migrate/028_create_tat.rb
+END
+047_add_default_contracted_tat.rb
+K 25
+svn:wc:ra_dav:version-url
+V 84
+/revenuemed/revclaim/!svn/ver/879/trunk/db/migrate/047_add_default_contracted_tat.rb
+END
+077_add_accuracy_in_eob_report.rb
+K 25
+svn:wc:ra_dav:version-url
+V 84
+/revenuemed/revclaim/!svn/ver/879/trunk/db/migrate/077_add_accuracy_in_eob_report.rb
+END
+119_add_rejected_comments_on_jobs.rb
+K 25
+svn:wc:ra_dav:version-url
+V 87
+/revenuemed/revclaim/!svn/ver/879/trunk/db/migrate/119_add_rejected_comments_on_jobs.rb
+END
+003_create_users.rb
+K 25
+svn:wc:ra_dav:version-url
+V 70
+/revenuemed/revclaim/!svn/ver/879/trunk/db/migrate/003_create_users.rb
+END
+20110420113303_add_modifier_to_ub04_serviceline_informations.rb
+K 25
+svn:wc:ra_dav:version-url
+V 115
+/revenuemed/revclaim/!svn/ver/1044/trunk/db/migrate/20110420113303_add_modifier_to_ub04_serviceline_informations.rb
+END
+022_add_jobs_indexes.rb
+K 25
+svn:wc:ra_dav:version-url
+V 74
+/revenuemed/revclaim/!svn/ver/879/trunk/db/migrate/022_add_jobs_indexes.rb
+END
+20110418122842_add_diagnosis_pointer_field_to_cms1500.rb
+K 25
+svn:wc:ra_dav:version-url
+V 108
+/revenuemed/revclaim/!svn/ver/1042/trunk/db/migrate/20110418122842_add_diagnosis_pointer_field_to_cms1500.rb
+END
+055_create_qa_statuses.rb
+K 25
+svn:wc:ra_dav:version-url
+V 76
+/revenuemed/revclaim/!svn/ver/879/trunk/db/migrate/055_create_qa_statuses.rb
+END
+20100112115635_alter_limits_of_first_names_and_last_names_in_cms1500s.rb
+K 25
+svn:wc:ra_dav:version-url
+V 123
+/revenuemed/revclaim/!svn/ver/879/trunk/db/migrate/20100112115635_alter_limits_of_first_names_and_last_names_in_cms1500s.rb
+END
+018_batch_status_default_value.rb
+K 25
+svn:wc:ra_dav:version-url
+V 84
+/revenuemed/revclaim/!svn/ver/879/trunk/db/migrate/018_batch_status_default_value.rb
+END
+20130613055005_add_auto_allocation_status_in_batches_table.rb
+K 25
+svn:wc:ra_dav:version-url
+V 113
+/revenuemed/revclaim/!svn/ver/1686/trunk/db/migrate/20130613055005_add_auto_allocation_status_in_batches_table.rb
+END
+096_create_eob_sqas.rb
+K 25
+svn:wc:ra_dav:version-url
+V 73
+/revenuemed/revclaim/!svn/ver/879/trunk/db/migrate/096_create_eob_sqas.rb
+END
+20130503061043_add_status_internaltat_typeofclaim_to_facility.rb
+K 25
+svn:wc:ra_dav:version-url
+V 116
+/revenuemed/revclaim/!svn/ver/1626/trunk/db/migrate/20130503061043_add_status_internaltat_typeofclaim_to_facility.rb
+END
+20121121081504_add_batchuploadflag_to_facilities.rb
+K 25
+svn:wc:ra_dav:version-url
+V 103
+/revenuemed/revclaim/!svn/ver/1427/trunk/db/migrate/20121121081504_add_batchuploadflag_to_facilities.rb
+END
+099_create_super_qa_indexes.rb
+K 25
+svn:wc:ra_dav:version-url
+V 81
+/revenuemed/revclaim/!svn/ver/879/trunk/db/migrate/099_create_super_qa_indexes.rb
+END
+108_add_hlsc_id_to_jobs.rb
+K 25
+svn:wc:ra_dav:version-url
+V 77
+/revenuemed/revclaim/!svn/ver/879/trunk/db/migrate/108_add_hlsc_id_to_jobs.rb
+END
+015_add_completion_time_to_batch.rb
+K 25
+svn:wc:ra_dav:version-url
+V 86
+/revenuemed/revclaim/!svn/ver/879/trunk/db/migrate/015_add_completion_time_to_batch.rb
+END
+20101224065256_add_ub04_payer_details.rb
+K 25
+svn:wc:ra_dav:version-url
+V 91
+/revenuemed/revclaim/!svn/ver/907/trunk/db/migrate/20101224065256_add_ub04_payer_details.rb
+END
+033_add_contracted_tat_to_client.rb
+K 25
+svn:wc:ra_dav:version-url
+V 86
+/revenuemed/revclaim/!svn/ver/879/trunk/db/migrate/033_add_contracted_tat_to_client.rb
+END
+042_add_comment_to_job.rb
+K 25
+svn:wc:ra_dav:version-url
+V 76
+/revenuemed/revclaim/!svn/ver/879/trunk/db/migrate/042_add_comment_to_job.rb
+END
+122_change_client_and_facility_name_to_vestica.rb
+K 25
+svn:wc:ra_dav:version-url
+V 101
+/revenuemed/revclaim/!svn/ver/1428/trunk/db/migrate/122_change_client_and_facility_name_to_vestica.rb
+END
+20090916074725_create_remittors.rb
+K 25
+svn:wc:ra_dav:version-url
+V 85
+/revenuemed/revclaim/!svn/ver/879/trunk/db/migrate/20090916074725_create_remittors.rb
+END
+065_create_eob_qa.rb
+K 25
+svn:wc:ra_dav:version-url
+V 71
+/revenuemed/revclaim/!svn/ver/879/trunk/db/migrate/065_create_eob_qa.rb
+END
+078_add_indexes.rb
+K 25
+svn:wc:ra_dav:version-url
+V 69
+/revenuemed/revclaim/!svn/ver/879/trunk/db/migrate/078_add_indexes.rb
+END
+030_add_payer_to_job.rb
+K 25
+svn:wc:ra_dav:version-url
+V 74
+/revenuemed/revclaim/!svn/ver/879/trunk/db/migrate/030_add_payer_to_job.rb
+END
+023_create_documents.rb
+K 25
+svn:wc:ra_dav:version-url
+V 74
+/revenuemed/revclaim/!svn/ver/879/trunk/db/migrate/023_create_documents.rb
+END
+20110912111929_change_limit_of_patient_city_in_cms1500s.rb
+K 25
+svn:wc:ra_dav:version-url
+V 110
+/revenuemed/revclaim/!svn/ver/1166/trunk/db/migrate/20110912111929_change_limit_of_patient_city_in_cms1500s.rb
+END
+112_create_cms1500servicelines.rb
+K 25
+svn:wc:ra_dav:version-url
+V 84
+/revenuemed/revclaim/!svn/ver/879/trunk/db/migrate/112_create_cms1500servicelines.rb
+END
+024_create_payers.rb
+K 25
+svn:wc:ra_dav:version-url
+V 71
+/revenuemed/revclaim/!svn/ver/879/trunk/db/migrate/024_create_payers.rb
+END
+075_add_prev_status_to_eob_qas.rb
+K 25
+svn:wc:ra_dav:version-url
+V 84
+/revenuemed/revclaim/!svn/ver/879/trunk/db/migrate/075_add_prev_status_to_eob_qas.rb
+END
+083_add_batchid_to_runners.rb
+K 25
+svn:wc:ra_dav:version-url
+V 80
+/revenuemed/revclaim/!svn/ver/879/trunk/db/migrate/083_add_batchid_to_runners.rb
+END
+010_add_client_id_to_facilities.rb
+K 25
+svn:wc:ra_dav:version-url
+V 85
+/revenuemed/revclaim/!svn/ver/879/trunk/db/migrate/010_add_client_id_to_facilities.rb
+END
+20110902042445_alter_limit_patientaccountnumber.rb
+K 25
+svn:wc:ra_dav:version-url
+V 102
+/revenuemed/revclaim/!svn/ver/1143/trunk/db/migrate/20110902042445_alter_limit_patientaccountnumber.rb
+END
+20111228132740_add_three_more_modifiers_to_ub04_servicelineinformations.rb
+K 25
+svn:wc:ra_dav:version-url
+V 126
+/revenuemed/revclaim/!svn/ver/1272/trunk/db/migrate/20111228132740_add_three_more_modifiers_to_ub04_servicelineinformations.rb
+END
+20100309113051_change_the_data_type_of_billing_provider_tin_or_ein_and_rendering_providerid.rb
+K 25
+svn:wc:ra_dav:version-url
+V 145
+/revenuemed/revclaim/!svn/ver/879/trunk/db/migrate/20100309113051_change_the_data_type_of_billing_provider_tin_or_ein_and_rendering_providerid.rb
+END
+20100607051521_create_cpt_codes.rb
+K 25
+svn:wc:ra_dav:version-url
+V 85
+/revenuemed/revclaim/!svn/ver/879/trunk/db/migrate/20100607051521_create_cpt_codes.rb
+END
+20100323060533_add_default_state.rb
+K 25
+svn:wc:ra_dav:version-url
+V 86
+/revenuemed/revclaim/!svn/ver/879/trunk/db/migrate/20100323060533_add_default_state.rb
+END
+084_add_eob_accuracy_attributes.rb
+K 25
+svn:wc:ra_dav:version-url
+V 85
+/revenuemed/revclaim/!svn/ver/879/trunk/db/migrate/084_add_eob_accuracy_attributes.rb
+END
+037_add_source_in_batch.rb
+K 25
+svn:wc:ra_dav:version-url
+V 77
+/revenuemed/revclaim/!svn/ver/879/trunk/db/migrate/037_add_source_in_batch.rb
+END
+20100413064311_typeahead_billing_providers.rb
+K 25
+svn:wc:ra_dav:version-url
+V 96
+/revenuemed/revclaim/!svn/ver/879/trunk/db/migrate/20100413064311_typeahead_billing_providers.rb
+END
+097_add_column_in_jobs_for_super_qa_operation.rb
+K 25
+svn:wc:ra_dav:version-url
+V 99
+/revenuemed/revclaim/!svn/ver/879/trunk/db/migrate/097_add_column_in_jobs_for_super_qa_operation.rb
+END
+20091130125630_create_occurence_spans.rb
+K 25
+svn:wc:ra_dav:version-url
+V 91
+/revenuemed/revclaim/!svn/ver/879/trunk/db/migrate/20091130125630_create_occurence_spans.rb
+END
+20090917103059_add_status_to_remittor.rb
+K 25
+svn:wc:ra_dav:version-url
+V 91
+/revenuemed/revclaim/!svn/ver/879/trunk/db/migrate/20090917103059_add_status_to_remittor.rb
+END
+110_add_payerid_facilityid_userid_to_hlscdocuments.rb
+K 25
+svn:wc:ra_dav:version-url
+V 104
+/revenuemed/revclaim/!svn/ver/879/trunk/db/migrate/110_add_payerid_facilityid_userid_to_hlscdocuments.rb
+END
+059_create_default_facilities.rb
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/revenuemed/revclaim/!svn/ver/879/trunk/db/migrate/059_create_default_facilities.rb
+END
+118_create_default_payer.rb
+K 25
+svn:wc:ra_dav:version-url
+V 78
+/revenuemed/revclaim/!svn/ver/879/trunk/db/migrate/118_create_default_payer.rb
+END
+20130410071112_add_page_count_to_jobs.rb
+K 25
+svn:wc:ra_dav:version-url
+V 92
+/revenuemed/revclaim/!svn/ver/1608/trunk/db/migrate/20130410071112_add_page_count_to_jobs.rb
+END
+105_create_error_popups.rb
+K 25
+svn:wc:ra_dav:version-url
+V 77
+/revenuemed/revclaim/!svn/ver/879/trunk/db/migrate/105_create_error_popups.rb
+END
+20130419074425_add_claim_field_count_to_ub04_claim_informations.rb
+K 25
+svn:wc:ra_dav:version-url
+V 118
+/revenuemed/revclaim/!svn/ver/1614/trunk/db/migrate/20130419074425_add_claim_field_count_to_ub04_claim_informations.rb
+END
+039_add_user_productivity_rating.rb
+K 25
+svn:wc:ra_dav:version-url
+V 86
+/revenuemed/revclaim/!svn/ver/879/trunk/db/migrate/039_add_user_productivity_rating.rb
+END
+008_create_clients.rb
+K 25
+svn:wc:ra_dav:version-url
+V 72
+/revenuemed/revclaim/!svn/ver/879/trunk/db/migrate/008_create_clients.rb
+END
+20091121072355_add_details_column_to_cms1500s.rb
+K 25
+svn:wc:ra_dav:version-url
+V 99
+/revenuemed/revclaim/!svn/ver/879/trunk/db/migrate/20091121072355_add_details_column_to_cms1500s.rb
+END
+012_add_facility_site_code.rb
+K 25
+svn:wc:ra_dav:version-url
+V 80
+/revenuemed/revclaim/!svn/ver/879/trunk/db/migrate/012_add_facility_site_code.rb
+END
+093_create_user_client_job_histories.rb
+K 25
+svn:wc:ra_dav:version-url
+V 90
+/revenuemed/revclaim/!svn/ver/879/trunk/db/migrate/093_create_user_client_job_histories.rb
+END
+070_create_eob_error_ref_in_eob_qa.rb
+K 25
+svn:wc:ra_dav:version-url
+V 88
+/revenuemed/revclaim/!svn/ver/879/trunk/db/migrate/070_create_eob_error_ref_in_eob_qa.rb
+END
+121_add_physician_organisation_name_in_cms1500s.rb
+K 25
+svn:wc:ra_dav:version-url
+V 101
+/revenuemed/revclaim/!svn/ver/879/trunk/db/migrate/121_add_physician_organisation_name_in_cms1500s.rb
+END
+111_create_cms1500s.rb
+K 25
+svn:wc:ra_dav:version-url
+V 73
+/revenuemed/revclaim/!svn/ver/879/trunk/db/migrate/111_create_cms1500s.rb
+END
+054_create_job_statuses.rb
+K 25
+svn:wc:ra_dav:version-url
+V 77
+/revenuemed/revclaim/!svn/ver/879/trunk/db/migrate/054_create_job_statuses.rb
+END
+20091130125620_create_ub04payers.rb
+K 25
+svn:wc:ra_dav:version-url
+V 86
+/revenuemed/revclaim/!svn/ver/879/trunk/db/migrate/20091130125620_create_ub04payers.rb
+END
+101_add_column_in_querydetails_for_tatreport.rb
+K 25
+svn:wc:ra_dav:version-url
+V 98
+/revenuemed/revclaim/!svn/ver/879/trunk/db/migrate/101_add_column_in_querydetails_for_tatreport.rb
+END
+20130828060107_change_default_value_of_processor_comments.rb
+K 25
+svn:wc:ra_dav:version-url
+V 112
+/revenuemed/revclaim/!svn/ver/1769/trunk/db/migrate/20130828060107_change_default_value_of_processor_comments.rb
+END
+081_create_runner.rb
+K 25
+svn:wc:ra_dav:version-url
+V 71
+/revenuemed/revclaim/!svn/ver/879/trunk/db/migrate/081_create_runner.rb
+END
+058_create_default_clients.rb
+K 25
+svn:wc:ra_dav:version-url
+V 80
+/revenuemed/revclaim/!svn/ver/879/trunk/db/migrate/058_create_default_clients.rb
+END
+102_create_payergroups.rb
+K 25
+svn:wc:ra_dav:version-url
+V 76
+/revenuemed/revclaim/!svn/ver/879/trunk/db/migrate/102_create_payergroups.rb
+END
+20130611083035_add_incomplete_status_to_processor_status_table.rb
+K 25
+svn:wc:ra_dav:version-url
+V 117
+/revenuemed/revclaim/!svn/ver/1684/trunk/db/migrate/20130611083035_add_incomplete_status_to_processor_status_table.rb
+END
+20090921051954_add_name_to_remittor.rb
+K 25
+svn:wc:ra_dav:version-url
+V 89
+/revenuemed/revclaim/!svn/ver/879/trunk/db/migrate/20090921051954_add_name_to_remittor.rb
+END
+20091204040724_add_columns_to_ub04_claim_information.rb
+K 25
+svn:wc:ra_dav:version-url
+V 106
+/revenuemed/revclaim/!svn/ver/879/trunk/db/migrate/20091204040724_add_columns_to_ub04_claim_information.rb
+END
+004_create_jobs.rb
+K 25
+svn:wc:ra_dav:version-url
+V 69
+/revenuemed/revclaim/!svn/ver/879/trunk/db/migrate/004_create_jobs.rb
+END
+064_create_default_sampling_rate.rb
+K 25
+svn:wc:ra_dav:version-url
+V 86
+/revenuemed/revclaim/!svn/ver/879/trunk/db/migrate/064_create_default_sampling_rate.rb
+END
+019_add_sessions.rb
+K 25
+svn:wc:ra_dav:version-url
+V 70
+/revenuemed/revclaim/!svn/ver/879/trunk/db/migrate/019_add_sessions.rb
+END
+089_add_shift_to_users.rb
+K 25
+svn:wc:ra_dav:version-url
+V 76
+/revenuemed/revclaim/!svn/ver/879/trunk/db/migrate/089_add_shift_to_users.rb
+END
+011_create_certifications.rb
+K 25
+svn:wc:ra_dav:version-url
+V 79
+/revenuemed/revclaim/!svn/ver/879/trunk/db/migrate/011_create_certifications.rb
+END
+20091130125600_create_qualifier_code_values.rb
+K 25
+svn:wc:ra_dav:version-url
+V 97
+/revenuemed/revclaim/!svn/ver/879/trunk/db/migrate/20091130125600_create_qualifier_code_values.rb
+END
+020_add_session_to_user.rb
+K 25
+svn:wc:ra_dav:version-url
+V 77
+/revenuemed/revclaim/!svn/ver/879/trunk/db/migrate/020_add_session_to_user.rb
+END
+104_create_team_leader_queue.rb
+K 25
+svn:wc:ra_dav:version-url
+V 82
+/revenuemed/revclaim/!svn/ver/879/trunk/db/migrate/104_create_team_leader_queue.rb
+END
+002_create_batches.rb
+K 25
+svn:wc:ra_dav:version-url
+V 72
+/revenuemed/revclaim/!svn/ver/879/trunk/db/migrate/002_create_batches.rb
+END
+20090917081524_add_is_deleted_to_remittor.rb
+K 25
+svn:wc:ra_dav:version-url
+V 95
+/revenuemed/revclaim/!svn/ver/879/trunk/db/migrate/20090917081524_add_is_deleted_to_remittor.rb
+END
+031_add_comment_field_in_batches.rb
+K 25
+svn:wc:ra_dav:version-url
+V 86
+/revenuemed/revclaim/!svn/ver/879/trunk/db/migrate/031_add_comment_field_in_batches.rb
+END
+072_add_payable_to_batch.rb
+K 25
+svn:wc:ra_dav:version-url
+V 78
+/revenuemed/revclaim/!svn/ver/879/trunk/db/migrate/072_add_payable_to_batch.rb
+END
+048_add_job_status_and_qa_status_to_job.rb
+K 25
+svn:wc:ra_dav:version-url
+V 93
+/revenuemed/revclaim/!svn/ver/879/trunk/db/migrate/048_add_job_status_and_qa_status_to_job.rb
+END
+106_create_hlsc_documents.rb
+K 25
+svn:wc:ra_dav:version-url
+V 79
+/revenuemed/revclaim/!svn/ver/879/trunk/db/migrate/106_create_hlsc_documents.rb
+END
+079_create_user_payer_job_histories.rb
+K 25
+svn:wc:ra_dav:version-url
+V 89
+/revenuemed/revclaim/!svn/ver/879/trunk/db/migrate/079_create_user_payer_job_histories.rb
+END
+063_create_sampling_rates.rb
+K 25
+svn:wc:ra_dav:version-url
+V 79
+/revenuemed/revclaim/!svn/ver/879/trunk/db/migrate/063_create_sampling_rates.rb
+END
+20100414130140_create_billing_provider_detail.rb
+K 25
+svn:wc:ra_dav:version-url
+V 99
+/revenuemed/revclaim/!svn/ver/879/trunk/db/migrate/20100414130140_create_billing_provider_detail.rb
+END
+061_create_client_status_histories.rb
+K 25
+svn:wc:ra_dav:version-url
+V 88
+/revenuemed/revclaim/!svn/ver/879/trunk/db/migrate/061_create_client_status_histories.rb
+END
+087_add_client_to_document.rb
+K 25
+svn:wc:ra_dav:version-url
+V 80
+/revenuemed/revclaim/!svn/ver/879/trunk/db/migrate/087_add_client_to_document.rb
+END
+120_add_time_taken_to_jobs.rb
+K 25
+svn:wc:ra_dav:version-url
+V 80
+/revenuemed/revclaim/!svn/ver/879/trunk/db/migrate/120_add_time_taken_to_jobs.rb
+END
+026_change_content_field_size_for_documents.rb
+K 25
+svn:wc:ra_dav:version-url
+V 97
+/revenuemed/revclaim/!svn/ver/879/trunk/db/migrate/026_change_content_field_size_for_documents.rb
+END
+044_predefined_job_comments.rb
+K 25
+svn:wc:ra_dav:version-url
+V 81
+/revenuemed/revclaim/!svn/ver/879/trunk/db/migrate/044_predefined_job_comments.rb
+END
+20130502102918_add_status_to_client.rb
+K 25
+svn:wc:ra_dav:version-url
+V 90
+/revenuemed/revclaim/!svn/ver/1626/trunk/db/migrate/20130502102918_add_status_to_client.rb
+END
+20091127113830_create_ub04_claim_informations.rb
+K 25
+svn:wc:ra_dav:version-url
+V 99
+/revenuemed/revclaim/!svn/ver/879/trunk/db/migrate/20091127113830_create_ub04_claim_informations.rb
+END
+114_create_images_for_jobs.rb
+K 25
+svn:wc:ra_dav:version-url
+V 80
+/revenuemed/revclaim/!svn/ver/879/trunk/db/migrate/114_create_images_for_jobs.rb
+END
+007_create_default_batch_status.rb
+K 25
+svn:wc:ra_dav:version-url
+V 85
+/revenuemed/revclaim/!svn/ver/879/trunk/db/migrate/007_create_default_batch_status.rb
+END
+043_predefined_batch_comments.rb
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/revenuemed/revclaim/!svn/ver/879/trunk/db/migrate/043_predefined_batch_comments.rb
+END
+086_add_incomplete_count_tiff_to_jobs.rb
+K 25
+svn:wc:ra_dav:version-url
+V 91
+/revenuemed/revclaim/!svn/ver/879/trunk/db/migrate/086_add_incomplete_count_tiff_to_jobs.rb
+END
+050_add_updated_by_updated_at_created_by_created_at_to_batch.rb
+K 25
+svn:wc:ra_dav:version-url
+V 114
+/revenuemed/revclaim/!svn/ver/879/trunk/db/migrate/050_add_updated_by_updated_at_created_by_created_at_to_batch.rb
+END
+045_add_two_columns_for_triad_and_other_clients.rb
+K 25
+svn:wc:ra_dav:version-url
+V 101
+/revenuemed/revclaim/!svn/ver/879/trunk/db/migrate/045_add_two_columns_for_triad_and_other_clients.rb
+END
+20130820044049_remove_typeofclaim_from_facility_add_to_batches.rb
+K 25
+svn:wc:ra_dav:version-url
+V 117
+/revenuemed/revclaim/!svn/ver/1747/trunk/db/migrate/20130820044049_remove_typeofclaim_from_facility_add_to_batches.rb
+END
+20100414130032_create_payer_detail.rb
+K 25
+svn:wc:ra_dav:version-url
+V 88
+/revenuemed/revclaim/!svn/ver/879/trunk/db/migrate/20100414130032_create_payer_detail.rb
+END
+029_add_payer_and_eobs_to_batch.rb
+K 25
+svn:wc:ra_dav:version-url
+V 85
+/revenuemed/revclaim/!svn/ver/879/trunk/db/migrate/029_add_payer_and_eobs_to_batch.rb
+END
+20100414130312_create_rendering_provider_detail.rb
+K 25
+svn:wc:ra_dav:version-url
+V 101
+/revenuemed/revclaim/!svn/ver/879/trunk/db/migrate/20100414130312_create_rendering_provider_detail.rb
+END
+021_add_batches_indexes.rb
+K 25
+svn:wc:ra_dav:version-url
+V 77
+/revenuemed/revclaim/!svn/ver/879/trunk/db/migrate/021_add_batches_indexes.rb
+END
+005_create_statuses.rb
+K 25
+svn:wc:ra_dav:version-url
+V 73
+/revenuemed/revclaim/!svn/ver/879/trunk/db/migrate/005_create_statuses.rb
+END
+20091130145680_create_value_codes.rb
+K 25
+svn:wc:ra_dav:version-url
+V 87
+/revenuemed/revclaim/!svn/ver/879/trunk/db/migrate/20091130145680_create_value_codes.rb
+END
+036_add_manual_override_column_to_batches.rb
+K 25
+svn:wc:ra_dav:version-url
+V 95
+/revenuemed/revclaim/!svn/ver/879/trunk/db/migrate/036_add_manual_override_column_to_batches.rb
+END
+053_create_batch_statuses.rb
+K 25
+svn:wc:ra_dav:version-url
+V 79
+/revenuemed/revclaim/!svn/ver/879/trunk/db/migrate/053_create_batch_statuses.rb
+END
+073_add_payer_to_qa_checked_jobs.rb
+K 25
+svn:wc:ra_dav:version-url
+V 86
+/revenuemed/revclaim/!svn/ver/879/trunk/db/migrate/073_add_payer_to_qa_checked_jobs.rb
+END
+014_separate_processor_and_qa.rb
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/revenuemed/revclaim/!svn/ver/879/trunk/db/migrate/014_separate_processor_and_qa.rb
+END
+057_create_default_user.rb
+K 25
+svn:wc:ra_dav:version-url
+V 77
+/revenuemed/revclaim/!svn/ver/879/trunk/db/migrate/057_create_default_user.rb
+END
+20091127144858_create_ub04_serviceline_informations.rb
+K 25
+svn:wc:ra_dav:version-url
+V 105
+/revenuemed/revclaim/!svn/ver/879/trunk/db/migrate/20091127144858_create_ub04_serviceline_informations.rb
+END
+092_create_site_settings.rb
+K 25
+svn:wc:ra_dav:version-url
+V 78
+/revenuemed/revclaim/!svn/ver/879/trunk/db/migrate/092_create_site_settings.rb
+END
+117_add_processor_comments_to_jobs.rb
+K 25
+svn:wc:ra_dav:version-url
+V 88
+/revenuemed/revclaim/!svn/ver/879/trunk/db/migrate/117_add_processor_comments_to_jobs.rb
+END
+20110420112350_add_rendering_provider_address2_to_ub04_claim_informations.rb
+K 25
+svn:wc:ra_dav:version-url
+V 128
+/revenuemed/revclaim/!svn/ver/1044/trunk/db/migrate/20110420112350_add_rendering_provider_address2_to_ub04_claim_informations.rb
+END
+035_add_contracted_time_to_batch.rb
+K 25
+svn:wc:ra_dav:version-url
+V 86
+/revenuemed/revclaim/!svn/ver/879/trunk/db/migrate/035_add_contracted_time_to_batch.rb
+END
+20091221094722_drop_foreign_key_user_id.rb
+K 25
+svn:wc:ra_dav:version-url
+V 93
+/revenuemed/revclaim/!svn/ver/879/trunk/db/migrate/20091221094722_drop_foreign_key_user_id.rb
+END
+123_create_isa_identifiers.rb
+K 25
+svn:wc:ra_dav:version-url
+V 80
+/revenuemed/revclaim/!svn/ver/879/trunk/db/migrate/123_create_isa_identifiers.rb
+END
+20091130125610_create_occurences.rb
+K 25
+svn:wc:ra_dav:version-url
+V 86
+/revenuemed/revclaim/!svn/ver/879/trunk/db/migrate/20091130125610_create_occurences.rb
+END
+20091218104014_change_data_type_of_revcode.rb
+K 25
+svn:wc:ra_dav:version-url
+V 96
+/revenuemed/revclaim/!svn/ver/879/trunk/db/migrate/20091218104014_change_data_type_of_revcode.rb
+END
+113_create_states.rb
+K 25
+svn:wc:ra_dav:version-url
+V 71
+/revenuemed/revclaim/!svn/ver/879/trunk/db/migrate/113_create_states.rb
+END
+20090916132400_create_roles.rb
+K 25
+svn:wc:ra_dav:version-url
+V 81
+/revenuemed/revclaim/!svn/ver/879/trunk/db/migrate/20090916132400_create_roles.rb
+END
+20110502113408_add_minutes_to_cms1500_servicelines.rb
+K 25
+svn:wc:ra_dav:version-url
+V 105
+/revenuemed/revclaim/!svn/ver/1058/trunk/db/migrate/20110502113408_add_minutes_to_cms1500_servicelines.rb
+END
+060_add_user_activity_status_to_users.rb
+K 25
+svn:wc:ra_dav:version-url
+V 91
+/revenuemed/revclaim/!svn/ver/879/trunk/db/migrate/060_add_user_activity_status_to_users.rb
+END
+20100413064210_typeahead_payers.rb
+K 25
+svn:wc:ra_dav:version-url
+V 85
+/revenuemed/revclaim/!svn/ver/879/trunk/db/migrate/20100413064210_typeahead_payers.rb
+END
+025_add_filetype_column_to_documents.rb
+K 25
+svn:wc:ra_dav:version-url
+V 90
+/revenuemed/revclaim/!svn/ver/879/trunk/db/migrate/025_add_filetype_column_to_documents.rb
+END
+20101221053017_add_allocation_status_to_remittor.rb
+K 25
+svn:wc:ra_dav:version-url
+V 102
+/revenuemed/revclaim/!svn/ver/897/trunk/db/migrate/20101221053017_add_allocation_status_to_remittor.rb
+END
+20100413064354_typeahead_service_facilities.rb
+K 25
+svn:wc:ra_dav:version-url
+V 97
+/revenuemed/revclaim/!svn/ver/879/trunk/db/migrate/20100413064354_typeahead_service_facilities.rb
+END
+068_create_eob_errors.rb
+K 25
+svn:wc:ra_dav:version-url
+V 75
+/revenuemed/revclaim/!svn/ver/879/trunk/db/migrate/068_create_eob_errors.rb
+END
+062_add_total_field_total_incorrect_field_accuracy_sampling_rate_to_user.rb
+K 25
+svn:wc:ra_dav:version-url
+V 126
+/revenuemed/revclaim/!svn/ver/879/trunk/db/migrate/062_add_total_field_total_incorrect_field_accuracy_sampling_rate_to_user.rb
+END
+20130418061307_add_claim_field_count_to_cms1500.rb
+K 25
+svn:wc:ra_dav:version-url
+V 102
+/revenuemed/revclaim/!svn/ver/1614/trunk/db/migrate/20130418061307_add_claim_field_count_to_cms1500.rb
+END
+040_create_job_rejection_comments.rb
+K 25
+svn:wc:ra_dav:version-url
+V 87
+/revenuemed/revclaim/!svn/ver/879/trunk/db/migrate/040_create_job_rejection_comments.rb
+END
+056_create_processor_statuses.rb
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/revenuemed/revclaim/!svn/ver/879/trunk/db/migrate/056_create_processor_statuses.rb
+END

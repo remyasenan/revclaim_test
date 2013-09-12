@@ -1,0 +1,95 @@
+K 25
+svn:wc:ra_dav:version-url
+V 60
+/revenuemed/revclaim/!svn/ver/1738/trunk/app/views/admin/job
+END
+edit_payer.rhtml
+K 25
+svn:wc:ra_dav:version-url
+V 76
+/revenuemed/revclaim/!svn/ver/879/trunk/app/views/admin/job/edit_payer.rhtml
+END
+work_queue.rhtml
+K 25
+svn:wc:ra_dav:version-url
+V 76
+/revenuemed/revclaim/!svn/ver/879/trunk/app/views/admin/job/work_queue.rhtml
+END
+allocate_payer_jobs.html.erb
+K 25
+svn:wc:ra_dav:version-url
+V 89
+/revenuemed/revclaim/!svn/ver/1473/trunk/app/views/admin/job/allocate_payer_jobs.html.erb
+END
+qa_completed.rhtml
+K 25
+svn:wc:ra_dav:version-url
+V 78
+/revenuemed/revclaim/!svn/ver/879/trunk/app/views/admin/job/qa_completed.rhtml
+END
+add_qa.html.erb
+K 25
+svn:wc:ra_dav:version-url
+V 76
+/revenuemed/revclaim/!svn/ver/1473/trunk/app/views/admin/job/add_qa.html.erb
+END
+list.html.erb
+K 25
+svn:wc:ra_dav:version-url
+V 73
+/revenuemed/revclaim/!svn/ver/879/trunk/app/views/admin/job/list.html.erb
+END
+_form.rhtml
+K 25
+svn:wc:ra_dav:version-url
+V 71
+/revenuemed/revclaim/!svn/ver/879/trunk/app/views/admin/job/_form.rhtml
+END
+show.html.erb
+K 25
+svn:wc:ra_dav:version-url
+V 73
+/revenuemed/revclaim/!svn/ver/879/trunk/app/views/admin/job/show.html.erb
+END
+allocate.html.erb
+K 25
+svn:wc:ra_dav:version-url
+V 78
+/revenuemed/revclaim/!svn/ver/1738/trunk/app/views/admin/job/allocate.html.erb
+END
+edit.html.erb
+K 25
+svn:wc:ra_dav:version-url
+V 73
+/revenuemed/revclaim/!svn/ver/879/trunk/app/views/admin/job/edit.html.erb
+END
+add_processor.html.erb
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/revenuemed/revclaim/!svn/ver/1505/trunk/app/views/admin/job/add_processor.html.erb
+END
+qa_jobs.rhtml
+K 25
+svn:wc:ra_dav:version-url
+V 73
+/revenuemed/revclaim/!svn/ver/879/trunk/app/views/admin/job/qa_jobs.rhtml
+END
+new.html.erb
+K 25
+svn:wc:ra_dav:version-url
+V 72
+/revenuemed/revclaim/!svn/ver/879/trunk/app/views/admin/job/new.html.erb
+END
+user_jobs.html.erb
+K 25
+svn:wc:ra_dav:version-url
+V 79
+/revenuemed/revclaim/!svn/ver/1475/trunk/app/views/admin/job/user_jobs.html.erb
+END
+split.html.erb
+K 25
+svn:wc:ra_dav:version-url
+V 74
+/revenuemed/revclaim/!svn/ver/879/trunk/app/views/admin/job/split.html.erb
+END

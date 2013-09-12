@@ -1,0 +1,59 @@
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+      <title>RevClaim - <%= controller.action_name %></title>
+      <meta http-equiv="content-type" content="text/html; charset=iso-8859-1" />
+
+      <meta http-equiv="cache-control" content="no-cache" />
+      <link rel="shortcut icon" href="/favicon.ico" >
+
+        <%= stylesheet_link_tag "ub04_design",:media => 'all'%>
+        <%= stylesheet_link_tag "login",:media => 'all'%>
+        <%#= javascript_include_tag 'sorttable' %>
+       <%=javascript_include_tag "default.js"%>
+        <%= javascript_include_tag "application.js" %>
+        
+        <%= javascript_include_tag "datepicker" %>
+        <%= stylesheet_link_tag 'ub04_design' %>
+        <%= javascript_include_tag "ub04" %>
+        <%#= javascript_include_tag 'restrict' %>
+        <%= javascript_include_tag "highlight" %>
+
+    </head>
+  <body>
+
+    <div id="link_bar"  align="right">
+      <div id="message" style:align="absleft" >
+
+        <% if flash[:notice] %>
+          <%= image_tag("alert.gif", :alt => "Edit")%>
+          <%= flash[:notice] %>
+        <% end %></div>
+
+
+      <% if session[:user]%>
+        <%= link_to image_tag("home.gif", :alt => "home",:border=>'0',:align=>'absmiddle'), :controller =>  '/sessions', :action => 'dashboard' %>
+        <%= link_to image_tag("logout.gif", :alt => "Logout",:border=>'0',:align=>'absmiddle'), :controller => '/sessions', :action => 'logout' %>
+
+      <%else%>
+
+        <%= link_to image_tag("home.gif", :alt => "home",:border=>'0',:align=>'absmiddle'), :controller =>  '/sessions', :action => 'new' %>
+        <%= link_to image_tag("login.gif", :alt => "Login",:border=>'0',:align=>'absmiddle'), :controller => '/sessions', :action => 'new' %>
+
+      <%end%>
+
+
+    </div>
+
+    <div id="container">
+
+
+      <%=yield %>
+
+
+    </div>
+
+
+    <script language="JavaScript" type="text/javascript" src="/javascripts/wz_tooltip.js"></script>
+  </body>
+
+</html>
